@@ -1,0 +1,143 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  background:white;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.6;
+  z-index: -1; /* Para asegurarse de que el pseudo-elemento esté detrás del contenido real */
+}
+
+.container {
+  background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco con opacidad */
+  padding: 20px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  border:2px solid gray;
+}
+
+h2 {
+  color:red;
+  font-size:30px;
+  font-family:'Times New Roman', Times, serif;
+}
+.login-form {
+  display: flex;
+  flex-direction: column;
+}
+/* Estilo más específico para un elemento con la clase "my-input" */
+.my-input {
+  padding: 8px;
+  margin-bottom: 10px;
+}
+
+/* Estilo más específico para un elemento con la clase "my-label" */
+label {
+  margin-top: 10px;
+}
+.my-input:focus {
+  border: 2px solid red;
+}
+button {
+  padding: 10px;
+  background-color: white;
+  color: red;
+  border: 2px solid red;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+  button:hover {
+      background-color: red;
+      color: white;
+  }
+
+  .fade-in {
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 0.3s ease-in-out;
+    display: none; /* Oculta el elemento después de la transición */
+}
+.row {
+  display: flex;
+  justify-content: space-between;
+}
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.select-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 8px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  appearance: none; /* Para quitar las flechas de selección del navegador */
+}
+
+.select-wrapper::before {
+  content: '\25BC'; /* Triángulo hacia abajo para simular una flecha */
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #555;
+  pointer-events: none;
+}
+
+
+
+/* Estilo del contenedor del radio button */
+input[type="radio"] + label {
+  display: inline-block;
+  padding: 8px 16px;
+  border: 2px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* Estilo del radio button cuando está seleccionado */
+input[type="radio"]:checked + label {
+  background-color: red; /* Cambia el color al seleccionar */
+  color: red; /* Cambia el color del texto al seleccionar */
+}

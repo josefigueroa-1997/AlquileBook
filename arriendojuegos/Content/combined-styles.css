@@ -1,0 +1,261 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: white;
+    
+}
+
+header {
+    background-color: white;
+    color: red;
+    padding: 10px;
+    border-bottom: 2px solid gray;
+    text-align: center;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    header h1 a {
+        text-decoration: none;
+        color: red;
+    }
+
+    header .search-bar {
+        display: flex;
+        align-items: center;
+    }
+
+        header .search-bar input {
+            padding: 8px;
+            width: 300px;
+            border: 2px solid gray;
+            border-radius: 50px;
+        }
+
+        header .search-bar button {
+            padding: 8px 15px;
+            background-color: white;
+            color: gray;
+            border: 2px solid gray;
+            cursor: pointer;
+            border-radius: 50px;
+            margin-left: 10px;
+        }
+
+nav {
+    background-color: black;
+    display: flex;
+    justify-content: center;
+    position: relative;
+    border: 2px solid black;
+}
+
+    nav a {
+        /* Elimina float: left; */
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        position: relative; /* Agrega esta línea */
+    }
+
+        nav a:hover,
+        nav a.expanded {
+            background-color: red;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            color: white;
+        }
+
+    nav .submenu {
+        /* Ajusta la posición en relación con el contenedor de navegación */
+        position: absolute;
+        top: 100%;
+        left: 50%; /* Cambia esto a 50% para centrar el submenú */
+        transform: translateX(-50%); /* Añade esta línea para centrar el submenú */
+        width: 30%;
+        background-color: white;
+        color: black;
+        z-index: 1;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+        /* Cambia la regla nav a:hover .submenu a nav a:hover + .submenu */
+        nav a:hover + .submenu,
+        nav .submenu:hover {
+            opacity: 1;
+            visibility: visible;
+            position: absolute;
+        }
+
+        nav .submenu a {
+            color: black;
+            padding: 10px;
+            text-decoration: none;
+            display: block;
+            border: none;
+            background: none;
+        }
+
+.cart-profile {
+    float: right;
+    padding: 20px;
+}
+
+.content {
+    width: 100%;
+    overflow: hidden;
+}
+
+.banner-container {
+    position: relative;
+    width: 100%; /* Establece un ancho máximo para el banner (puedes ajustar este valor) */
+    margin: 20px auto; /* Centra el banner en el medio de la página y agrega un espacio superior e inferior */
+    overflow: hidden;
+}
+
+.banner {
+    width: 100%;
+    max-width: 1366px;
+    height: auto;
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+
+    .banner img {
+        width: 100%;
+        height: auto;
+        max-height: 300px; /* Ajusta según el tamaño máximo que deseas para la imagen */
+    }
+
+
+.arrow {
+    position: absolute;
+    top: 50%;
+    font-size: 2em;
+    color: white;
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 10px;
+    border-radius: 50%;
+}
+
+    .arrow.left {
+        left: 10px;
+    }
+
+    .arrow.right {
+        right: 10px;
+    }
+
+section {
+    margin-top: 20px;
+    text-align: left;
+    border-bottom: 2px solid black;
+    padding: 10px;
+    margin-bottom: 20px;
+}
+
+.section h2 {
+    color: black;
+    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size: 50px;
+}
+
+.product {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.product-item {
+    width: calc(20% - 20px);
+    margin: 20px;
+    box-sizing: border-box; /* Añade esta línea para que el padding y el borde no afecten el ancho total */
+    float: left;
+    text-align: center; /* Añade centrado de contenido */
+}
+
+    .product-item img {
+        width: 100%;
+        max-width: 120px; /* Ancho máximo de la imagen */
+        height: auto;
+        max-height: 150px; /* Altura máxima de la imagen */
+        margin-bottom: 10px;
+    }
+
+    .product-item h3 {
+        color: black;
+        font-family: 'Times New Roman', Times, serif;
+        font-size: 24px;
+    }
+
+    .product-item p {
+        font-size: 1.2em;
+        color: #333;
+        font-family: Georgia, 'Times New Roman', Times, serif;
+    }
+
+    .product-item .price {
+        font-weight: bold;
+        color: green;
+    }
+
+#profile-menu {
+    position: absolute;
+    top: calc(100% + 10px);
+    left: -100px;
+    display: none;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    z-index: 1;
+    padding: 10px;
+}
+
+    #profile-menu a {
+        display: block;
+        padding: 10px;
+        text-decoration: none;
+        color: black;
+        font-size: 15px;
+        transition: background-color 0.3s;
+    }
+
+        #profile-menu a:hover {
+            background-color: #f5f5f5;
+        }
+
+    #profile-menu.show-menu {
+        display: block;
+    }
+/* Media query para pantallas más grandes, como computadoras */
+@media only screen and (min-width: 768px) {
+    /* Muestra hasta 5 productos por fila */
+    .product-item {
+        width: calc(20% - 20px);
+        margin: 20px 0;
+        box-sizing: border-box;
+        float: left;
+    }
+
+    /* Asegura que cada sección ocupe el ancho completo de su contenedor */
+    .content::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+/* Para dispositivos más pequeños, como móviles */
+@media only screen and (max-width: 767px) {
+    /* Muestra 1 producto por fila */
+    .product-item {
+        width: 100%;
+    }
+}

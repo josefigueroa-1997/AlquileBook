@@ -1,0 +1,91 @@
+﻿@model arriendojuegos.Models.ListModelUsuario.Usuario
+@{
+    ViewBag.Title = "Update";
+}
+
+@if (Session["nombre"] != null)
+{
+    <a href="@Url.Action("CerrarSesion", "Usuario")">Cerrar Sesión</a>
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-body">
+                        <h2 class="text-center">Actualizar Usuario: @Session["nombre"]</h2>
+
+                        @using (Html.BeginForm("Update", "Usuario", FormMethod.Post))
+                        {
+                            @Html.HiddenFor(d => d.Id)
+                            <div class="form-group">
+                                @Html.LabelFor(d => d.nombre)
+                                @Html.TextBoxFor(d => d.nombre, "", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(d => d.nombre, null, new { @class = "red" })
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(d => d.correo)
+                                @Html.TextBoxFor(d => d.correo, "", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(d => d.correo, null, new { @class = "text-danger" })
+                            </div>
+
+
+
+                            <div class="form-group">
+                                @Html.LabelFor(d => d.telefono)
+                                @Html.TextBoxFor(d => d.telefono, "", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(d => d.telefono, null, new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(d => d.direccion)
+                                @Html.TextBoxFor(d => d.direccion, "", new { @class = "form-control" })
+                                @Html.ValidationMessageFor(d => d.direccion, null, new { @class = "text-danger" })
+                            </div>
+
+
+                            <div class="text-center">
+                                <input value="Actualizar" type="submit" class="btn btn-primary" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+else
+{
+    <p>Por favor, inicie sesión.</p>
+    <a href="@Url.Action("Login", "Usuario")">Iniciar Sesión</a>
+}
+<style>
+    body {
+        background-color: #f4f4f4; /* Color de fondo de la página */
+    }
+
+    .container {
+        margin-top: 50px; /* Ajusta según sea necesario para centrar verticalmente */
+        background-color: #ffffff; /* Color de fondo del formulario */
+        padding: 20px;
+        border-radius: 10px; /* Bordes redondeados */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    }
+
+    .card {
+        border: none; /* Quita el borde de la tarjeta */
+    }
+
+    .text-center {
+        text-align: center; /* Centra el texto */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Color de fondo del botón */
+        border-color: #007bff; /* Color del borde del botón */
+    }
+
+        .btn-primary:hover {
+            background-color: #0056b3; /* Cambia el color de fondo al pasar el ratón */
+            border-color: #0056b3; /* Cambia el color del borde al pasar el ratón */
+        }
+</style>

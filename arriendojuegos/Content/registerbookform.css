@@ -1,0 +1,41 @@
+﻿.product-detail {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.product-item {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.image-container {
+    flex: 1;
+    margin-right: 20px;
+}
+
+    .image-container img {
+        width: 100%;
+        max-width: 250px; /* Ancho máximo de la imagen, ajusta según sea necesario */
+        height: auto;
+        max-height: 300px; /* Alto máximo de la imagen, ajusta según sea necesario */
+    }
+
+.details-container {
+    flex: 2;
+}
+
+.detail-row {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+    .detail-row label {
+        font-weight: bold;
+        width: 100px; /* Ancho fijo para las etiquetas, ajusta según sea necesario */
+    }
+
+    .detail-row p {
+        margin: 0;
+        flex: 1;
+    }

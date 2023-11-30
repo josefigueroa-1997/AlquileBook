@@ -1,0 +1,122 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    @Styles.Render("~/Content/combined-styles.css");
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha384-ezCdBI9ZtG4JNQ6TpRlC+gGqmnrvZlU5i8yO0o2/Jm6YXSQ5JGZnXC/8CVW6K/iS" crossorigin="anonymous">
+
+    <!-- Puedes crear un nuevo archivo de estilos combinados si es necesario -->
+</head>
+<body>
+    <header>
+        <h1><a href="@Url.Action("Index","Home")"><i class="material-icons">menu_book</i> AlquileBook</a></h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Buscar...">
+            <button type="submit"><i class="material-icons">search</i></button>
+        </div>
+        <div class="cart-profile">
+            <span><i class="material-icons">shopping_cart</i></span>
+            <span id="profile-icon"><i class="material-icons">person</i></span>
+            <div id="profile-menu" class="submenu">
+                @if (Session["nombre"] != null)
+                {
+                    int id = (int)Session["id"];
+                    <a href="@Url.Action("Update","Usuario",new {id})">Hola @Session["nombre"]</a>
+                }
+
+
+                <a href="#">Visualizar Perfil</a>
+                <a href="@Url.Action("Login","Usuario")">Cerrar Sesión</a>
+            </div>
+        </div>
+    </header>
+
+
+    <nav>
+        @if (Session["rol"] != null)
+        {
+            int rol = (int)Session["rol"];
+            if (rol == 2)
+            {
+                <a href="#">
+                    Mantenimiento
+                    <div class="submenu">
+                        <a href="@Url.Action("Registrar","Libro")">Registrar</a>
+                        <a href="@Url.Action("Libros","Libro")">Visualizar/editar</a>
+                    </div>
+                </a>
+            }
+
+
+        }
+
+        <a href="#">
+            Tipos de Libros
+            <div class="submenu">
+                <a href="#">Físico</a>
+                <a href="#">Digital</a>
+                <a href="#">Digital</a>
+                <a href="#">Digital</a>
+                <a href="#">Digital</a>
+            </div>
+        </a>
+        <a href="#">
+            Categorías
+            <div class="submenu">
+                @{
+                    var categoria = ViewBag.Categorias as List<arriendojuegos.Models.ListModelLibro.Categoria>;
+                    foreach (var i in categoria)
+                    {
+                            <a href="#">@i.Nombre</a>              
+                    }
+
+                }
+
+            </div>
+        </a>
+        <a href="#">
+            Novedades
+            <div class="submenu">
+                <a href="#">2023</a>
+                <a href="#">2022</a>
+            </div>
+        </a>
+        <a class="expander"></a>
+    </nav>
+
+    <div class="content">
+
+        @RenderBody()
+    </div>
+
+    <!-- Resto del contenido -->
+    <!-- ... -->
+    @Scripts.Render("~/Scripts/layout.js");
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Manejar clic en el icono de perfil
+            $("#profile-icon i").click(function (e) {
+                e.stopPropagation(); // Evita que el evento de clic se propague al documento
+                var iconPosition = $("#profile-icon").offset(); // Cambiado a offset() para obtener la posición respecto al documento
+                $("#profile-menu").css({
+                    top: iconPosition.top + $("#profile-icon").outerHeight() + 10,
+                    left: iconPosition.left - 110
+                });
+                $("#profile-menu").toggleClass("show-menu");
+            });
+
+            // Ocultar el menú al hacer clic fuera de él
+            $(document).click(function (e) {
+                if (!$(e.target).closest('#profile-menu, #profile-icon').length) {
+                    $("#profile-menu").removeClass("show-menu");
+                }
+            });
+        });
+    </script>
+</body>
+</html>

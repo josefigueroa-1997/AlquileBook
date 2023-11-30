@@ -1,0 +1,390 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="arriendojuegosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="ADMINISTRADOR">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NOMBRE" Type="varchar" MaxLength="100" />
+    <Property Name="CORREO" Type="varchar" MaxLength="200" />
+    <Property Name="CONTRASEÑA" Type="nvarchar" MaxLength="100" />
+    <Property Name="SALT" Type="nvarchar" MaxLength="100" />
+    <Property Name="ROL" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <EntityType Name="ALQUILA">
+    <Key>
+      <PropertyRef Name="ID_LIBRO" />
+      <PropertyRef Name="ID_PERSONA" />
+      <PropertyRef Name="ID_FECHA" />
+    </Key>
+    <Property Name="ID_LIBRO" Type="int" Nullable="false" />
+    <Property Name="ID_PERSONA" Type="int" Nullable="false" />
+    <Property Name="ID_FECHA" Type="int" Nullable="false" />
+    <Property Name="FECHAFIN" Type="date" Nullable="false" />
+    <Property Name="TOTAL" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="COMENTARIO" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="CATEGORIA">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NOMBRE" Type="varchar" MaxLength="70" Nullable="false" />
+  </EntityType>
+  <EntityType Name="CATEGORIA_LIBRO">
+    <Key>
+      <PropertyRef Name="ID_CATEGORIA" />
+      <PropertyRef Name="ID_LIBRO" />
+    </Key>
+    <Property Name="ID_CATEGORIA" Type="int" Nullable="false" />
+    <Property Name="ID_LIBRO" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="COMUNA">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NOMBRE" Type="varchar" MaxLength="70" Nullable="false" />
+  </EntityType>
+  <EntityType Name="EDITORIAL">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="NOMBRE" Type="varchar" MaxLength="70" Nullable="false" />
+  </EntityType>
+  <EntityType Name="FECHAALQUILER">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="FECHA" Type="date" Nullable="false" />
+  </EntityType>
+  <EntityType Name="LIBRO">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ISBN" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="NOMBRE" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="AUTOR" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="TIPOLIBRO" Type="varchar" MaxLength="100" Nullable="false" />
+    <Property Name="PRECIO" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="STOCK" Type="int" Nullable="false" />
+    <Property Name="ANIO" Type="int" Nullable="false" />
+    <Property Name="EDITORIAL" Type="int" Nullable="false" />
+    <Property Name="ID_ADMINISTRADOR" Type="int" />
+    <Property Name="DESCRIPCION" Type="varchar" MaxLength="300" Nullable="false" />
+    <Property Name="IMAGEN" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="sexo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nombre" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+    <Property Name="principal_id" Type="int" Nullable="false" />
+    <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="version" Type="int" />
+    <Property Name="definition" Type="varbinary(max)" />
+  </EntityType>
+  <EntityType Name="usuarios">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="nombre" Type="varchar" MaxLength="100" />
+    <Property Name="correo" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="telefono" Type="int" />
+    <Property Name="sexo" Type="int" />
+    <Property Name="FECHANACIMIENTO" Type="date" Nullable="false" />
+    <Property Name="COMUNA" Type="int" Nullable="false" />
+    <Property Name="DIRECCION" Type="varchar" MaxLength="200" Nullable="false" />
+    <Property Name="SALT" Type="nvarchar" MaxLength="200" Nullable="false" />
+    <Property Name="CONTRASEÑA" Type="nvarchar" MaxLength="200" />
+    <Property Name="ROL" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <Association Name="ADMIN_FK">
+    <End Role="ADMINISTRADOR" Type="Self.ADMINISTRADOR" Multiplicity="0..1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ADMINISTRADOR">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="ID_ADMINISTRADOR" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CATEGORIA_FK">
+    <End Role="CATEGORIA" Type="Self.CATEGORIA" Multiplicity="1" />
+    <End Role="CATEGORIA_LIBRO" Type="Self.CATEGORIA_LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="CATEGORIA">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CATEGORIA_LIBRO">
+        <PropertyRef Name="ID_CATEGORIA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="COMUNA_FK">
+    <End Role="COMUNA" Type="Self.COMUNA" Multiplicity="1" />
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="COMUNA">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="usuarios">
+        <PropertyRef Name="COMUNA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EDITORIAL_L_FK">
+    <End Role="EDITORIAL" Type="Self.EDITORIAL" Multiplicity="1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EDITORIAL">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="EDITORIAL" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FECH_FK">
+    <End Role="FECHAALQUILER" Type="Self.FECHAALQUILER" Multiplicity="1" />
+    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FECHAALQUILER">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ALQUILA">
+        <PropertyRef Name="ID_FECHA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="LIB_FK">
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
+    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LIBRO">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ALQUILA">
+        <PropertyRef Name="ID_LIBRO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="LIBRO_FK">
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
+    <End Role="CATEGORIA_LIBRO" Type="Self.CATEGORIA_LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LIBRO">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CATEGORIA_LIBRO">
+        <PropertyRef Name="ID_LIBRO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PERSONA_FK">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ALQUILA">
+        <PropertyRef Name="ID_PERSONA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="sexo_fk">
+    <End Role="sexo" Type="Self.sexo" Multiplicity="0..1" />
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="sexo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="usuarios">
+        <PropertyRef Name="sexo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="ACTUALIZARLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ISBN" Type="varchar" Mode="In" />
+    <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+    <Parameter Name="AUTOR" Type="varchar" Mode="In" />
+    <Parameter Name="TIPOLIBRO" Type="varchar" Mode="In" />
+    <Parameter Name="PRECIO" Type="decimal" Mode="In" />
+    <Parameter Name="STOCK" Type="int" Mode="In" />
+    <Parameter Name="ANIO" Type="int" Mode="In" />
+    <Parameter Name="EDITORIAL" Type="int" Mode="In" />
+    <Parameter Name="ID_ADMINISTRADOR" Type="int" Mode="In" />
+    <Parameter Name="DESCRIPCION" Type="varchar" Mode="In" />
+    <Parameter Name="IDLIBRO" Type="int" Mode="In" />
+    <Parameter Name="CATEGORIAS_ID_LIST" Type="varchar(max)" Mode="In" />
+    <Parameter Name="IMAGEN" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="CREARADMIN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+    <Parameter Name="CORREO" Type="varchar" Mode="In" />
+    <Parameter Name="CONTRASEÑA" Type="nvarchar" Mode="In" />
+    <Parameter Name="SALT" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="CREARUSUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+    <Parameter Name="CORREO" Type="varchar" Mode="In" />
+    <Parameter Name="CONTRASEÑA" Type="nvarchar" Mode="In" />
+    <Parameter Name="TELEFONO" Type="int" Mode="In" />
+    <Parameter Name="SEXO" Type="int" Mode="In" />
+    <Parameter Name="FECHANACIMIENTO" Type="date" Mode="In" />
+    <Parameter Name="COMUNA" Type="int" Mode="In" />
+    <Parameter Name="DIRECCION" Type="varchar" Mode="In" />
+    <Parameter Name="SALT" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="DELETEUSUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="DESPLEGARCOMUNAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="DESPLEGARSEXO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+  <Function Name="GETID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CORREO" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="INICIOSESION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="CORREO" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="OBTENERCATEGORIAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="OBTENEREDITORIAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="OBTENERLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="OBTENERROL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="OBTENERUSUARIOID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID" Type="int" Mode="In" />
+  </Function>
+  <Function Name="OBTENERUSUARIOS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="REGISTRARLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ISBN" Type="varchar" Mode="In" />
+    <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+    <Parameter Name="AUTOR" Type="varchar" Mode="In" />
+    <Parameter Name="TIPOLIBRO" Type="varchar" Mode="In" />
+    <Parameter Name="PRECIO" Type="decimal" Mode="In" />
+    <Parameter Name="STOCK" Type="int" Mode="In" />
+    <Parameter Name="ANIO" Type="int" Mode="In" />
+    <Parameter Name="EDITORIAL" Type="int" Mode="In" />
+    <Parameter Name="ID_ADMINISTRADOR" Type="int" Mode="In" />
+    <Parameter Name="DESCRIPCION" Type="varchar" Mode="In" />
+    <Parameter Name="IDLIBRO" Type="int" Mode="InOut" />
+    <Parameter Name="CATEGORIAS_ID_LIST" Type="varchar(max)" Mode="In" />
+    <Parameter Name="IMAGEN" Type="nvarchar(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_creatediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="version" Type="int" Mode="In" />
+    <Parameter Name="definition" Type="varbinary(max)" Mode="In" />
+  </Function>
+  <Function Name="sp_dropdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagramdefinition" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_helpdiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+  </Function>
+  <Function Name="sp_renamediagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
+    <Parameter Name="owner_id" Type="int" Mode="In" />
+    <Parameter Name="new_diagramname" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="sp_upgraddiagrams" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="SplitString" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="String" Type="nvarchar(max)" Mode="In" />
+    <Parameter Name="Delimiter" Type="char" Mode="In" />
+    <ReturnType>
+      <CollectionType>
+        <RowType>
+          <Property Name="Value" Type="nvarchar(max)" />
+        </RowType>
+      </CollectionType>
+    </ReturnType>
+  </Function>
+  <Function Name="UPDATEUSUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID" Type="int" Mode="In" />
+    <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
+    <Parameter Name="CORREO" Type="varchar" Mode="In" />
+    <Parameter Name="TELEFONO" Type="int" Mode="In" />
+    <Parameter Name="DIRECCION" Type="varchar" Mode="In" />
+    <Parameter Name="COMUNA" Type="int" Mode="In" />
+  </Function>
+  <EntityContainer Name="arriendojuegosModelStoreContainer">
+    <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ALQUILA" EntityType="Self.ALQUILA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CATEGORIA" EntityType="Self.CATEGORIA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CATEGORIA_LIBRO" EntityType="Self.CATEGORIA_LIBRO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="COMUNA" EntityType="Self.COMUNA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="EDITORIAL" EntityType="Self.EDITORIAL" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="FECHAALQUILER" EntityType="Self.FECHAALQUILER" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LIBRO" EntityType="Self.LIBRO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sexo" EntityType="Self.sexo" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="ADMIN_FK" Association="Self.ADMIN_FK">
+      <End Role="ADMINISTRADOR" EntitySet="ADMINISTRADOR" />
+      <End Role="LIBRO" EntitySet="LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="CATEGORIA_FK" Association="Self.CATEGORIA_FK">
+      <End Role="CATEGORIA" EntitySet="CATEGORIA" />
+      <End Role="CATEGORIA_LIBRO" EntitySet="CATEGORIA_LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="COMUNA_FK" Association="Self.COMUNA_FK">
+      <End Role="COMUNA" EntitySet="COMUNA" />
+      <End Role="usuarios" EntitySet="usuarios" />
+    </AssociationSet>
+    <AssociationSet Name="EDITORIAL_L_FK" Association="Self.EDITORIAL_L_FK">
+      <End Role="EDITORIAL" EntitySet="EDITORIAL" />
+      <End Role="LIBRO" EntitySet="LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="FECH_FK" Association="Self.FECH_FK">
+      <End Role="FECHAALQUILER" EntitySet="FECHAALQUILER" />
+      <End Role="ALQUILA" EntitySet="ALQUILA" />
+    </AssociationSet>
+    <AssociationSet Name="LIB_FK" Association="Self.LIB_FK">
+      <End Role="LIBRO" EntitySet="LIBRO" />
+      <End Role="ALQUILA" EntitySet="ALQUILA" />
+    </AssociationSet>
+    <AssociationSet Name="LIBRO_FK" Association="Self.LIBRO_FK">
+      <End Role="LIBRO" EntitySet="LIBRO" />
+      <End Role="CATEGORIA_LIBRO" EntitySet="CATEGORIA_LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="PERSONA_FK" Association="Self.PERSONA_FK">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="ALQUILA" EntitySet="ALQUILA" />
+    </AssociationSet>
+    <AssociationSet Name="sexo_fk" Association="Self.sexo_fk">
+      <End Role="sexo" EntitySet="sexo" />
+      <End Role="usuarios" EntitySet="usuarios" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

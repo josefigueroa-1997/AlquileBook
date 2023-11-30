@@ -1,0 +1,178 @@
+﻿@model List<arriendojuegos.Models.ListModelLibro.Libro>
+
+
+
+@{
+    ViewBag.Title = "Detalle";
+}
+@Styles.Render("~/Content/registerbookform.css");
+<h2>Detalle</h2>
+
+
+<div class="product-detail">
+    @foreach (var libro in Model)
+    {<form method="post" action="@Url.Action("Actualizarlibro","Libro")" enctype="multipart/form-data">
+            <input type="hidden" name="idlibro" value="@libro.Id" />
+            <div class="product-item">
+                <div class="image-container">
+                    @if (libro.Imagen != null)
+                    {
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Libro Imagen">
+
+                    }
+                    else
+                    {
+                        <span>Imagen no disponible</span>
+                    }
+                    <input type="file" name="imagen" />
+                </div>
+                <div class="details-container">
+                    <div class="detail-row">
+                        <label>Nombre:</label>
+                        <input type="text" name="Nombre" value="@libro.Nombre" />
+                    </div>
+
+                    <div class="detail-row">
+                        <label>ISBN:</label>
+                        <input type="text" name="ISBN" value="@libro.ISBN" />
+                    </div>
+
+                    <div class="detail-row">
+                        <label>Autor:</label>
+                        <input type="text" name="Autor" value="@libro.Autor" />
+                    </div>
+                    <div class="detail-row">
+                        <label>Formato de Libro:</label>
+                        @{
+
+                            if (libro.TipoLibro == "Digital")
+                            {
+                                <label>Digital</label>
+                                <input type="radio" checked="checked" name="Tipolibro" value="@libro.TipoLibro" />
+                                <label>Fisico</label>
+                                <input type="radio" name="Tipolibro" value="Fisico" />
+                            }
+                            else
+                            {
+                                <label>Digital</label>
+                                <input type="radio" name="Tipolibro" value="Digital" />
+                                <label>Fisico</label>
+                                <input type="radio" checked="checked" name="Tipolibro" value="@libro.TipoLibro" />
+                            }
+
+                        }
+
+
+                    </div>
+                    <div class="detail-row">
+                        <label>Precio:</label>
+                        <input type="text" name="Precio" value="@libro.Precio" />
+                    </div>
+                    <div class="detail-row">
+                        <label>Stock:</label>
+                        <input type="text" name="Stock" value="@libro.Stock" />
+                    </div>
+                    <div class="detail-row">
+                        <label>Año:</label>
+                        <input type="text" name="Anio" value="@libro.Anio" />
+                    </div>
+                    <div class="detail-row">
+                        <label>Editorial:</label>
+                        <select id="editorial" name="Editorial">
+
+                            @{
+                                
+                                var editoriales = ViewBag.Editoriales as List<arriendojuegos.Models.ListModelLibro.Editorial>;
+                                foreach (var editorial in editoriales)
+                                {
+                                   <option value="@editorial.Id" @(editorial.Id == libro.EditorialId ? "selected" : "")>@editorial.Nombre</option>
+                                }
+                            }
+
+
+                        </select>
+
+                    </div>
+                    <div class="detail-row">
+                        <label>Géneros:</label>
+                        @{
+                            var categorias = ViewBag.Categorias as List<arriendojuegos.Models.ListModelLibro.Categoria>;
+                            foreach (var categoria in categorias)
+                            {
+                                <div style="margin-right: 20px;">
+                                    <input type="checkbox" name="Categorias[]" value="@categoria.Id" @(libro.CategoriaId.Contains(categoria.Id) ? "checked" : "") />
+                                    @categoria.Nombre
+                                </div>
+                            }
+
+                        }
+
+                    </div>
+
+                    <div class="detail-row">
+                        <label>Descripción:</label>
+                        <textarea id="descripcion" name="descripcion" rows="4">@libro.Descripcion</textarea>
+                    </div>
+
+                    <div class="detail-row">
+                        <button type="submit" style="border-radius:14px;background-color:lightgreen;color:white" class="btn-success">Actualizar Datos</button>
+                    </div>
+
+
+
+                </div>
+            </div>
+        </form>
+    }
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*
+    <div class="product-detail">
+        @foreach (var libro in Model)
+        {
+            <div class="product-item">
+                <div class="image-container">
+                    <img src="~/imagenes/libro_1354376096.jpg" alt="Libro Imagen">
+                </div>
+                <div class="details-container">
+                    <div class="detail-row">
+                        <label>Nombre:</label>
+                        <p>@libro.Nombre</p>
+                    </div>
+
+                    <div class="detail-row">
+                        <label>ISBN:</label>
+                        <p>@libro.ISBN</p>
+                    </div>
+
+                    <div class="detail-row">
+                        <label>Autor:</label>
+                        <p>@libro.Autor</p>
+                    </div>
+
+                    <!-- Agrega más campos según sea necesario -->
+                </div>
+            </div>
+        }
+    </div>
+*@
+
+
+
+
+
+
+

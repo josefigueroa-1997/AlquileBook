@@ -1,0 +1,434 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="arriendojuegosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <ComplexType Name="SplitString_Result">
+    <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+  </ComplexType>
+  <EntityType Name="ADMINISTRADOR">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NOMBRE" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="CORREO" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="CONTRASEÑA" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="SALT" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="ROL" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="LIBRO" Relationship="Self.ADMIN_FK" FromRole="ADMINISTRADOR" ToRole="LIBRO" />
+  </EntityType>
+  <EntityType Name="ALQUILA">
+    <Key>
+      <PropertyRef Name="ID_LIBRO" />
+      <PropertyRef Name="ID_PERSONA" />
+      <PropertyRef Name="ID_FECHA" />
+    </Key>
+    <Property Name="ID_LIBRO" Type="Int32" Nullable="false" />
+    <Property Name="ID_PERSONA" Type="Int32" Nullable="false" />
+    <Property Name="ID_FECHA" Type="Int32" Nullable="false" />
+    <Property Name="FECHAFIN" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="TOTAL" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="COMENTARIO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="FECHAALQUILER" Relationship="Self.FECH_FK" FromRole="ALQUILA" ToRole="FECHAALQUILER" />
+    <NavigationProperty Name="LIBRO" Relationship="Self.LIB_FK" FromRole="ALQUILA" ToRole="LIBRO" />
+    <NavigationProperty Name="usuarios" Relationship="Self.PERSONA_FK" FromRole="ALQUILA" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="CATEGORIA">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NOMBRE" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="LIBRO" Relationship="Self.CATEGORIA_LIBRO" FromRole="CATEGORIA" ToRole="LIBRO" />
+  </EntityType>
+  <EntityType Name="COMUNA">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NOMBRE" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="usuarios" Relationship="Self.COMUNA_FK" FromRole="COMUNA" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="EDITORIAL">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="NOMBRE" Type="String" MaxLength="70" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="LIBRO" Relationship="Self.EDITORIAL_L_FK" FromRole="EDITORIAL" ToRole="LIBRO" />
+  </EntityType>
+  <EntityType Name="FECHAALQUILER">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
+    <NavigationProperty Name="ALQUILA" Relationship="Self.FECH_FK" FromRole="FECHAALQUILER" ToRole="ALQUILA" />
+  </EntityType>
+  <EntityType Name="LIBRO">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ISBN" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NOMBRE" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="AUTOR" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="TIPOLIBRO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="PRECIO" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+    <Property Name="STOCK" Type="Int32" Nullable="false" />
+    <Property Name="ANIO" Type="Int32" Nullable="false" />
+    <Property Name="EDITORIAL" Type="Int32" Nullable="false" />
+    <Property Name="ID_ADMINISTRADOR" Type="Int32" />
+    <Property Name="DESCRIPCION" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IMAGEN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ADMINISTRADOR" Relationship="Self.ADMIN_FK" FromRole="LIBRO" ToRole="ADMINISTRADOR" />
+    <NavigationProperty Name="ALQUILA" Relationship="Self.LIB_FK" FromRole="LIBRO" ToRole="ALQUILA" />
+    <NavigationProperty Name="EDITORIAL1" Relationship="Self.EDITORIAL_L_FK" FromRole="LIBRO" ToRole="EDITORIAL" />
+    <NavigationProperty Name="CATEGORIA" Relationship="Self.CATEGORIA_LIBRO" FromRole="LIBRO" ToRole="CATEGORIA" />
+  </EntityType>
+  <EntityType Name="sexo">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nombre" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="usuarios" Relationship="Self.sexo_fk" FromRole="sexo" ToRole="usuarios" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" MaxLength="128" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="usuarios">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nombre" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="correo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="telefono" Type="Int32" />
+    <Property Name="sexo" Type="Int32" />
+    <Property Name="FECHANACIMIENTO" Type="DateTime" Nullable="false" Precision="0" />
+    <Property Name="COMUNA" Type="Int32" Nullable="false" />
+    <Property Name="DIRECCION" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SALT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+    <Property Name="CONTRASEÑA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="ROL" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="ALQUILA" Relationship="Self.PERSONA_FK" FromRole="usuarios" ToRole="ALQUILA" />
+    <NavigationProperty Name="COMUNA1" Relationship="Self.COMUNA_FK" FromRole="usuarios" ToRole="COMUNA" />
+    <NavigationProperty Name="sexo1" Relationship="Self.sexo_fk" FromRole="usuarios" ToRole="sexo" />
+  </EntityType>
+  <Association Name="ADMIN_FK">
+    <End Role="ADMINISTRADOR" Type="Self.ADMINISTRADOR" Multiplicity="0..1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ADMINISTRADOR">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="ID_ADMINISTRADOR" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FECH_FK">
+    <End Role="FECHAALQUILER" Type="Self.FECHAALQUILER" Multiplicity="1" />
+    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="FECHAALQUILER">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ALQUILA">
+        <PropertyRef Name="ID_FECHA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="LIB_FK">
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
+    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LIBRO">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ALQUILA">
+        <PropertyRef Name="ID_LIBRO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="PERSONA_FK">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="ALQUILA">
+        <PropertyRef Name="ID_PERSONA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="COMUNA_FK">
+    <End Role="COMUNA" Type="Self.COMUNA" Multiplicity="1" />
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="COMUNA">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="usuarios">
+        <PropertyRef Name="COMUNA" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="EDITORIAL_L_FK">
+    <End Role="EDITORIAL" Type="Self.EDITORIAL" Multiplicity="1" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="EDITORIAL">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="LIBRO">
+        <PropertyRef Name="EDITORIAL" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="sexo_fk">
+    <End Role="sexo" Type="Self.sexo" Multiplicity="0..1" />
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="sexo">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="usuarios">
+        <PropertyRef Name="sexo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="CATEGORIA_LIBRO">
+    <End Role="CATEGORIA" Type="Self.CATEGORIA" Multiplicity="*" />
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="*" />
+  </Association>
+  <EntityContainer Name="arriendojuegosEntities1" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" />
+    <EntitySet Name="ALQUILA" EntityType="Self.ALQUILA" />
+    <EntitySet Name="CATEGORIA" EntityType="Self.CATEGORIA" />
+    <EntitySet Name="COMUNA" EntityType="Self.COMUNA" />
+    <EntitySet Name="EDITORIAL" EntityType="Self.EDITORIAL" />
+    <EntitySet Name="FECHAALQUILER" EntityType="Self.FECHAALQUILER" />
+    <EntitySet Name="LIBRO" EntityType="Self.LIBRO" />
+    <EntitySet Name="sexo" EntityType="Self.sexo" />
+    <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="usuarios" EntityType="Self.usuarios" />
+    <AssociationSet Name="ADMIN_FK" Association="Self.ADMIN_FK">
+      <End Role="ADMINISTRADOR" EntitySet="ADMINISTRADOR" />
+      <End Role="LIBRO" EntitySet="LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="FECH_FK" Association="Self.FECH_FK">
+      <End Role="FECHAALQUILER" EntitySet="FECHAALQUILER" />
+      <End Role="ALQUILA" EntitySet="ALQUILA" />
+    </AssociationSet>
+    <AssociationSet Name="LIB_FK" Association="Self.LIB_FK">
+      <End Role="LIBRO" EntitySet="LIBRO" />
+      <End Role="ALQUILA" EntitySet="ALQUILA" />
+    </AssociationSet>
+    <AssociationSet Name="PERSONA_FK" Association="Self.PERSONA_FK">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="ALQUILA" EntitySet="ALQUILA" />
+    </AssociationSet>
+    <AssociationSet Name="COMUNA_FK" Association="Self.COMUNA_FK">
+      <End Role="COMUNA" EntitySet="COMUNA" />
+      <End Role="usuarios" EntitySet="usuarios" />
+    </AssociationSet>
+    <AssociationSet Name="EDITORIAL_L_FK" Association="Self.EDITORIAL_L_FK">
+      <End Role="EDITORIAL" EntitySet="EDITORIAL" />
+      <End Role="LIBRO" EntitySet="LIBRO" />
+    </AssociationSet>
+    <AssociationSet Name="sexo_fk" Association="Self.sexo_fk">
+      <End Role="sexo" EntitySet="sexo" />
+      <End Role="usuarios" EntitySet="usuarios" />
+    </AssociationSet>
+    <AssociationSet Name="CATEGORIA_LIBRO" Association="Self.CATEGORIA_LIBRO">
+      <End Role="CATEGORIA" EntitySet="CATEGORIA" />
+      <End Role="LIBRO" EntitySet="LIBRO" />
+    </AssociationSet>
+    <FunctionImport Name="SplitString" IsComposable="true" ReturnType="Collection(arriendojuegosModel.SplitString_Result)">
+      <Parameter Name="String" Mode="In" Type="String" />
+      <Parameter Name="Delimiter" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="ACTUALIZARLIBRO">
+      <Parameter Name="ISBN" Mode="In" Type="String" />
+      <Parameter Name="NOMBRE" Mode="In" Type="String" />
+      <Parameter Name="AUTOR" Mode="In" Type="String" />
+      <Parameter Name="TIPOLIBRO" Mode="In" Type="String" />
+      <Parameter Name="PRECIO" Mode="In" Type="Decimal" />
+      <Parameter Name="STOCK" Mode="In" Type="Int32" />
+      <Parameter Name="ANIO" Mode="In" Type="Int32" />
+      <Parameter Name="EDITORIAL" Mode="In" Type="Int32" />
+      <Parameter Name="ID_ADMINISTRADOR" Mode="In" Type="Int32" />
+      <Parameter Name="DESCRIPCION" Mode="In" Type="String" />
+      <Parameter Name="IDLIBRO" Mode="In" Type="Int32" />
+      <Parameter Name="CATEGORIAS_ID_LIST" Mode="In" Type="String" />
+      <Parameter Name="IMAGEN" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CREARADMIN">
+      <Parameter Name="NOMBRE" Mode="In" Type="String" />
+      <Parameter Name="CORREO" Mode="In" Type="String" />
+      <Parameter Name="CONTRASEÑA" Mode="In" Type="String" />
+      <Parameter Name="SALT" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="CREARUSUARIO">
+      <Parameter Name="NOMBRE" Mode="In" Type="String" />
+      <Parameter Name="CORREO" Mode="In" Type="String" />
+      <Parameter Name="CONTRASEÑA" Mode="In" Type="String" />
+      <Parameter Name="TELEFONO" Mode="In" Type="Int32" />
+      <Parameter Name="SEXO" Mode="In" Type="Int32" />
+      <Parameter Name="FECHANACIMIENTO" Mode="In" Type="DateTime" />
+      <Parameter Name="COMUNA" Mode="In" Type="Int32" />
+      <Parameter Name="DIRECCION" Mode="In" Type="String" />
+      <Parameter Name="SALT" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="DELETEUSUARIO">
+      <Parameter Name="ID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DESPLEGARCOMUNAS" ReturnType="Collection(arriendojuegosModel.DESPLEGARCOMUNAS_Result)" />
+    <FunctionImport Name="DESPLEGARSEXO" ReturnType="Collection(arriendojuegosModel.DESPLEGARSEXO_Result)" />
+    <FunctionImport Name="GETID" ReturnType="Collection(Int32)">
+      <Parameter Name="CORREO" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="INICIOSESION" ReturnType="Collection(arriendojuegosModel.INICIOSESION_Result)">
+      <Parameter Name="CORREO" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="OBTENERCATEGORIAS" ReturnType="Collection(arriendojuegosModel.OBTENERCATEGORIAS_Result)" />
+    <FunctionImport Name="OBTENEREDITORIAL" ReturnType="Collection(arriendojuegosModel.OBTENEREDITORIAL_Result)" />
+    <FunctionImport Name="OBTENERLIBRO" ReturnType="Collection(arriendojuegosModel.OBTENERLIBRO_Result)">
+      <Parameter Name="ID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="OBTENERROL" ReturnType="Collection(Int32)">
+      <Parameter Name="ID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="OBTENERUSUARIOID" ReturnType="Collection(arriendojuegosModel.OBTENERUSUARIOID_Result)">
+      <Parameter Name="ID" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="OBTENERUSUARIOS" ReturnType="Collection(arriendojuegosModel.OBTENERUSUARIOS_Result)" />
+    <FunctionImport Name="REGISTRARLIBRO">
+      <Parameter Name="ISBN" Mode="In" Type="String" />
+      <Parameter Name="NOMBRE" Mode="In" Type="String" />
+      <Parameter Name="AUTOR" Mode="In" Type="String" />
+      <Parameter Name="TIPOLIBRO" Mode="In" Type="String" />
+      <Parameter Name="PRECIO" Mode="In" Type="Decimal" />
+      <Parameter Name="STOCK" Mode="In" Type="Int32" />
+      <Parameter Name="ANIO" Mode="In" Type="Int32" />
+      <Parameter Name="EDITORIAL" Mode="In" Type="Int32" />
+      <Parameter Name="ID_ADMINISTRADOR" Mode="In" Type="Int32" />
+      <Parameter Name="DESCRIPCION" Mode="In" Type="String" />
+      <Parameter Name="IDLIBRO" Mode="InOut" Type="Int32" />
+      <Parameter Name="CATEGORIAS_ID_LIST" Mode="In" Type="String" />
+      <Parameter Name="IMAGEN" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(arriendojuegosModel.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(arriendojuegosModel.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <FunctionImport Name="UPDATEUSUARIO">
+      <Parameter Name="ID" Mode="In" Type="Int32" />
+      <Parameter Name="NOMBRE" Mode="In" Type="String" />
+      <Parameter Name="CORREO" Mode="In" Type="String" />
+      <Parameter Name="TELEFONO" Mode="In" Type="Int32" />
+      <Parameter Name="DIRECCION" Mode="In" Type="String" />
+      <Parameter Name="COMUNA" Mode="In" Type="Int32" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="DESPLEGARCOMUNAS_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="70" />
+  </ComplexType>
+  <ComplexType Name="DESPLEGARSEXO_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
+  </ComplexType>
+  <ComplexType Name="INICIOSESION_Result">
+    <Property Type="Int32" Name="ID" Nullable="true" />
+    <Property Type="String" Name="CONTRASEÑA" Nullable="true" MaxLength="255" />
+    <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="OBTENERCATEGORIAS_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="70" />
+  </ComplexType>
+  <ComplexType Name="OBTENEREDITORIAL_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="70" />
+  </ComplexType>
+  <ComplexType Name="OBTENERLIBRO_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="ISBN" Nullable="false" MaxLength="20" />
+    <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="AUTOR" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="TIPOLIBRO" Nullable="false" MaxLength="100" />
+    <Property Type="Decimal" Name="PRECIO" Nullable="false" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="STOCK" Nullable="false" />
+    <Property Type="Int32" Name="ANIO" Nullable="false" />
+    <Property Type="String" Name="EDITORIALNOMBRE" Nullable="false" MaxLength="70" />
+    <Property Type="Int32" Name="EDITORIALID" Nullable="false" />
+    <Property Type="Int32" Name="ID_ADMINISTRADOR" Nullable="true" />
+    <Property Type="String" Name="DESCRIPCION" Nullable="false" MaxLength="300" />
+    <Property Type="String" Name="IMAGEN" Nullable="true" />
+    <Property Type="String" Name="CATEGORIANOMBRES" Nullable="true" />
+    <Property Type="String" Name="CATEGORIAIDSTRING" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="OBTENERUSUARIOID_Result">
+    <Property Type="String" Name="nombre" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="correo" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="contraseña" Nullable="true" MaxLength="200" />
+    <Property Type="Int32" Name="telefono" Nullable="true" />
+    <Property Type="String" Name="DIRECCION" Nullable="false" MaxLength="200" />
+    <Property Type="Int32" Name="COMUNA" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="OBTENERUSUARIOS_Result">
+    <Property Type="Int32" Name="Id" Nullable="false" />
+    <Property Type="String" Name="nombre" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="correo" Nullable="false" MaxLength="200" />
+    <Property Type="Int32" Name="telefono" Nullable="true" />
+    <Property Type="String" Name="CONTRASEÑA" Nullable="true" MaxLength="200" />
+    <Property Type="String" Name="DIRECCION" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="comunanombre" Nullable="false" MaxLength="70" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+</Schema>

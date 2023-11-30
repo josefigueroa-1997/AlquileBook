@@ -1,0 +1,103 @@
+﻿
+@{
+    ViewBag.Title = "Registrar";
+}
+
+@Styles.Render("~/Content/registerbookform.css");
+<h2>Libro</h2>
+
+
+<div class="product-detail">
+
+    <form method="post" action="@Url.Action("RegistrarLibro","Libro")" enctype="multipart/form-data" onsubmit="return validarregistrolibro('isbn', 'nombre', 'autor',  'precio', 'stock', 'anio', 'editorial', 'descripcion', 'imagen','fisico','digital');">
+
+        <div class="product-item">
+            <div class="image-container">
+
+
+                <span>Agregar Imagen</span>
+
+                <input type="file" id="imagen" name="imagen" />
+            </div>
+            <div class="details-container">
+                <div class="detail-row">
+                    <label>Nombre:</label>
+                    <input id="nombre" type="text" name="Nombre" />
+                </div>
+
+                <div class="detail-row">
+                    <label>ISBN:</label>
+                    <input type="text" id="isbn" name="ISBN" />
+                </div>
+
+                <div class="detail-row">
+                    <label>Autor:</label>
+                    <input id="autor" type="text" name="Autor" />
+                </div>
+                <div class="detail-row">
+                    <label>Formato de Libro:</label>
+
+                    <label>Digital</label>
+                    <input class="tipolibro" id="digital" type="radio" name="Tipolibro" value="Digital" />
+                    <label>Fisico</label>
+                    <input class="tipolibro" id="fisico" type="radio" name="Tipolibro" value="Fisico" />
+
+                </div>
+                <div class="detail-row">
+                    <label>Precio:</label>
+                    <input id="precio" type="text" name="Precio" />
+                </div>
+                <div class="detail-row">
+                    <label>Stock:</label>
+                    <input id="stock" type="text" name="Stock" />
+                </div>
+                <div class="detail-row">
+                    <label>Año:</label>
+                    <input id="anio" type="text" name="Anio" />
+                </div>
+                <div class="detail-row">
+                    <label>Editorial:</label>
+                    <select id="editorial" name="Editorial">
+
+                        @{
+                            var editoriales = ViewBag.Editoriales as List<arriendojuegos.Models.ListModelLibro.Editorial>;
+                            foreach (var editorial in editoriales)
+                            {
+                                <option value="@editorial.Id">@editorial.Nombre</option>
+                            }
+                        }
+
+
+                    </select>
+
+                </div>
+                <div class="detail-row">
+                    <label>Géneros:</label>
+                    @{
+                        var categorias = ViewBag.Categorias as List<arriendojuegos.Models.ListModelLibro.Categoria>;
+                        foreach (var categoria in categorias)
+                        {
+                            <div style="margin-right: 20px;">
+                                <input id="categoria" type="checkbox" name="Categorias[]" value="@categoria.Id" />
+                                @categoria.Nombre
+                            </div>
+                        }
+
+                    }
+
+                </div>
+
+                <div class="detail-row">
+                    <label>Descripción:</label>
+                    <textarea id="descripcion" name="descripcion" rows="4"></textarea>
+                </div>
+
+                <div class="detail-row">
+                    <button type="submit" style="border-radius:14px;background-color:lightgreen;color:white" class="btn-success">Registrar</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    @Scripts.Render("~/Scripts/validar.js")
+</div>
+

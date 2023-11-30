@@ -1,0 +1,38 @@
+﻿@model arriendojuegos.Models.ListModelUsuario.Usuario
+
+
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    @Styles.Render("~/Content/login-styles.css");
+    <title>Formulario de Inicio de Sesión</title>
+</head>
+<body>
+    <div class="container">
+        
+        <form class="login-form" method="post" action="@Url.Action("Login", "Usuario")">
+            <p>Acceder a</p>
+            <h2><i class="material-icons">menu_book</i>AlquileBook</h2>
+            @if (!string.IsNullOrEmpty(ViewBag.Error))
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.Error
+                </div>
+            }
+            <label for="usuario">Correo</label>
+            <input class="my-input" type="email" id="usuario" name="correo" placeholder="" required>
+            <label for="contrasena">Contraseña</label>
+            <input class="my-input" type="password" id="contraseña" name="contraseña" placeholder="" required>
+
+            <button type="submit">Iniciar Sesión</button>
+            <label>¿No tienes una cuenta?</label>
+            <a style="color:red" href="@Url.Action("CrearUsuario","Usuario")">Registrate</a>
+        </form>
+    </div>
+</body>
+</html>

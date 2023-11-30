@@ -1,0 +1,99 @@
+﻿@model List<arriendojuegos.Models.ListModelUsuario.Usuario>
+@{
+    ViewBag.Title = "Usuarios";
+}
+@if (@Session["nombre"] != null)
+{
+    <h2>Bienvenido, @Session["nombre"]</h2>
+    <a href="@Url.Action("CerrarSesion", "Usuario")">Cerrar Sesión</a>
+    <table class="tabla-verde">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Telefono</th>
+                <th>Dirección</th>
+                <th>Comuna</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in Model)
+            {
+                <tr>
+
+                    <td>@usuario.nombre</td>
+                    <td>@usuario.correo</td>
+                    <td>@usuario.telefono</td>
+                    <td>@usuario.direccion</td>
+                    <td>@usuario.comunanombre</td>
+                    <td><a class="btn-update" href="javascript:void(0);" onclick="Updateuser('@usuario.Id')">Editar</a></td>
+                    <td><a class="btn-delete" href="javascript:void(0);" onclick="Deleteuser('@usuario.Id')">Eliminar</a></td>
+                </tr>
+            }
+
+        </tbody>
+    </table>
+}
+
+else
+{
+    <p>Por favor, inicie sesión.</p>
+    <a href="@Url.Action("Login", "Usuario")">Iniciar Sesión</a>
+}
+
+<style>
+    .tabla-verde {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px; /* Ajusta el margen según sea necesario */
+    }
+
+        .tabla-verde th, .tabla-verde td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .tabla-verde th {
+            background-color: #8bc34a; /* Color verde claro - ajusta según tus preferencias */
+            color: white; /* Color del texto en el encabezado */
+        }
+
+    .btn-update {
+        display: inline-block;
+        padding: 15px 20px; /* Ajusta el relleno según sea necesario para aumentar el tamaño */
+        font-size: 14px; /* Ajusta el tamaño del texto según sea necesario */
+        text-align: center;
+        text-decoration: none;
+        border-radius: 10px; /* Esto define los bordes circulares */
+        cursor: pointer;
+        background-color: #EEF479; /* Color de fondo del botón */
+        color: black; /* Color del texto del botón */
+        border: 2px solid #4CAF50;
+    }
+
+    .btn-delete {
+        display: inline-block;
+        padding: 15px 20px; /* Ajusta el relleno según sea necesario para aumentar el tamaño */
+        font-size: 14px; /* Ajusta el tamaño del texto según sea necesario */
+        text-align: center;
+        text-decoration: none;
+        border-radius: 10px; /* Esto define los bordes circulares */
+        cursor: pointer;
+        background-color: #F92323; /* Color de fondo del botón */
+        color: black; /* Color del texto del botón */
+        border: 2px solid #4CAF50;
+    }
+</style>
+<script>
+    function Updateuser(id) {
+        window.location.href = '@Url.Action("Update", "Usuario")/' + id;
+    }
+    function Deleteuser(id) {
+        var confirmar = confirm("¿Estás seguero que quierse eliminar este registro?");
+        if (confirmar) {
+            window.location.href = '@Url.Action("Delete", "Usuario")/' + id;
+        }
+
+    }
+</script>
