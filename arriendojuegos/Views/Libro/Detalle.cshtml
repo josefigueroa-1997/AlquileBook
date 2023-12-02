@@ -6,12 +6,14 @@
     ViewBag.Title = "Detalle";
 }
 @Styles.Render("~/Content/registerbookform.css");
-<h2>Detalle</h2>
+
 
 
 <div class="product-detail">
     @foreach (var libro in Model)
-    {<form method="post" action="@Url.Action("Actualizarlibro","Libro")" enctype="multipart/form-data">
+
+    {
+        <form method="post" action="@Url.Action("Actualizarlibro","Libro")" enctype="multipart/form-data">
             <input type="hidden" name="idlibro" value="@libro.Id" />
             <div class="product-item">
                 <div class="image-container">
@@ -81,11 +83,11 @@
                         <select id="editorial" name="Editorial">
 
                             @{
-                                
+
                                 var editoriales = ViewBag.Editoriales as List<arriendojuegos.Models.ListModelLibro.Editorial>;
                                 foreach (var editorial in editoriales)
                                 {
-                                   <option value="@editorial.Id" @(editorial.Id == libro.EditorialId ? "selected" : "")>@editorial.Nombre</option>
+                                    <option value="@editorial.Id" @(editorial.Id == libro.EditorialId ? "selected" : "")>@editorial.Nombre</option>
                                 }
                             }
 
@@ -116,6 +118,7 @@
 
                     <div class="detail-row">
                         <button type="submit" style="border-radius:14px;background-color:lightgreen;color:white" class="btn-success">Actualizar Datos</button>
+                        <a href="javascript:void(0);" onclick="DeleteBook('@libro.Id')" style="border-radius: 14px; background-color: red; color: white;text-decoration:none;" class="btn-success">Eliminar</a>
                     </div>
 
 
@@ -127,8 +130,16 @@
 </div>
 
 
+<script>
 
+    function DeleteBook(id) {
+        var confirmar = confirm("¿Estás seguro de querer borrar este libro?");
+        if (confirmar) {
+            window.location.href = '@Url.Action("DeleteBook","Libro")/' + id;
+        }
+    };
 
+</script>
 
 
 

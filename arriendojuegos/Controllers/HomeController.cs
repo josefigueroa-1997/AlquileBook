@@ -7,23 +7,20 @@ using System.Web.Mvc;
 using arriendojuegos.Models;
 using arriendojuegos.Models.ListModelLibro;
 using arriendojuegos.Filters;
+using arriendojuegos.Services;
 namespace arriendojuegos.Controllers
 {
     [CargarCategorias]
     public class HomeController : Controller
     {
-        
-        public ActionResult Index()
+        private readonly Libroservice libroservice = new Libroservice();
+        public ActionResult Index(int? id, string tipolibro, int? idcategoria, int? anio)
         {
-            
-            return View();
+            var libro = libroservice.ObtenerLibros(id,tipolibro,idcategoria,anio);
+            return View(libro);
         }
 
-        
-       
-
-
-
+     
         public ActionResult About()
         {
             ViewBag.Message = "Your application description page.";

@@ -1,10 +1,10 @@
-﻿
+﻿@model List<arriendojuegos.Models.ListModelLibro.Libro>
 @{
     ViewBag.Title = "Home Page";
-    
-       
-    
+
 }
+
+
 
 <div class="content">
     <div class="banner-container">
@@ -16,51 +16,142 @@
         </div>
 
     </div>
-
-    <!-- Sección: Para ti -->
-    <div class="section">
-        <h2>Para ti</h2>
-        <div class="product">
-            <div class="product-item">
-                <img src="~/imagenes/libro_1354376096.jpg" alt="Producto 1">
-                <h3>Producto 1</h3>
-                <p>Descripción del producto 1</p>
-                <p class="price">$XX.XX</p>
-            </div>
-            <div class="product-item">
-                <img src="~/imagenes/descarga.jpg" alt="Producto 2">
-                <h3>Producto 2</h3>
-                <p>Descripción del producto 2</p>
-                <p class="price">$XX.XX</p>
-            </div>
-            <div class="product-item">
-                <img src="~/imagenes/images.jpg" alt="Producto 3">
-                <h3>Maldita Roma</h3>
-                <p>Descripción del producto 3</p>
-                <p class="price">$27.000</p>
-            </div>
-            <div class="product-item">
-                <img src="URL_DE_LA_IMAGEN" alt="Producto 4">
-                <h3>Producto 4</h3>
-                <p>Descripción del producto 4</p>
-                <p class="price">$27.000</p>
+    @if (Session["nombre"] != null)
+    {
+        <!-- Sección: Para ti -->
+        <div class="section">
+            <h2>Para ti</h2>
+            <div class="product">
+                <div class="product-item">
+                    <img src="~/imagenes/libro_1354376096.jpg" alt="Producto 1">
+                    <h3>Producto 1</h3>
+                    <p>Descripción del producto 1</p>
+                    <p class="price">$XX.XX</p>
+                </div>
+                <div class="product-item">
+                    <img src="~/imagenes/descarga.jpg" alt="Producto 2">
+                    <h3>Producto 2</h3>
+                    <p>Descripción del producto 2</p>
+                    <p class="price">$XX.XX</p>
+                </div>
+                <div class="product-item">
+                    <img src="~/imagenes/images.jpg" alt="Producto 3">
+                    <h3>Maldita Roma</h3>
+                    <p>Descripción del producto 3</p>
+                    <p class="price">$27.000</p>
+                </div>
+                <div class="product-item">
+                    <img src="URL_DE_LA_IMAGEN" alt="Producto 4">
+                    <h3>Producto 4</h3>
+                    <p>Descripción del producto 4</p>
+                    <p class="price">$27.000</p>
+                </div>
             </div>
         </div>
-    </div>
 
-    <!-- Sección: Novedades -->
+    }
+
+
     <div class="section">
         <h2>Novedades</h2>
-        <div class="product">
-            <div class="product-item">
-                <img src="URL_DE_LA_IMAGEN" alt="Producto 5">
-                <h3>Producto 5</h3>
-                <p>Descripción del producto 5</p>
-                <p class="price">$XX.XX</p>
+        <div class="product-container">
+            <div class="product">
+
+                @{
+                    int count = 0;
+                    foreach (var libro in Model)
+                    {
+                        if (libro.Anio == 2023 || libro.Anio == 2022)
+                        {
+                            <!-- Sección: Novedades -->
+                            <div class="product-item">
+                                <a href="@Url.Action("DetalleLibro","Libro", new {id = libro.Id })" style="text-decoration:none;">
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 5">
+                                    <h3>@libro.Nombre</h3>
+                                    <p>@libro.Autor</p>
+                                    <p class="price">$@libro.Precio</p>
+                                </a>
+
+                            </div>
+                            count++;
+                            if (count == 4)
+                            {
+                                break;
+                            }
+
+                        }
+                    }
+                }
             </div>
         </div>
     </div>
 
+    <div class="section">
+        <h2>Libros fisicos</h2>
+        <div class="product-container">
+            <div class="product">
+
+                @{
+                    int counta = 0;
+                    foreach (var libro in Model)
+                    {
+                        if (libro.TipoLibro == "Fisico")
+                        {
+                            <!-- Sección: Novedades -->
+                            <div class="product-item">
+                                <a href="#" style="text-decoration:none;">
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 5">
+                                    <h3>@libro.Nombre</h3>
+                                    <p>@libro.Autor</p>
+                                    <p class="price">$@libro.Precio</p>
+                                </a>
+
+                            </div>
+                            counta++;
+                            if (counta == 4)
+                            {
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
+    <div class="section">
+        <h2>Libros Digitales</h2>
+        <div class="product-container">
+            <div class="product">
+
+                @{
+                    int countad = 0;
+                    foreach (var libro in Model)
+                    {
+                        if (libro.TipoLibro == "Digital")
+                        {
+                            <!-- Sección: Novedades -->
+                            <div class="product-item">
+                                <a href="#" style="text-decoration:none;">
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 5">
+                                    <h3>@libro.Nombre</h3>
+                                    <p>@libro.Autor</p>
+                                    <p class="price">$@libro.Precio</p>
+                                </a>
+
+                            </div>
+                            countad++;
+                            if (countad == 4)
+                            {
+                                break;
+                            }
+
+                        }
+                    }
+                }
+            </div>
+        </div>
+    </div>
     <!-- Sección: Mejores Evaluados -->
     <div class="section">
         <h2>Mejores Evaluados</h2>

@@ -23,6 +23,7 @@ namespace arriendojuegos.Models.ListModelLibro
         public string Descripcion { get; set; }
         public List<int> CategoriaId { get; set; } = new List<int>();
         public string CategoriaIdString { get; set; }
+        public string CategoriaNombres { get; set; }
         public byte[] Byteimagen { get; set;}
 
     }

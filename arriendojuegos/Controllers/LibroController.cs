@@ -14,20 +14,20 @@ using System.EnterpriseServices;
 using System.Diagnostics;
 using System.Data;
 using System.Runtime.InteropServices.ComTypes;
-
+using arriendojuegos.Services;
 namespace arriendojuegos.Controllers
 {
     [CargarCategorias]
-    
+
     public class LibroController : Controller
     {
-        
+        private readonly Libroservice libroservice = new Libroservice();
         // GET: Libro
-        public ActionResult Libros(int?id)
+        public ActionResult Libros(int?id, string tipolibro, int? idcategoria, int? anio)
         {
             if (Session["nombre"]!= null)
             {
-                var libros = ObtenerLibros(id);
+                var libros = libroservice.ObtenerLibros(id,tipolibro,idcategoria,anio);
                 ViewBag.Libros = libros;
                 return View();
             }
@@ -39,13 +39,13 @@ namespace arriendojuegos.Controllers
         }
 
         
-        public ActionResult Detalle(int? id)
+        public ActionResult Detalle(int? id, string tipolibro, int? idcategoria, int? anio)
         {
             if (id == null || id<0)
             {
                 return RedirectToAction("Libros");
             } 
-            var libro = ObtenerLibros(id);
+            var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio);
             var editorial = obtenereditorial();
             var cateogiras = obtenercategorias();
             ViewBag.Editoriales = editorial;
@@ -53,7 +53,16 @@ namespace arriendojuegos.Controllers
             return View(libro);
         }
 
+        public ActionResult FilterBook(int? id, string tipolibro, int? idcategoria, int? anio)
+        {
+            if (id == null || id < 0 || idcategoria == null || idcategoria < 0 || anio == null || anio < 0 || tipolibro == null)
+            {
+                return RedirectToAction("Libros");
+            }
 
+
+            return View();
+        }
         public ActionResult Registrar()
         {
             if (Session["nombre"] != null)
@@ -71,6 +80,8 @@ namespace arriendojuegos.Controllers
             }
             
         }
+
+
 
         [HttpPost]
         public ActionResult RegistrarLibro()
@@ -117,11 +128,10 @@ namespace arriendojuegos.Controllers
                          new SqlParameter("@CATEGORIAS_ID_LIST", categoriaidlist),
                         new SqlParameter("@IMAGEN", imagen)
                      };
-
                      var parametersArray = parameters.ToArray();
                      var resultado = dbcontext.Database.ExecuteSqlCommand("REGISTRARLIBRO @ISBN, @NOMBRE, @AUTOR, @TIPOLIBRO, @PRECIO, @STOCK, @ANIO, @EDITORIAL, @ID_ADMINISTRADOR, @DESCRIPCION, @IDLIBRO OUTPUT, @CATEGORIAS_ID_LIST, @IMAGEN", parametersArray);
-
                      int idlibrosalida = idlibro.Value != DBNull.Value ? (int)idlibro.Value : 0;
+                    TempData["RegistroExitoso"] = "!El libro fue registrado con éxito¡";
                      return RedirectToAction("Libros");
 
                  }
@@ -130,8 +140,8 @@ namespace arriendojuegos.Controllers
              {
                 Debug.WriteLine($"Error SQL: {e.Number} - {e.Message}");
                 Debug.WriteLine($"Error SQL: {e.Message}");
-
-                 return RedirectToAction("Error", "Shared");
+               
+                return RedirectToAction("Error", "Shared");
              }
                 
         }
@@ -179,6 +189,7 @@ namespace arriendojuegos.Controllers
                         // Puedes imprimir el mensaje de error o tomar alguna acción específica.
                         Console.WriteLine("Error al ejecutar el procedimiento almacenado.");
                     }
+                    TempData["ActualizacionExitoso"] = "!El libro fue actualizado con éxito¡";
                     return RedirectToAction("Libros");
                 }
                 
@@ -195,6 +206,36 @@ namespace arriendojuegos.Controllers
             }
 
 
+        }
+        [HttpGet]
+        public ActionResult DeleteBook(int id)
+        {
+            try
+            {
+                using (var dbcontext = new arriendojuegosEntities1())
+                {
+                    var resultado = dbcontext.Database.ExecuteSqlCommand("DELETEBOOK @ID",
+                        new SqlParameter("@ID", id));
+                }
+                return RedirectToAction("Libros");
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+                return RedirectToAction("Error", "Shared");
+            }
+            
+        }
+
+        public ActionResult DetalleLibro(int? id, string tipolibro, int? idcategoria, int? anio)
+        {
+            if (id == null || id < 0)
+            {
+                return RedirectToAction("Index","Home");
+            }
+            var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio);
+            
+            return View(libro);
         }
 
         private string obtenerimagen(HttpPostedFileBase file)
@@ -217,30 +258,7 @@ namespace arriendojuegos.Controllers
             return base64String;
         }
         
-        private List<Libro> ObtenerLibros(int? id)
-        {
-            
-            using (var dbcontext = new arriendojuegosEntities1())
-            {
-                object idparameter = (object)id ?? DBNull.Value;
-                var resultado = dbcontext.Database.SqlQuery<Libro>("OBTENERLIBRO @ID",
-                    new SqlParameter("@ID", idparameter)).ToList();
-                foreach (var libro in resultado)
-                {
-                    libro.CategoriaIdString = libro.CategoriaIdString.Trim();
-                    if (!string.IsNullOrEmpty(libro.CategoriaIdString))
-                    {
-                        libro.CategoriaId = libro.CategoriaIdString.Split(',').Select(int.Parse).ToList();
-                    }
-                    if (!string.IsNullOrEmpty(libro.Imagen))
-                    {
-                        libro.Byteimagen = Convert.FromBase64String(libro.Imagen);
-                    }
-
-                }
-                return resultado;
-            }
-        }
+       
 
         private List<Editorial> obtenereditorial()
         {

@@ -2,31 +2,141 @@
 @{
     ViewBag.Title = "Libros";
 }
-
-<h2>Libros</h2>
-
-
-
-@{
-    if (Session["nombre"] != null)
-    {
-        var libros = ViewBag.Libros as List<arriendojuegos.Models.ListModelLibro.Libro>;
-
-        foreach (var libro in libros)
-        {
-            <div class="product-item">
-                <a style="text-decoration:none;" href="@Url.Action("Detalle", "Libro", new { Id = libro.Id })">
-                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 1">
-                    <h3>@libro.Nombre</h3>
-                    <p>@libro.Autor</p>
-                    <p class="price">$@libro.Precio</p>
-            </div>
-        }
+<style>
+    .special-link {
+        background-color: red;
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        display: inline-block;
+        border-radius: 5px;
+        position: absolute;
+        top: 0;
+        right: 0;
+        margin-top: 180px
     }
-    
+    /* Estilo para el fondo oscuro detrás del modal */
+    .modal-backdrop {
+        background-color: rgba(0, 128, 0, 0.0); /* Fondo verde semi-transparente */
+    }
+
+    /* Estilo para el contenido del modal */
+    .modal-content {
+        background-color: #5CA550; /* Fondo verde */
+        border-radius: 10px; /* Bordes redondeados */
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+        color: white;
+    }
+
+    /* Estilo para el encabezado del modal */
+    .modal-header {
+        background-color: #006400; /* Fondo verde oscuro */
+        color: #fff; /* Texto blanco */
+        border-bottom: 1px solid #ddd; /* Borde inferior del encabezado */
+    }
+
+    /* Estilo para el botón de cerrar */
+    .close {
+        color: #fff; /* Color del icono de cerrar */
+        opacity: 1; /* Opacidad completa del icono de cerrar */
+    }
+
+    /* Estilo para el cuerpo del modal */
+    .modal-body {
+        padding: 20px; /* Espaciado interno del cuerpo del modal */
+    }
+
+    /* Estilo para el título del modal */
+    .modal-title {
+        font-weight: bold; /* Texto en negrita */
+        font-size: 1.5rem; /* Tamaño del texto del título */
+    }
+</style>
 
 
+@if (Session["nombre"] != null)
+{
+    <a href="@Url.Action("Registrar", "Libro")" class="special-link">Registrar Libro</a>
+    var libros = ViewBag.Libros as List<arriendojuegos.Models.ListModelLibro.Libro>;
+    <div class="product-container">
+        <div class="product">
+            @foreach (var libro in libros)
+            {
+                <div class="product-item">
+                    <a style="text-decoration:none;" href="@Url.Action("Detalle", "Libro", new { Id = libro.Id })">
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 1">
+                        <h3>@libro.Nombre</h3>
+                        <p>@libro.Autor</p>
+                        <p class="price">$@libro.Precio</p>
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
 
+    if (TempData["RegistroExitoso"] != null)
+    {
+        <div class="modal fade" id="modalExito" tabindex="-1" role="dialog" aria-labelledby="modalExitoLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalExitoLabel">Éxito</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @TempData["RegistroExitoso"]
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    if (TempData["ActualizacionExitoso"] != null)
+    {
+        <div class="modal fade" id="modalExito" tabindex="-1" role="dialog" aria-labelledby="modalExitoLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalExitoLabel">Éxito</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        @TempData["ActualizacionExitoso"]
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 }
 
 
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Manejar clic en el icono de perfil
+        $("#profile-icon i").click(function (e) {
+            e.stopPropagation(); // Evita que el evento de clic se propague al documento
+            var iconPosition = $("#profile-icon").offset();
+            $("#profile-menu").css({
+                top: iconPosition.top + $("#profile-icon").outerHeight() + 10,
+                left: iconPosition.left - 110
+            });
+            $("#profile-menu").toggleClass("show-menu");
+        });
+
+        // Ocultar el menú al hacer clic fuera de él
+        $(document).click(function (e) {
+            if (!$(e.target).closest('#profile-menu, #profile-icon').length) {
+                $("#profile-menu").removeClass("show-menu");
+            }
+        });
+
+        // Mostrar el modal de éxito automáticamente al cargar la página
+        $("#modalExito").modal("show");
+    });
+</script>

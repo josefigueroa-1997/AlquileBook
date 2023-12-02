@@ -1,0 +1,91 @@
+﻿@model List<arriendojuegos.Models.ListModelLibro.Libro>
+@{
+    ViewBag.Title = "DetalleLibro";
+}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f4f4;
+    }
+
+    .product-container {
+        display: flex;
+        max-width: 1200px;
+        margin: 50px auto;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-image {
+        flex: 1;
+        padding: 20px;
+    }
+
+        .product-image img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+
+    .product-details {
+        flex: 1;
+        padding: 20px;
+    }
+
+    .product-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+    }
+
+    .product-description {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 20px;
+    }
+
+    .product-price {
+        font-size: 18px;
+        color: #e44d26;
+        font-weight: bold;
+    }
+    .product-manufacturer {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .product-stock {
+        font-size: 16px;
+        margin-bottom: 10px;
+        color: #e44d26; /* Puedes ajustar el color según tu diseño */
+    }
+</style>
+
+@foreach(var libro in Model)
+      {
+        <div class="product-container">
+            <div class="product-image">
+                <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Nombre del producto">
+            </div>
+            <div class="product-details">
+                <div class="product-title">@libro.Nombre</div>
+                <div class="product-manufacturer">Autor: @libro.Autor</div>
+                <div class="product-manufacturer">ISBN: @libro.ISBN</div>
+                <div class="product-manufacturer">Generos: @libro.CategoriaNombres</div>
+                <div class="product-stock">Disponibilidad: @libro.Stock</div>
+                <div class="product-description">
+                    @libro.Descripcion
+                </div>
+                <div class="product-price">$@libro.Precio</div>
+                <!-- Agrega más información del producto según tus necesidades -->
+                <button>Agregar al carrito</button>
+            </div>
+        </div>
+ }
+
+
+
+
