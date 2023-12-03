@@ -16,18 +16,17 @@
           <Property Name="SALT" Type="nvarchar" MaxLength="100" />
           <Property Name="ROL" Type="varchar" MaxLength="30" />
         </EntityType>
-        <EntityType Name="ALQUILA">
+        <EntityType Name="ALQUILER">
           <Key>
-            <PropertyRef Name="ID_LIBRO" />
-            <PropertyRef Name="ID_PERSONA" />
-            <PropertyRef Name="ID_FECHA" />
+            <PropertyRef Name="ID" />
           </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="ID_LIBRO" Type="int" Nullable="false" />
-          <Property Name="ID_PERSONA" Type="int" Nullable="false" />
-          <Property Name="ID_FECHA" Type="int" Nullable="false" />
-          <Property Name="FECHAFIN" Type="date" Nullable="false" />
+          <Property Name="ID_USUARIO" Type="int" Nullable="false" />
           <Property Name="TOTAL" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="COMENTARIO" Type="varchar" MaxLength="100" />
+          <Property Name="FECHAALQUILER" Type="date" Nullable="false" />
+          <Property Name="INFORMACION" Type="varchar" MaxLength="500" />
+          <Property Name="FECHATERMINO" Type="date" Nullable="false" />
         </EntityType>
         <EntityType Name="CATEGORIA">
           <Key>
@@ -81,6 +80,15 @@
           <Property Name="ID_ADMINISTRADOR" Type="int" />
           <Property Name="DESCRIPCION" Type="varchar" MaxLength="300" Nullable="false" />
           <Property Name="IMAGEN" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="LIBRO_CARRITO_USUARIO">
+          <Key>
+            <PropertyRef Name="ID_LIBRO" />
+            <PropertyRef Name="ID_USUARIO" />
+          </Key>
+          <Property Name="ID_LIBRO" Type="int" Nullable="false" />
+          <Property Name="ID_USUARIO" Type="int" Nullable="false" />
+          <Property Name="TOTAL" Type="decimal" Precision="10" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="sexo">
           <Key>
@@ -163,30 +171,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FECH_FK">
-          <End Role="FECHAALQUILER" Type="Self.FECHAALQUILER" Multiplicity="1" />
-          <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="FECHAALQUILER">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ALQUILA">
-              <PropertyRef Name="ID_FECHA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="LIB_FK">
-          <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
-          <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LIBRO">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ALQUILA">
-              <PropertyRef Name="ID_LIBRO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
         <Association Name="LIBRO_FK">
           <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
           <End Role="CATEGORIA_LIBRO" Type="Self.CATEGORIA_LIBRO" Multiplicity="*" />
@@ -199,15 +183,29 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="PERSONA_FK">
-          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
-          <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+        <Association Name="LIBROALQUILER_FK">
+          <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="1" />
+          <End Role="ALQUILER" Type="Self.ALQUILER" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="usuarios">
-              <PropertyRef Name="id" />
+            <Principal Role="LIBRO_CARRITO_USUARIO">
+              <PropertyRef Name="ID_LIBRO" />
+              <PropertyRef Name="ID_USUARIO" />
             </Principal>
-            <Dependent Role="ALQUILA">
-              <PropertyRef Name="ID_PERSONA" />
+            <Dependent Role="ALQUILER">
+              <PropertyRef Name="ID_LIBRO" />
+              <PropertyRef Name="ID_USUARIO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="LIBROCARRITO_FK">
+          <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
+          <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LIBRO">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LIBRO_CARRITO_USUARIO">
+              <PropertyRef Name="ID_LIBRO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -220,6 +218,18 @@
             </Principal>
             <Dependent Role="usuarios">
               <PropertyRef Name="sexo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="USUARIO_FK">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="LIBRO_CARRITO_USUARIO">
+              <PropertyRef Name="ID_USUARIO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -255,6 +265,9 @@
           <Parameter Name="DIRECCION" Type="varchar" Mode="In" />
           <Parameter Name="SALT" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="DELETEBOOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+        </Function>
         <Function Name="DELETEUSUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
         </Function>
@@ -271,6 +284,15 @@
         <Function Name="OBTENEREDITORIAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="OBTENERLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="TIPO_LIBRO" Type="varchar" Mode="In" />
+          <Parameter Name="CATEGORIA_ID" Type="int" Mode="In" />
+          <Parameter Name="ANIO" Type="int" Mode="In" />
+        </Function>
+        <Function Name="OBTENERLIBROSINDEX" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID" Type="int" Mode="In" />
+          <Parameter Name="TIPO_LIBRO" Type="varchar" Mode="In" />
+          <Parameter Name="CATEGORIA_ID" Type="int" Mode="In" />
+          <Parameter Name="ANIO" Type="int" Mode="In" />
         </Function>
         <Function Name="OBTENERROL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
@@ -345,13 +367,14 @@
         </Function>
         <EntityContainer Name="arriendojuegosModelStoreContainer">
           <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="ALQUILA" EntityType="Self.ALQUILA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ALQUILER" EntityType="Self.ALQUILER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CATEGORIA" EntityType="Self.CATEGORIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CATEGORIA_LIBRO" EntityType="Self.CATEGORIA_LIBRO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMUNA" EntityType="Self.COMUNA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="EDITORIAL" EntityType="Self.EDITORIAL" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="FECHAALQUILER" EntityType="Self.FECHAALQUILER" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="LIBRO" EntityType="Self.LIBRO" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="LIBRO_CARRITO_USUARIO" EntityType="Self.LIBRO_CARRITO_USUARIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sexo" EntityType="Self.sexo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
@@ -371,25 +394,25 @@
             <End Role="EDITORIAL" EntitySet="EDITORIAL" />
             <End Role="LIBRO" EntitySet="LIBRO" />
           </AssociationSet>
-          <AssociationSet Name="FECH_FK" Association="Self.FECH_FK">
-            <End Role="FECHAALQUILER" EntitySet="FECHAALQUILER" />
-            <End Role="ALQUILA" EntitySet="ALQUILA" />
-          </AssociationSet>
-          <AssociationSet Name="LIB_FK" Association="Self.LIB_FK">
-            <End Role="LIBRO" EntitySet="LIBRO" />
-            <End Role="ALQUILA" EntitySet="ALQUILA" />
-          </AssociationSet>
           <AssociationSet Name="LIBRO_FK" Association="Self.LIBRO_FK">
             <End Role="LIBRO" EntitySet="LIBRO" />
             <End Role="CATEGORIA_LIBRO" EntitySet="CATEGORIA_LIBRO" />
           </AssociationSet>
-          <AssociationSet Name="PERSONA_FK" Association="Self.PERSONA_FK">
-            <End Role="usuarios" EntitySet="usuarios" />
-            <End Role="ALQUILA" EntitySet="ALQUILA" />
+          <AssociationSet Name="LIBROALQUILER_FK" Association="Self.LIBROALQUILER_FK">
+            <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
+            <End Role="ALQUILER" EntitySet="ALQUILER" />
+          </AssociationSet>
+          <AssociationSet Name="LIBROCARRITO_FK" Association="Self.LIBROCARRITO_FK">
+            <End Role="LIBRO" EntitySet="LIBRO" />
+            <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
           </AssociationSet>
           <AssociationSet Name="sexo_fk" Association="Self.sexo_fk">
             <End Role="sexo" EntitySet="sexo" />
             <End Role="usuarios" EntitySet="usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="USUARIO_FK" Association="Self.USUARIO_FK">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
           </AssociationSet>
         </EntityContainer>
       </Schema>
@@ -412,21 +435,18 @@
           <Property Name="ROL" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="LIBRO" Relationship="Self.ADMIN_FK" FromRole="ADMINISTRADOR" ToRole="LIBRO" />
         </EntityType>
-        <EntityType Name="ALQUILA">
+        <EntityType Name="ALQUILER">
           <Key>
-            <PropertyRef Name="ID_LIBRO" />
-            <PropertyRef Name="ID_PERSONA" />
-            <PropertyRef Name="ID_FECHA" />
+            <PropertyRef Name="ID" />
           </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="ID_LIBRO" Type="Int32" Nullable="false" />
-          <Property Name="ID_PERSONA" Type="Int32" Nullable="false" />
-          <Property Name="ID_FECHA" Type="Int32" Nullable="false" />
-          <Property Name="FECHAFIN" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="ID_USUARIO" Type="Int32" Nullable="false" />
           <Property Name="TOTAL" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
-          <Property Name="COMENTARIO" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="FECHAALQUILER" Relationship="Self.FECH_FK" FromRole="ALQUILA" ToRole="FECHAALQUILER" />
-          <NavigationProperty Name="LIBRO" Relationship="Self.LIB_FK" FromRole="ALQUILA" ToRole="LIBRO" />
-          <NavigationProperty Name="usuarios" Relationship="Self.PERSONA_FK" FromRole="ALQUILA" ToRole="usuarios" />
+          <Property Name="FECHAALQUILER" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="INFORMACION" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="FECHATERMINO" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="LIBRO_CARRITO_USUARIO" Relationship="Self.LIBROALQUILER_FK" FromRole="ALQUILER" ToRole="LIBRO_CARRITO_USUARIO" />
         </EntityType>
         <EntityType Name="CATEGORIA">
           <Key>
@@ -458,7 +478,6 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="FECHA" Type="DateTime" Nullable="false" Precision="0" />
-          <NavigationProperty Name="ALQUILA" Relationship="Self.FECH_FK" FromRole="FECHAALQUILER" ToRole="ALQUILA" />
         </EntityType>
         <EntityType Name="LIBRO">
           <Key>
@@ -477,9 +496,21 @@
           <Property Name="DESCRIPCION" Type="String" MaxLength="300" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="IMAGEN" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="ADMINISTRADOR" Relationship="Self.ADMIN_FK" FromRole="LIBRO" ToRole="ADMINISTRADOR" />
-          <NavigationProperty Name="ALQUILA" Relationship="Self.LIB_FK" FromRole="LIBRO" ToRole="ALQUILA" />
           <NavigationProperty Name="EDITORIAL1" Relationship="Self.EDITORIAL_L_FK" FromRole="LIBRO" ToRole="EDITORIAL" />
+          <NavigationProperty Name="LIBRO_CARRITO_USUARIO" Relationship="Self.LIBROCARRITO_FK" FromRole="LIBRO" ToRole="LIBRO_CARRITO_USUARIO" />
           <NavigationProperty Name="CATEGORIA" Relationship="Self.CATEGORIA_LIBRO" FromRole="LIBRO" ToRole="CATEGORIA" />
+        </EntityType>
+        <EntityType Name="LIBRO_CARRITO_USUARIO">
+          <Key>
+            <PropertyRef Name="ID_LIBRO" />
+            <PropertyRef Name="ID_USUARIO" />
+          </Key>
+          <Property Name="ID_LIBRO" Type="Int32" Nullable="false" />
+          <Property Name="ID_USUARIO" Type="Int32" Nullable="false" />
+          <Property Name="TOTAL" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
+          <NavigationProperty Name="ALQUILER" Relationship="Self.LIBROALQUILER_FK" FromRole="LIBRO_CARRITO_USUARIO" ToRole="ALQUILER" />
+          <NavigationProperty Name="LIBRO" Relationship="Self.LIBROCARRITO_FK" FromRole="LIBRO_CARRITO_USUARIO" ToRole="LIBRO" />
+          <NavigationProperty Name="usuarios" Relationship="Self.USUARIO_FK" FromRole="LIBRO_CARRITO_USUARIO" ToRole="usuarios" />
         </EntityType>
         <EntityType Name="sexo">
           <Key>
@@ -514,8 +545,8 @@
           <Property Name="SALT" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="CONTRASEÑA" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <Property Name="ROL" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <NavigationProperty Name="ALQUILA" Relationship="Self.PERSONA_FK" FromRole="usuarios" ToRole="ALQUILA" />
           <NavigationProperty Name="COMUNA1" Relationship="Self.COMUNA_FK" FromRole="usuarios" ToRole="COMUNA" />
+          <NavigationProperty Name="LIBRO_CARRITO_USUARIO" Relationship="Self.USUARIO_FK" FromRole="usuarios" ToRole="LIBRO_CARRITO_USUARIO" />
           <NavigationProperty Name="sexo1" Relationship="Self.sexo_fk" FromRole="usuarios" ToRole="sexo" />
         </EntityType>
         <Association Name="ADMIN_FK">
@@ -530,39 +561,17 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FECH_FK">
-          <End Role="FECHAALQUILER" Type="Self.FECHAALQUILER" Multiplicity="1" />
-          <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+        <Association Name="LIBROALQUILER_FK">
+          <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="1" />
+          <End Role="ALQUILER" Type="Self.ALQUILER" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="FECHAALQUILER">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ALQUILA">
-              <PropertyRef Name="ID_FECHA" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="LIB_FK">
-          <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
-          <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="LIBRO">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="ALQUILA">
+            <Principal Role="LIBRO_CARRITO_USUARIO">
               <PropertyRef Name="ID_LIBRO" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PERSONA_FK">
-          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
-          <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="usuarios">
-              <PropertyRef Name="id" />
+              <PropertyRef Name="ID_USUARIO" />
             </Principal>
-            <Dependent Role="ALQUILA">
-              <PropertyRef Name="ID_PERSONA" />
+            <Dependent Role="ALQUILER">
+              <PropertyRef Name="ID_LIBRO" />
+              <PropertyRef Name="ID_USUARIO" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -590,6 +599,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="LIBROCARRITO_FK">
+          <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
+          <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="LIBRO">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="LIBRO_CARRITO_USUARIO">
+              <PropertyRef Name="ID_LIBRO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="USUARIO_FK">
+          <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+          <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="usuarios">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="LIBRO_CARRITO_USUARIO">
+              <PropertyRef Name="ID_USUARIO" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="sexo_fk">
           <End Role="sexo" Type="Self.sexo" Multiplicity="0..1" />
           <End Role="usuarios" Type="Self.usuarios" Multiplicity="*" />
@@ -608,12 +641,13 @@
         </Association>
         <EntityContainer Name="arriendojuegosEntities1" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" />
-          <EntitySet Name="ALQUILA" EntityType="Self.ALQUILA" />
+          <EntitySet Name="ALQUILER" EntityType="Self.ALQUILER" />
           <EntitySet Name="CATEGORIA" EntityType="Self.CATEGORIA" />
           <EntitySet Name="COMUNA" EntityType="Self.COMUNA" />
           <EntitySet Name="EDITORIAL" EntityType="Self.EDITORIAL" />
           <EntitySet Name="FECHAALQUILER" EntityType="Self.FECHAALQUILER" />
           <EntitySet Name="LIBRO" EntityType="Self.LIBRO" />
+          <EntitySet Name="LIBRO_CARRITO_USUARIO" EntityType="Self.LIBRO_CARRITO_USUARIO" />
           <EntitySet Name="sexo" EntityType="Self.sexo" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
           <EntitySet Name="usuarios" EntityType="Self.usuarios" />
@@ -621,17 +655,9 @@
             <End Role="ADMINISTRADOR" EntitySet="ADMINISTRADOR" />
             <End Role="LIBRO" EntitySet="LIBRO" />
           </AssociationSet>
-          <AssociationSet Name="FECH_FK" Association="Self.FECH_FK">
-            <End Role="FECHAALQUILER" EntitySet="FECHAALQUILER" />
-            <End Role="ALQUILA" EntitySet="ALQUILA" />
-          </AssociationSet>
-          <AssociationSet Name="LIB_FK" Association="Self.LIB_FK">
-            <End Role="LIBRO" EntitySet="LIBRO" />
-            <End Role="ALQUILA" EntitySet="ALQUILA" />
-          </AssociationSet>
-          <AssociationSet Name="PERSONA_FK" Association="Self.PERSONA_FK">
-            <End Role="usuarios" EntitySet="usuarios" />
-            <End Role="ALQUILA" EntitySet="ALQUILA" />
+          <AssociationSet Name="LIBROALQUILER_FK" Association="Self.LIBROALQUILER_FK">
+            <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
+            <End Role="ALQUILER" EntitySet="ALQUILER" />
           </AssociationSet>
           <AssociationSet Name="COMUNA_FK" Association="Self.COMUNA_FK">
             <End Role="COMUNA" EntitySet="COMUNA" />
@@ -640,6 +666,14 @@
           <AssociationSet Name="EDITORIAL_L_FK" Association="Self.EDITORIAL_L_FK">
             <End Role="EDITORIAL" EntitySet="EDITORIAL" />
             <End Role="LIBRO" EntitySet="LIBRO" />
+          </AssociationSet>
+          <AssociationSet Name="LIBROCARRITO_FK" Association="Self.LIBROCARRITO_FK">
+            <End Role="LIBRO" EntitySet="LIBRO" />
+            <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
+          </AssociationSet>
+          <AssociationSet Name="USUARIO_FK" Association="Self.USUARIO_FK">
+            <End Role="usuarios" EntitySet="usuarios" />
+            <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
           </AssociationSet>
           <AssociationSet Name="sexo_fk" Association="Self.sexo_fk">
             <End Role="sexo" EntitySet="sexo" />
@@ -685,6 +719,9 @@
             <Parameter Name="DIRECCION" Mode="In" Type="String" />
             <Parameter Name="SALT" Mode="In" Type="String" />
           </FunctionImport>
+          <FunctionImport Name="DELETEBOOK">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+          </FunctionImport>
           <FunctionImport Name="DELETEUSUARIO">
             <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
@@ -700,6 +737,15 @@
           <FunctionImport Name="OBTENEREDITORIAL" ReturnType="Collection(arriendojuegosModel.OBTENEREDITORIAL_Result)" />
           <FunctionImport Name="OBTENERLIBRO" ReturnType="Collection(arriendojuegosModel.OBTENERLIBRO_Result)">
             <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="TIPO_LIBRO" Mode="In" Type="String" />
+            <Parameter Name="CATEGORIA_ID" Mode="In" Type="Int32" />
+            <Parameter Name="ANIO" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="OBTENERLIBROSINDEX" ReturnType="Collection(arriendojuegosModel.OBTENERLIBROSINDEX_Result)">
+            <Parameter Name="ID" Mode="In" Type="Int32" />
+            <Parameter Name="TIPO_LIBRO" Mode="In" Type="String" />
+            <Parameter Name="CATEGORIA_ID" Mode="In" Type="Int32" />
+            <Parameter Name="ANIO" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="OBTENERROL" ReturnType="Collection(Int32)">
             <Parameter Name="ID" Mode="In" Type="Int32" />
@@ -800,6 +846,23 @@
           <Property Type="String" Name="CATEGORIANOMBRES" Nullable="true" />
           <Property Type="String" Name="CATEGORIAIDSTRING" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="OBTENERLIBROSINDEX_Result">
+          <Property Type="Int32" Name="ID" Nullable="false" />
+          <Property Type="String" Name="ISBN" Nullable="false" MaxLength="20" />
+          <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="AUTOR" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="TIPOLIBRO" Nullable="false" MaxLength="100" />
+          <Property Type="Decimal" Name="PRECIO" Nullable="false" Precision="10" Scale="2" />
+          <Property Type="Int32" Name="STOCK" Nullable="false" />
+          <Property Type="Int32" Name="ANIO" Nullable="false" />
+          <Property Type="String" Name="EDITORIALNOMBRE" Nullable="false" MaxLength="70" />
+          <Property Type="Int32" Name="EDITORIALID" Nullable="false" />
+          <Property Type="Int32" Name="ID_ADMINISTRADOR" Nullable="true" />
+          <Property Type="String" Name="DESCRIPCION" Nullable="false" MaxLength="300" />
+          <Property Type="String" Name="IMAGEN" Nullable="true" />
+          <Property Type="String" Name="CATEGORIANOMBRES" Nullable="true" />
+          <Property Type="String" Name="CATEGORIAIDSTRING" Nullable="true" />
+        </ComplexType>
         <ComplexType Name="OBTENERUSUARIOID_Result">
           <Property Type="String" Name="nombre" Nullable="true" MaxLength="100" />
           <Property Type="String" Name="correo" Nullable="false" MaxLength="200" />
@@ -846,15 +909,16 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ALQUILA">
-            <EntityTypeMapping TypeName="arriendojuegosModel.ALQUILA">
-              <MappingFragment StoreEntitySet="ALQUILA">
+          <EntitySetMapping Name="ALQUILER">
+            <EntityTypeMapping TypeName="arriendojuegosModel.ALQUILER">
+              <MappingFragment StoreEntitySet="ALQUILER">
+                <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
-                <ScalarProperty Name="ID_PERSONA" ColumnName="ID_PERSONA" />
-                <ScalarProperty Name="ID_FECHA" ColumnName="ID_FECHA" />
-                <ScalarProperty Name="FECHAFIN" ColumnName="FECHAFIN" />
+                <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
                 <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
-                <ScalarProperty Name="COMENTARIO" ColumnName="COMENTARIO" />
+                <ScalarProperty Name="FECHAALQUILER" ColumnName="FECHAALQUILER" />
+                <ScalarProperty Name="INFORMACION" ColumnName="INFORMACION" />
+                <ScalarProperty Name="FECHATERMINO" ColumnName="FECHATERMINO" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -905,6 +969,15 @@
                 <ScalarProperty Name="ID_ADMINISTRADOR" ColumnName="ID_ADMINISTRADOR" />
                 <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
                 <ScalarProperty Name="IMAGEN" ColumnName="IMAGEN" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="LIBRO_CARRITO_USUARIO">
+            <EntityTypeMapping TypeName="arriendojuegosModel.LIBRO_CARRITO_USUARIO">
+              <MappingFragment StoreEntitySet="LIBRO_CARRITO_USUARIO">
+                <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
+                <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -962,6 +1035,7 @@
           <FunctionImportMapping FunctionImportName="ACTUALIZARLIBRO" FunctionName="arriendojuegosModel.Store.ACTUALIZARLIBRO" />
           <FunctionImportMapping FunctionImportName="CREARADMIN" FunctionName="arriendojuegosModel.Store.CREARADMIN" />
           <FunctionImportMapping FunctionImportName="CREARUSUARIO" FunctionName="arriendojuegosModel.Store.CREARUSUARIO" />
+          <FunctionImportMapping FunctionImportName="DELETEBOOK" FunctionName="arriendojuegosModel.Store.DELETEBOOK" />
           <FunctionImportMapping FunctionImportName="DELETEUSUARIO" FunctionName="arriendojuegosModel.Store.DELETEUSUARIO" />
           <FunctionImportMapping FunctionImportName="DESPLEGARCOMUNAS" FunctionName="arriendojuegosModel.Store.DESPLEGARCOMUNAS">
             <ResultMapping>
@@ -1008,6 +1082,27 @@
           <FunctionImportMapping FunctionImportName="OBTENERLIBRO" FunctionName="arriendojuegosModel.Store.OBTENERLIBRO">
             <ResultMapping>
               <ComplexTypeMapping TypeName="arriendojuegosModel.OBTENERLIBRO_Result">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ISBN" ColumnName="ISBN" />
+                <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+                <ScalarProperty Name="AUTOR" ColumnName="AUTOR" />
+                <ScalarProperty Name="TIPOLIBRO" ColumnName="TIPOLIBRO" />
+                <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
+                <ScalarProperty Name="STOCK" ColumnName="STOCK" />
+                <ScalarProperty Name="ANIO" ColumnName="ANIO" />
+                <ScalarProperty Name="EDITORIALNOMBRE" ColumnName="EDITORIALNOMBRE" />
+                <ScalarProperty Name="EDITORIALID" ColumnName="EDITORIALID" />
+                <ScalarProperty Name="ID_ADMINISTRADOR" ColumnName="ID_ADMINISTRADOR" />
+                <ScalarProperty Name="DESCRIPCION" ColumnName="DESCRIPCION" />
+                <ScalarProperty Name="IMAGEN" ColumnName="IMAGEN" />
+                <ScalarProperty Name="CATEGORIANOMBRES" ColumnName="CATEGORIANOMBRES" />
+                <ScalarProperty Name="CATEGORIAIDSTRING" ColumnName="CATEGORIAIDSTRING" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="OBTENERLIBROSINDEX" FunctionName="arriendojuegosModel.Store.OBTENERLIBROSINDEX">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="arriendojuegosModel.OBTENERLIBROSINDEX_Result">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ISBN" ColumnName="ISBN" />
                 <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />

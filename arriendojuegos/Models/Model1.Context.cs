@@ -28,12 +28,13 @@ namespace arriendojuegos.Models
         }
     
         public virtual DbSet<ADMINISTRADOR> ADMINISTRADOR { get; set; }
-        public virtual DbSet<ALQUILA> ALQUILA { get; set; }
+        public virtual DbSet<ALQUILER> ALQUILER { get; set; }
         public virtual DbSet<CATEGORIA> CATEGORIA { get; set; }
         public virtual DbSet<COMUNA> COMUNA { get; set; }
         public virtual DbSet<EDITORIAL> EDITORIAL { get; set; }
         public virtual DbSet<FECHAALQUILER> FECHAALQUILER { get; set; }
         public virtual DbSet<LIBRO> LIBRO { get; set; }
+        public virtual DbSet<LIBRO_CARRITO_USUARIO> LIBRO_CARRITO_USUARIO { get; set; }
         public virtual DbSet<sexo> sexo { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<usuarios> usuarios { get; set; }
@@ -171,6 +172,15 @@ namespace arriendojuegos.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("CREARUSUARIO", nOMBREParameter, cORREOParameter, cONTRASEÑAParameter, tELEFONOParameter, sEXOParameter, fECHANACIMIENTOParameter, cOMUNAParameter, dIRECCIONParameter, sALTParameter);
         }
     
+        public virtual int DELETEBOOK(Nullable<int> iD)
+        {
+            var iDParameter = iD.HasValue ?
+                new ObjectParameter("ID", iD) :
+                new ObjectParameter("ID", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DELETEBOOK", iDParameter);
+        }
+    
         public virtual int DELETEUSUARIO(Nullable<int> iD)
         {
             var iDParameter = iD.HasValue ?
@@ -218,13 +228,46 @@ namespace arriendojuegos.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENEREDITORIAL_Result>("OBTENEREDITORIAL");
         }
     
-        public virtual ObjectResult<OBTENERLIBRO_Result> OBTENERLIBRO(Nullable<int> iD)
+        public virtual ObjectResult<OBTENERLIBRO_Result> OBTENERLIBRO(Nullable<int> iD, string tIPO_LIBRO, Nullable<int> cATEGORIA_ID, Nullable<int> aNIO)
         {
             var iDParameter = iD.HasValue ?
                 new ObjectParameter("ID", iD) :
                 new ObjectParameter("ID", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERLIBRO_Result>("OBTENERLIBRO", iDParameter);
+            var tIPO_LIBROParameter = tIPO_LIBRO != null ?
+                new ObjectParameter("TIPO_LIBRO", tIPO_LIBRO) :
+                new ObjectParameter("TIPO_LIBRO", typeof(string));
+    
+            var cATEGORIA_IDParameter = cATEGORIA_ID.HasValue ?
+                new ObjectParameter("CATEGORIA_ID", cATEGORIA_ID) :
+                new ObjectParameter("CATEGORIA_ID", typeof(int));
+    
+            var aNIOParameter = aNIO.HasValue ?
+                new ObjectParameter("ANIO", aNIO) :
+                new ObjectParameter("ANIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERLIBRO_Result>("OBTENERLIBRO", iDParameter, tIPO_LIBROParameter, cATEGORIA_IDParameter, aNIOParameter);
+        }
+    
+        public virtual ObjectResult<OBTENERLIBROSINDEX_Result> OBTENERLIBROSINDEX(Nullable<int> iD, string tIPO_LIBRO, Nullable<int> cATEGORIA_ID, Nullable<int> aNIO)
+        {
+            var iDParameter = iD.HasValue ?
+                new ObjectParameter("ID", iD) :
+                new ObjectParameter("ID", typeof(int));
+    
+            var tIPO_LIBROParameter = tIPO_LIBRO != null ?
+                new ObjectParameter("TIPO_LIBRO", tIPO_LIBRO) :
+                new ObjectParameter("TIPO_LIBRO", typeof(string));
+    
+            var cATEGORIA_IDParameter = cATEGORIA_ID.HasValue ?
+                new ObjectParameter("CATEGORIA_ID", cATEGORIA_ID) :
+                new ObjectParameter("CATEGORIA_ID", typeof(int));
+    
+            var aNIOParameter = aNIO.HasValue ?
+                new ObjectParameter("ANIO", aNIO) :
+                new ObjectParameter("ANIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERLIBROSINDEX_Result>("OBTENERLIBROSINDEX", iDParameter, tIPO_LIBROParameter, cATEGORIA_IDParameter, aNIOParameter);
         }
     
         public virtual ObjectResult<Nullable<int>> OBTENERROL(Nullable<int> iD)

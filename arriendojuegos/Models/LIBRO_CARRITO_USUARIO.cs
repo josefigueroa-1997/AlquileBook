@@ -12,29 +12,21 @@ namespace arriendojuegos.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class usuarios
+    public partial class LIBRO_CARRITO_USUARIO
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public usuarios()
+        public LIBRO_CARRITO_USUARIO()
         {
-            this.LIBRO_CARRITO_USUARIO = new HashSet<LIBRO_CARRITO_USUARIO>();
+            this.ALQUILER = new HashSet<ALQUILER>();
         }
     
-        public int id { get; set; }
-        public string nombre { get; set; }
-        public string correo { get; set; }
-        public Nullable<int> telefono { get; set; }
-        public Nullable<int> sexo { get; set; }
-        public System.DateTime FECHANACIMIENTO { get; set; }
-        public int COMUNA { get; set; }
-        public string DIRECCION { get; set; }
-        public string SALT { get; set; }
-        public string CONTRASEÑA { get; set; }
-        public string ROL { get; set; }
+        public int ID_LIBRO { get; set; }
+        public int ID_USUARIO { get; set; }
+        public decimal TOTAL { get; set; }
     
-        public virtual COMUNA COMUNA1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<LIBRO_CARRITO_USUARIO> LIBRO_CARRITO_USUARIO { get; set; }
-        public virtual sexo sexo1 { get; set; }
+        public virtual ICollection<ALQUILER> ALQUILER { get; set; }
+        public virtual LIBRO LIBRO { get; set; }
+        public virtual usuarios usuarios { get; set; }
     }
 }

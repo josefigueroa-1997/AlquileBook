@@ -12,17 +12,16 @@ namespace arriendojuegos.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class ALQUILA
+    public partial class ALQUILER
     {
+        public int ID { get; set; }
         public int ID_LIBRO { get; set; }
-        public int ID_PERSONA { get; set; }
-        public int ID_FECHA { get; set; }
-        public System.DateTime FECHAFIN { get; set; }
+        public int ID_USUARIO { get; set; }
         public decimal TOTAL { get; set; }
-        public string COMENTARIO { get; set; }
+        public System.DateTime FECHAALQUILER { get; set; }
+        public string INFORMACION { get; set; }
+        public System.DateTime FECHATERMINO { get; set; }
     
-        public virtual FECHAALQUILER FECHAALQUILER { get; set; }
-        public virtual LIBRO LIBRO { get; set; }
-        public virtual usuarios usuarios { get; set; }
+        public virtual LIBRO_CARRITO_USUARIO LIBRO_CARRITO_USUARIO { get; set; }
     }
 }

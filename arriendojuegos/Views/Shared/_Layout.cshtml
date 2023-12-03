@@ -49,44 +49,49 @@
             {
                 <a href="#">
                     Mantenimiento
+                </a>
                     <div class="submenu">
                         <a href="@Url.Action("Registrar","Libro")">Registrar</a>
                         <a href="@Url.Action("Libros","Libro")">Visualizar/editar</a>
                     </div>
-                </a>
+                
             }
 
 
         }
-
+    <div>
         <a href="#">
             Tipos de Libros
-            <div class="submenu">
-                <a href="#">Físico</a>
-                <a href="#">Digital</a>
-            </div>
         </a>
-        <a href="#">
-            Categorías
+            <div class="submenu">
+                <a href="@Url.Action("FilterBook","Libro",new { id = "",tipolibro = "Fisico",idcategoria = "",anio = ""})">Físico</a>
+                <a href="@Url.Action("FilterBook","Libro",new { id = "",tipolibro = "Digital",idcategoria = "",anio = ""})">Digital</a>
+            </div>
+        
+    </div>
+    <a href="#">
+        Categorías
+    </a>
             <div class="submenu">
                 @{
                     var categoria = ViewBag.Categorias as List<arriendojuegos.Models.ListModelLibro.Categoria>;
                     foreach (var i in categoria)
                     {
-                        <a href="#">@i.Nombre</a>
+                        <a href="@Url.Action("FilterBook","Libro",new { id = "",tipolibro = "",idcategoria = i.Id,anio = ""})">@i.Nombre</a>
                     }
 
                 }
 
             </div>
-        </a>
-        <a href="#">
-            Novedades
+        
+            <a href="#">
+                Novedades
+            </a>
             <div class="submenu">
-                <a href="#">2023</a>
-                <a href="#">2022</a>
+                <a href="@Url.Action("FilterBook","Libro",new { id = "",tipolibro = "",idcategoria = "",anio = 2023})">2023</a>
+                <a href="@Url.Action("FilterBook","Libro",new { id = "",tipolibro = "Fisico",idcategoria = "",anio = 2022})">2022</a>
             </div>
-        </a>
+        
         <a class="expander"></a>
     </nav>
 

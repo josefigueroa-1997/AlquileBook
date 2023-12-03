@@ -24,6 +24,11 @@ namespace arriendojuegos
                 url: "Libro/DeleteBook/{id}",
                 defaults: new { controller = "Libro", action = "DeleteBook", id = UrlParameter.Optional }
                 );
+            routes.MapRoute(
+            name: "LibroRoute",
+            url: "Libro/Libros",
+            defaults: new { controller = "Libro", action = "Libros" }
+        );
         }
     }
 }

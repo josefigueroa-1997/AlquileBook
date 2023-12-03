@@ -154,7 +154,7 @@
     <Compile Include="Models\ADMINISTRADOR.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\ALQUILA.cs">
+    <Compile Include="Models\ALQUILER.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CATEGORIA.cs">
@@ -179,6 +179,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\LIBRO.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\LIBRO_CARRITO_USUARIO.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\ListModelLibro\Categoria.cs" />
@@ -208,6 +211,9 @@
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBTENEREDITORIAL_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\OBTENERLIBROSINDEX_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\OBTENERLIBRO_Result.cs">

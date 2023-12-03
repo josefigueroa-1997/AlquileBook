@@ -51,6 +51,32 @@
         font-weight: bold; /* Texto en negrita */
         font-size: 1.5rem; /* Tamaño del texto del título */
     }
+    .pagination {
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+
+        .pagination a {
+            text-decoration: none;
+            padding: 8px 16px;
+            margin: 0 4px;
+            border: 1px solid #ddd;
+            color: #333;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+
+            .pagination a:hover {
+                background-color: #ddd;
+            }
+
+        .pagination .active {
+            background-color: #4CAF50;
+            color: white;
+        }
+   
 </style>
 
 
@@ -58,14 +84,14 @@
 {
     <a href="@Url.Action("Registrar", "Libro")" class="special-link">Registrar Libro</a>
     var libros = ViewBag.Libros as List<arriendojuegos.Models.ListModelLibro.Libro>;
-    <div class="product-container">
+    <div class="product-container" style="margin-left: 90px;">
         <div class="product">
             @foreach (var libro in libros)
             {
                 <div class="product-item">
                     <a style="text-decoration:none;" href="@Url.Action("Detalle", "Libro", new { Id = libro.Id })">
                         <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 1">
-                        <h3>@libro.Nombre</h3>
+                        <h3 style="justify-content:center; word-wrap: break-word;">@libro.Nombre</h3>
                         <p>@libro.Autor</p>
                         <p class="price">$@libro.Precio</p>
                     </a>
@@ -73,7 +99,7 @@
             }
         </div>
     </div>
-
+   
     if (TempData["RegistroExitoso"] != null)
     {
         <div class="modal fade" id="modalExito" tabindex="-1" role="dialog" aria-labelledby="modalExitoLabel" aria-hidden="true">

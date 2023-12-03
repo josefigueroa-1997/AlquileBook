@@ -23,22 +23,22 @@ namespace arriendojuegos.Controllers
     {
         private readonly Libroservice libroservice = new Libroservice();
         // GET: Libro
-        public ActionResult Libros(int?id, string tipolibro, int? idcategoria, int? anio)
+        public ActionResult Libros(int? id, string tipolibro, int? idcategoria, int? anio)
         {
-            if (Session["nombre"]!= null)
+            if (Session["nombre"] != null)
             {
-                var libros = libroservice.ObtenerLibros(id,tipolibro,idcategoria,anio);
+               var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio);
                 ViewBag.Libros = libros;
                 return View();
             }
             else
             {
-                return RedirectToAction("Login","Usuario");
+                return RedirectToAction("Login", "Usuario");
             }
-            
+
         }
 
-        
+
         public ActionResult Detalle(int? id, string tipolibro, int? idcategoria, int? anio)
         {
             if (id == null || id<0)
@@ -55,13 +55,19 @@ namespace arriendojuegos.Controllers
 
         public ActionResult FilterBook(int? id, string tipolibro, int? idcategoria, int? anio)
         {
-            if (id == null || id < 0 || idcategoria == null || idcategoria < 0 || anio == null || anio < 0 || tipolibro == null)
+            /*if (id == null || id < 0 || idcategoria == null || idcategoria < 0 || anio == null || anio < 0 || tipolibro == null)
             {
                 return RedirectToAction("Libros");
             }
+            else*/
+            /*{*/
+                var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio);
+                return View(libros);
+                
+            /*}*/
 
 
-            return View();
+            
         }
         public ActionResult Registrar()
         {
@@ -278,6 +284,8 @@ namespace arriendojuegos.Controllers
             }
         }
 
+
+        
         
     }
 }

@@ -11,18 +11,17 @@
     <Property Name="SALT" Type="nvarchar" MaxLength="100" />
     <Property Name="ROL" Type="varchar" MaxLength="30" />
   </EntityType>
-  <EntityType Name="ALQUILA">
+  <EntityType Name="ALQUILER">
     <Key>
-      <PropertyRef Name="ID_LIBRO" />
-      <PropertyRef Name="ID_PERSONA" />
-      <PropertyRef Name="ID_FECHA" />
+      <PropertyRef Name="ID" />
     </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
     <Property Name="ID_LIBRO" Type="int" Nullable="false" />
-    <Property Name="ID_PERSONA" Type="int" Nullable="false" />
-    <Property Name="ID_FECHA" Type="int" Nullable="false" />
-    <Property Name="FECHAFIN" Type="date" Nullable="false" />
+    <Property Name="ID_USUARIO" Type="int" Nullable="false" />
     <Property Name="TOTAL" Type="decimal" Precision="10" Scale="2" Nullable="false" />
-    <Property Name="COMENTARIO" Type="varchar" MaxLength="100" />
+    <Property Name="FECHAALQUILER" Type="date" Nullable="false" />
+    <Property Name="INFORMACION" Type="varchar" MaxLength="500" />
+    <Property Name="FECHATERMINO" Type="date" Nullable="false" />
   </EntityType>
   <EntityType Name="CATEGORIA">
     <Key>
@@ -76,6 +75,15 @@
     <Property Name="ID_ADMINISTRADOR" Type="int" />
     <Property Name="DESCRIPCION" Type="varchar" MaxLength="300" Nullable="false" />
     <Property Name="IMAGEN" Type="nvarchar(max)" />
+  </EntityType>
+  <EntityType Name="LIBRO_CARRITO_USUARIO">
+    <Key>
+      <PropertyRef Name="ID_LIBRO" />
+      <PropertyRef Name="ID_USUARIO" />
+    </Key>
+    <Property Name="ID_LIBRO" Type="int" Nullable="false" />
+    <Property Name="ID_USUARIO" Type="int" Nullable="false" />
+    <Property Name="TOTAL" Type="decimal" Precision="10" Scale="2" Nullable="false" />
   </EntityType>
   <EntityType Name="sexo">
     <Key>
@@ -158,30 +166,6 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="FECH_FK">
-    <End Role="FECHAALQUILER" Type="Self.FECHAALQUILER" Multiplicity="1" />
-    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="FECHAALQUILER">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ALQUILA">
-        <PropertyRef Name="ID_FECHA" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="LIB_FK">
-    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
-    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="LIBRO">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ALQUILA">
-        <PropertyRef Name="ID_LIBRO" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
   <Association Name="LIBRO_FK">
     <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
     <End Role="CATEGORIA_LIBRO" Type="Self.CATEGORIA_LIBRO" Multiplicity="*" />
@@ -194,15 +178,29 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
-  <Association Name="PERSONA_FK">
-    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
-    <End Role="ALQUILA" Type="Self.ALQUILA" Multiplicity="*" />
+  <Association Name="LIBROALQUILER_FK">
+    <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="1" />
+    <End Role="ALQUILER" Type="Self.ALQUILER" Multiplicity="*" />
     <ReferentialConstraint>
-      <Principal Role="usuarios">
-        <PropertyRef Name="id" />
+      <Principal Role="LIBRO_CARRITO_USUARIO">
+        <PropertyRef Name="ID_LIBRO" />
+        <PropertyRef Name="ID_USUARIO" />
       </Principal>
-      <Dependent Role="ALQUILA">
-        <PropertyRef Name="ID_PERSONA" />
+      <Dependent Role="ALQUILER">
+        <PropertyRef Name="ID_LIBRO" />
+        <PropertyRef Name="ID_USUARIO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="LIBROCARRITO_FK">
+    <End Role="LIBRO" Type="Self.LIBRO" Multiplicity="1" />
+    <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="LIBRO">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="LIBRO_CARRITO_USUARIO">
+        <PropertyRef Name="ID_LIBRO" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -215,6 +213,18 @@
       </Principal>
       <Dependent Role="usuarios">
         <PropertyRef Name="sexo" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="USUARIO_FK">
+    <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
+    <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="usuarios">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="LIBRO_CARRITO_USUARIO">
+        <PropertyRef Name="ID_USUARIO" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -250,6 +260,9 @@
     <Parameter Name="DIRECCION" Type="varchar" Mode="In" />
     <Parameter Name="SALT" Type="nvarchar" Mode="In" />
   </Function>
+  <Function Name="DELETEBOOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID" Type="int" Mode="In" />
+  </Function>
   <Function Name="DELETEUSUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="int" Mode="In" />
   </Function>
@@ -266,6 +279,15 @@
   <Function Name="OBTENEREDITORIAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="OBTENERLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="int" Mode="In" />
+    <Parameter Name="TIPO_LIBRO" Type="varchar" Mode="In" />
+    <Parameter Name="CATEGORIA_ID" Type="int" Mode="In" />
+    <Parameter Name="ANIO" Type="int" Mode="In" />
+  </Function>
+  <Function Name="OBTENERLIBROSINDEX" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID" Type="int" Mode="In" />
+    <Parameter Name="TIPO_LIBRO" Type="varchar" Mode="In" />
+    <Parameter Name="CATEGORIA_ID" Type="int" Mode="In" />
+    <Parameter Name="ANIO" Type="int" Mode="In" />
   </Function>
   <Function Name="OBTENERROL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="int" Mode="In" />
@@ -340,13 +362,14 @@
   </Function>
   <EntityContainer Name="arriendojuegosModelStoreContainer">
     <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" Schema="dbo" store:Type="Tables" />
-    <EntitySet Name="ALQUILA" EntityType="Self.ALQUILA" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="ALQUILER" EntityType="Self.ALQUILER" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CATEGORIA" EntityType="Self.CATEGORIA" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="CATEGORIA_LIBRO" EntityType="Self.CATEGORIA_LIBRO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="COMUNA" EntityType="Self.COMUNA" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="EDITORIAL" EntityType="Self.EDITORIAL" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="FECHAALQUILER" EntityType="Self.FECHAALQUILER" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="LIBRO" EntityType="Self.LIBRO" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="LIBRO_CARRITO_USUARIO" EntityType="Self.LIBRO_CARRITO_USUARIO" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sexo" EntityType="Self.sexo" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
     <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
@@ -366,25 +389,25 @@
       <End Role="EDITORIAL" EntitySet="EDITORIAL" />
       <End Role="LIBRO" EntitySet="LIBRO" />
     </AssociationSet>
-    <AssociationSet Name="FECH_FK" Association="Self.FECH_FK">
-      <End Role="FECHAALQUILER" EntitySet="FECHAALQUILER" />
-      <End Role="ALQUILA" EntitySet="ALQUILA" />
-    </AssociationSet>
-    <AssociationSet Name="LIB_FK" Association="Self.LIB_FK">
-      <End Role="LIBRO" EntitySet="LIBRO" />
-      <End Role="ALQUILA" EntitySet="ALQUILA" />
-    </AssociationSet>
     <AssociationSet Name="LIBRO_FK" Association="Self.LIBRO_FK">
       <End Role="LIBRO" EntitySet="LIBRO" />
       <End Role="CATEGORIA_LIBRO" EntitySet="CATEGORIA_LIBRO" />
     </AssociationSet>
-    <AssociationSet Name="PERSONA_FK" Association="Self.PERSONA_FK">
-      <End Role="usuarios" EntitySet="usuarios" />
-      <End Role="ALQUILA" EntitySet="ALQUILA" />
+    <AssociationSet Name="LIBROALQUILER_FK" Association="Self.LIBROALQUILER_FK">
+      <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
+      <End Role="ALQUILER" EntitySet="ALQUILER" />
+    </AssociationSet>
+    <AssociationSet Name="LIBROCARRITO_FK" Association="Self.LIBROCARRITO_FK">
+      <End Role="LIBRO" EntitySet="LIBRO" />
+      <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
     </AssociationSet>
     <AssociationSet Name="sexo_fk" Association="Self.sexo_fk">
       <End Role="sexo" EntitySet="sexo" />
       <End Role="usuarios" EntitySet="usuarios" />
+    </AssociationSet>
+    <AssociationSet Name="USUARIO_FK" Association="Self.USUARIO_FK">
+      <End Role="usuarios" EntitySet="usuarios" />
+      <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
     </AssociationSet>
   </EntityContainer>
 </Schema>

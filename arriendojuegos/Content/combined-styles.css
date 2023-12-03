@@ -166,12 +166,13 @@ nav {
 .section h2 {
     color: black;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-    font-size: 50px;
+    font-size: 30px;
 }
 .product-container {
     display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap; /* Allow multiple lines */
+    justify-content: space-around; /* Ajusta según tus necesidades */
+    flex-wrap: wrap; /* Permite múltiples líneas */
+    margin: 0 -10px; /* Ajusta el margen negativo para compensar el espacio entre los elementos */
 }
 .product {
    
@@ -179,10 +180,10 @@ nav {
     margin: 20px 0;
 }
 .product-item {
-    width: 50%; /* O ajusta según tus necesidades */
+    width: 48%; /* O ajusta según tus necesidades */
     box-sizing: border-box;
-    /* Elimina la regla width: calc(25% - 20px); */
     margin: 20px 0;
+    margin-left: 10px; /* Añade un margen izquierdo */
 }
     .product-item img {
         width: 100%;
@@ -238,15 +239,12 @@ nav {
     }
 /* Media query para pantallas más grandes, como computadoras */
 @media only screen and (min-width: 768px) {
-    /* Muestra hasta 5 productos por fila */
-    
-        .product-item {
-            width: calc(25% - 20px);
-            box-sizing: border-box;
-            margin: 20px 0;
-            float: left;
-        }
-    
+    .product-item {
+        width: calc(25% - 20px);
+        box-sizing: border-box;
+        margin: 20px 0;
+        float: left;
+    }
 
     /* Asegura que cada sección ocupe el ancho completo de su contenedor */
     .content::after {
@@ -254,6 +252,7 @@ nav {
         display: table;
         clear: both;
     }
+
     .section::after {
         content: "";
         display: table;
@@ -262,10 +261,8 @@ nav {
 }
 
 
-
 /* Para dispositivos más pequeños, como móviles */
 @media only screen and (max-width: 767px) {
-    /* Muestra 1 producto por fila */
     .product-item {
         width: 100%;
     }
