@@ -1,0 +1,44 @@
+﻿/* Estilo para el fondo oscuro detrás del modal */
+.modal-backdrop {
+    background-color: rgba(0, 128, 0, 0.0); /* Fondo verde semi-transparente */
+}
+
+/* Estilo para el contenido del modal */
+.modal-content {
+    background-color: #5CA550; /* Fondo verde */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+    color: white;
+}
+
+/* Estilo para el encabezado del modal */
+.modal-header {
+    background-color: #006400; /* Fondo verde oscuro */
+    color: #fff; /* Texto blanco */
+    border-bottom: 1px solid #ddd; /* Borde inferior del encabezado */
+}
+
+/* Estilo para el botón de cerrar */
+.close {
+    color: #fff; /* Color del icono de cerrar */
+    opacity: 1; /* Opacidad completa del icono de cerrar */
+}
+
+/* Estilo para el cuerpo del modal */
+.modal-body {
+    padding: 20px; /* Espaciado interno del cuerpo del modal */
+}
+
+/* Estilo para el título del modal */
+.modal-title {
+    font-weight: bold; /* Texto en negrita */
+    font-size: 1.5rem; /* Tamaño del texto del título */
+}
+
+.modal-content.error {
+    background-color: #ff3333; /* Fondo rojo */
+}
+
+.modal-header.error {
+    background-color: #ff3333; /* Fondo rojo */
+}

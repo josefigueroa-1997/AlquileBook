@@ -5,17 +5,30 @@
 
     <div class="product-container" style="margin-left: 90px;">
         <div class="product">
-            @foreach (var libro in Model)
-            {
-                <div class="product-item">
-                    <a href="@Url.Action("DetalleLibro", "Libro", new { id = libro.Id })"  style="text-decoration:none;">
-                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 1">
-                        <h3 style="justify-content:center; word-wrap: break-word;">@libro.Nombre</h3>
-                        <p>@libro.Autor</p>
-                        <p class="price">$@libro.Precio</p>
-                    </a>
-                </div>
+            @{
+
+                    var count = 0;
+                    foreach (var libro in Model)
+                    {
+                    <div class="product-item">
+                        <a href="@Url.Action("DetalleLibro", "Libro", new { id = libro.Id })" style="text-decoration:none;">
+                            <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 1">
+                            <h3 style="justify-content:center; word-wrap: break-word;">@libro.Nombre</h3>
+                            <p>@libro.Autor</p>
+                            <p class="price">$@libro.Precio</p>
+                        </a>
+                    </div>
+                    count++;
+                }
+                if (count == 0)
+                {
+                        <p>@TempData["BusquedaFallida"]</p>
+                }
+
+
             }
+
+
         </div>
     </div>
 

@@ -14,9 +14,9 @@ namespace arriendojuegos.Controllers
     public class HomeController : Controller
     {
         private readonly Libroservice libroservice = new Libroservice();
-        public ActionResult Index(int? id, string tipolibro, int? idcategoria, int? anio)
+        public ActionResult Index(int? id, string tipolibro, int? idcategoria, int? anio,string nombre)
         {
-            var libro = libroservice.ObtenerLibros(id,tipolibro,idcategoria,anio);
+            var libro = libroservice.ObtenerLibros(id,tipolibro,idcategoria,anio,nombre);
             return View(libro);
         }
 

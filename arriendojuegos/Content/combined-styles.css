@@ -43,6 +43,42 @@ header {
             border-radius: 50px;
             margin-left: 10px;
         }
+#cart-content {
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    z-index: 1;
+    padding: 10px;
+    display: none;
+    transition: display 0.3s ease;
+}
+
+    #cart-content.show-menu {
+        display: block;
+    }
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+    .cart-item img {
+        width: 50px; /* Ajusta el tamaño de la imagen según sea necesario */
+        height: auto;
+        margin-right: 10px;
+    }
+
+    .cart-item h4 {
+        margin: 0;
+    }
+
+    .cart-item .price {
+        font-weight: bold;
+        color: green;
+        margin-left: auto;
+    }
 
 nav {
     background-color: black;

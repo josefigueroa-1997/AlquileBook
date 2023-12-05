@@ -23,11 +23,11 @@ namespace arriendojuegos.Controllers
     {
         private readonly Libroservice libroservice = new Libroservice();
         // GET: Libro
-        public ActionResult Libros(int? id, string tipolibro, int? idcategoria, int? anio)
+        public ActionResult Libros(int? id, string tipolibro, int? idcategoria, int? anio,string nombre)
         {
             if (Session["nombre"] != null)
             {
-               var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio);
+               var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio,nombre);
                 ViewBag.Libros = libros;
                 return View();
             }
@@ -39,13 +39,13 @@ namespace arriendojuegos.Controllers
         }
 
 
-        public ActionResult Detalle(int? id, string tipolibro, int? idcategoria, int? anio)
+        public ActionResult Detalle(int? id, string tipolibro, int? idcategoria, int? anio, string nombre)
         {
             if (id == null || id<0)
             {
                 return RedirectToAction("Libros");
             } 
-            var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio);
+            var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio,nombre);
             var editorial = obtenereditorial();
             var cateogiras = obtenercategorias();
             ViewBag.Editoriales = editorial;
@@ -53,7 +53,7 @@ namespace arriendojuegos.Controllers
             return View(libro);
         }
 
-        public ActionResult FilterBook(int? id, string tipolibro, int? idcategoria, int? anio)
+        public ActionResult FilterBook(int? id, string tipolibro, int? idcategoria, int? anio, string nombre)
         {
             /*if (id == null || id < 0 || idcategoria == null || idcategoria < 0 || anio == null || anio < 0 || tipolibro == null)
             {
@@ -61,8 +61,9 @@ namespace arriendojuegos.Controllers
             }
             else*/
             /*{*/
-                var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio);
-                return View(libros);
+            var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio, nombre);
+            TempData["BusquedaFallida"] = "No existe un libro con ese nombre :(";
+            return View(libros);
                 
             /*}*/
 
@@ -233,13 +234,13 @@ namespace arriendojuegos.Controllers
             
         }
 
-        public ActionResult DetalleLibro(int? id, string tipolibro, int? idcategoria, int? anio)
+        public ActionResult DetalleLibro(int? id, string tipolibro, int? idcategoria, int? anio, string nombre)
         {
             if (id == null || id < 0)
             {
                 return RedirectToAction("Index","Home");
             }
-            var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio);
+            var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio, nombre);
             
             return View(libro);
         }

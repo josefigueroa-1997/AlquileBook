@@ -28,7 +28,12 @@ namespace arriendojuegos
             name: "LibroRoute",
             url: "Libro/Libros",
             defaults: new { controller = "Libro", action = "Libros" }
-        );
+            );
+            routes.MapRoute(
+            name: "FilterBook",
+            url: "Libro/FilterBook/{id}/{tipolibro}/{idcategoria}/{anio}/{nombre}",
+            defaults: new { controller = "Libro", action = "FilterBook" }
+);
         }
     }
 }

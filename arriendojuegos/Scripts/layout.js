@@ -19,7 +19,7 @@ document.querySelectorAll('nav a').forEach(function (link) {
 });
 let currentSlide = 0;
 
-function nextSlide() {
+/*function nextSlide() {
     const banner = document.getElementById('banner');
     const totalSlides = banner.children.length;
     const slideWidth = banner.clientWidth / totalSlides;
@@ -57,3 +57,4 @@ function updateSlide(slideWidth) {
 setInterval(() => {
     nextSlide();
 }, 3000);
+*/
