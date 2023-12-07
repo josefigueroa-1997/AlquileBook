@@ -83,7 +83,6 @@
     </Key>
     <Property Name="ID_LIBRO" Type="int" Nullable="false" />
     <Property Name="ID_USUARIO" Type="int" Nullable="false" />
-    <Property Name="TOTAL" Type="decimal" Precision="10" Scale="2" Nullable="false" />
   </EntityType>
   <EntityType Name="sexo">
     <Key>
@@ -243,6 +242,10 @@
     <Parameter Name="CATEGORIAS_ID_LIST" Type="varchar(max)" Mode="In" />
     <Parameter Name="IMAGEN" Type="nvarchar(max)" Mode="In" />
   </Function>
+  <Function Name="AGREGAR_CARRITO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="ID_LIBRO" Type="int" Mode="In" />
+    <Parameter Name="ID_USUARIO" Type="int" Mode="In" />
+  </Function>
   <Function Name="CREARADMIN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
     <Parameter Name="CORREO" Type="varchar" Mode="In" />
@@ -263,6 +266,10 @@
   <Function Name="DELETEBOOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="int" Mode="In" />
   </Function>
+  <Function Name="DELETELIBROCARRITO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="IDLIBRO" Type="int" Mode="In" />
+    <Parameter Name="IDUSUARIO" Type="int" Mode="In" />
+  </Function>
   <Function Name="DELETEUSUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="int" Mode="In" />
   </Function>
@@ -275,6 +282,9 @@
   <Function Name="INICIOSESION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="CORREO" Type="nvarchar" Mode="In" />
   </Function>
+  <Function Name="OBTENERCARRITO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="IDUSUARIO" Type="int" Mode="In" />
+  </Function>
   <Function Name="OBTENERCATEGORIAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="OBTENEREDITORIAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="OBTENERLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -282,6 +292,7 @@
     <Parameter Name="TIPO_LIBRO" Type="varchar" Mode="In" />
     <Parameter Name="CATEGORIA_ID" Type="int" Mode="In" />
     <Parameter Name="ANIO" Type="int" Mode="In" />
+    <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
   </Function>
   <Function Name="OBTENERLIBROSINDEX" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="int" Mode="In" />

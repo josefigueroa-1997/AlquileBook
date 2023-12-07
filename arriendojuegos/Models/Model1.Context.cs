@@ -228,7 +228,7 @@ namespace arriendojuegos.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENEREDITORIAL_Result>("OBTENEREDITORIAL");
         }
     
-        public virtual ObjectResult<OBTENERLIBRO_Result> OBTENERLIBRO(Nullable<int> iD, string tIPO_LIBRO, Nullable<int> cATEGORIA_ID, Nullable<int> aNIO)
+        public virtual ObjectResult<OBTENERLIBRO_Result> OBTENERLIBRO(Nullable<int> iD, string tIPO_LIBRO, Nullable<int> cATEGORIA_ID, Nullable<int> aNIO, string nOMBRE)
         {
             var iDParameter = iD.HasValue ?
                 new ObjectParameter("ID", iD) :
@@ -246,7 +246,11 @@ namespace arriendojuegos.Models
                 new ObjectParameter("ANIO", aNIO) :
                 new ObjectParameter("ANIO", typeof(int));
     
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERLIBRO_Result>("OBTENERLIBRO", iDParameter, tIPO_LIBROParameter, cATEGORIA_IDParameter, aNIOParameter);
+            var nOMBREParameter = nOMBRE != null ?
+                new ObjectParameter("NOMBRE", nOMBRE) :
+                new ObjectParameter("NOMBRE", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERLIBRO_Result>("OBTENERLIBRO", iDParameter, tIPO_LIBROParameter, cATEGORIA_IDParameter, aNIOParameter, nOMBREParameter);
         }
     
         public virtual ObjectResult<OBTENERLIBROSINDEX_Result> OBTENERLIBROSINDEX(Nullable<int> iD, string tIPO_LIBRO, Nullable<int> cATEGORIA_ID, Nullable<int> aNIO)
@@ -476,6 +480,41 @@ namespace arriendojuegos.Models
                 new ObjectParameter("COMUNA", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UPDATEUSUARIO", iDParameter, nOMBREParameter, cORREOParameter, tELEFONOParameter, dIRECCIONParameter, cOMUNAParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> AGREGAR_CARRITO(Nullable<int> iD_LIBRO, Nullable<int> iD_USUARIO)
+        {
+            var iD_LIBROParameter = iD_LIBRO.HasValue ?
+                new ObjectParameter("ID_LIBRO", iD_LIBRO) :
+                new ObjectParameter("ID_LIBRO", typeof(int));
+    
+            var iD_USUARIOParameter = iD_USUARIO.HasValue ?
+                new ObjectParameter("ID_USUARIO", iD_USUARIO) :
+                new ObjectParameter("ID_USUARIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AGREGAR_CARRITO", iD_LIBROParameter, iD_USUARIOParameter);
+        }
+    
+        public virtual int DELETELIBROCARRITO(Nullable<int> iDLIBRO, Nullable<int> iDUSUARIO)
+        {
+            var iDLIBROParameter = iDLIBRO.HasValue ?
+                new ObjectParameter("IDLIBRO", iDLIBRO) :
+                new ObjectParameter("IDLIBRO", typeof(int));
+    
+            var iDUSUARIOParameter = iDUSUARIO.HasValue ?
+                new ObjectParameter("IDUSUARIO", iDUSUARIO) :
+                new ObjectParameter("IDUSUARIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DELETELIBROCARRITO", iDLIBROParameter, iDUSUARIOParameter);
+        }
+    
+        public virtual ObjectResult<OBTENERCARRITO_Result> OBTENERCARRITO(Nullable<int> iDUSUARIO)
+        {
+            var iDUSUARIOParameter = iDUSUARIO.HasValue ?
+                new ObjectParameter("IDUSUARIO", iDUSUARIO) :
+                new ObjectParameter("IDUSUARIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERCARRITO_Result>("OBTENERCARRITO", iDUSUARIOParameter);
         }
     }
 }

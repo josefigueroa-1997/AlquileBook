@@ -1,0 +1,77 @@
+﻿body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+}
+
+.product-container {
+    display: flex;
+    max-width: 1200px;
+    margin: 50px auto;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+    flex: 1;
+    padding: 20px;
+}
+
+    .product-image img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+        margin: 0 auto;
+    }
+
+.product-details {
+    flex: 1;
+    padding: 20px;
+}
+
+.product-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.product-description {
+    font-size: 16px;
+    color: #555;
+    margin-bottom: 20px;
+}
+
+.product-price {
+    font-size: 18px;
+    color: #e44d26;
+    font-weight: bold;
+}
+
+.product-manufacturer {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.product-stock {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #e44d26; /* Puedes ajustar el color según tu diseño */
+}
+
+.btn-agregar {
+    background-color: white;
+    color: red;
+    padding: 10px 20px;
+    border: 2px solid red;
+    text-decoration: none;
+    display: inline-block;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s; /* Agregamos transiciones para suavizar el cambio de estilos */
+}
+
+    .btn-agregar:hover {
+        cursor: pointer;
+        background-color: red;
+        color: white;
+    }

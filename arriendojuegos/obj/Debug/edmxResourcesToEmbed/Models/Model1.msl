@@ -81,7 +81,6 @@
         <MappingFragment StoreEntitySet="LIBRO_CARRITO_USUARIO">
           <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
           <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
-          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -277,5 +276,18 @@
     <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="arriendojuegosModel.Store.sp_renamediagram" />
     <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="arriendojuegosModel.Store.sp_upgraddiagrams" />
     <FunctionImportMapping FunctionImportName="UPDATEUSUARIO" FunctionName="arriendojuegosModel.Store.UPDATEUSUARIO" />
+    <FunctionImportMapping FunctionImportName="AGREGAR_CARRITO" FunctionName="arriendojuegosModel.Store.AGREGAR_CARRITO" />
+    <FunctionImportMapping FunctionImportName="DELETELIBROCARRITO" FunctionName="arriendojuegosModel.Store.DELETELIBROCARRITO" />
+    <FunctionImportMapping FunctionImportName="OBTENERCARRITO" FunctionName="arriendojuegosModel.Store.OBTENERCARRITO">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="arriendojuegosModel.OBTENERCARRITO_Result">
+          <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+          <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
+          <ScalarProperty Name="NOMBRELIBRO" ColumnName="NOMBRELIBRO" />
+          <ScalarProperty Name="IMAGENLIBRO" ColumnName="IMAGENLIBRO" />
+          <ScalarProperty Name="PRECIOLIBRO" ColumnName="PRECIOLIBRO" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
   </EntityContainerMapping>
 </Mapping>

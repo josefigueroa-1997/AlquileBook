@@ -320,6 +320,7 @@
       <Parameter Name="TIPO_LIBRO" Mode="In" Type="String" />
       <Parameter Name="CATEGORIA_ID" Mode="In" Type="Int32" />
       <Parameter Name="ANIO" Mode="In" Type="Int32" />
+      <Parameter Name="NOMBRE" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="OBTENERLIBROSINDEX" ReturnType="Collection(arriendojuegosModel.OBTENERLIBROSINDEX_Result)">
       <Parameter Name="ID" Mode="In" Type="Int32" />
@@ -386,6 +387,17 @@
       <Parameter Name="TELEFONO" Mode="In" Type="Int32" />
       <Parameter Name="DIRECCION" Mode="In" Type="String" />
       <Parameter Name="COMUNA" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="AGREGAR_CARRITO" ReturnType="Collection(Int32)">
+      <Parameter Name="ID_LIBRO" Mode="In" Type="Int32" />
+      <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="DELETELIBROCARRITO">
+      <Parameter Name="IDLIBRO" Mode="In" Type="Int32" />
+      <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="OBTENERCARRITO" ReturnType="Collection(arriendojuegosModel.OBTENERCARRITO_Result)">
+      <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
     </FunctionImport>
   </EntityContainer>
   <ComplexType Name="DESPLEGARCOMUNAS_Result">
@@ -470,5 +482,12 @@
     <Property Type="Int32" Name="ID" Nullable="false" />
     <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
     <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <ComplexType Name="OBTENERCARRITO_Result">
+    <Property Type="Int32" Name="ID_USUARIO" Nullable="false" />
+    <Property Type="Int32" Name="ID_LIBRO" Nullable="false" />
+    <Property Type="String" Name="NOMBRELIBRO" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="IMAGENLIBRO" Nullable="true" />
+    <Property Type="Decimal" Name="PRECIOLIBRO" Nullable="false" Precision="10" Scale="2" />
   </ComplexType>
 </Schema>

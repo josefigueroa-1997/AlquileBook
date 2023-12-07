@@ -80,6 +80,7 @@ header {
         margin-left: auto;
     }
 
+
 nav {
     background-color: black;
     display: flex;
@@ -141,6 +142,10 @@ nav {
     float: right;
     padding: 20px;
 }
+    .cart-profile:hover {
+        cursor: pointer;
+        /* Otros estilos que desees aplicar al pasar el cursor sobre el elemento */
+    }
 
 .content {
     width: 100%;

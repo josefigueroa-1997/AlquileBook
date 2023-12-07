@@ -6,9 +6,13 @@ using System.Web;
 using System.Web.Mvc;
 using System.Data.SqlClient;
 using System.Diagnostics;
-
+using arriendojuegos.Models.ListModelCarritoCompra;
+using System.Web.Services.Description;
+using arriendojuegos.Models.ListModelLibro;
+using arriendojuegos.Filters;
 namespace arriendojuegos.Controllers
 {
+    [CargarCategorias]
     public class CarritoCompraController : Controller
     {
         // GET: CarritoCompra
@@ -19,22 +23,21 @@ namespace arriendojuegos.Controllers
 
 
         [HttpPost]
-        public ActionResult AgregarCarrito(int Idlibro, int idusuario, decimal totalproducto)
+        public ActionResult AgregarCarrito(int Idlibro, int idusuario)
         {
             using (var dbcontext = new arriendojuegosEntities1())
             {
-                // Ejecutar el procedimiento almacenado y obtener el resultado escalar
+               
                 int resultado = dbcontext.Database.SqlQuery<int>(
-                    "AGREGAR_CARRITO @ID_LIBRO, @ID_USUARIO, @TOTAL_PRODUCTOS",
+                    "AGREGAR_CARRITO @ID_LIBRO, @ID_USUARIO",
                     new SqlParameter("@ID_LIBRO", Idlibro),
-                    new SqlParameter("@ID_USUARIO", idusuario),
-                    new SqlParameter("@TOTAL_PRODUCTOS", totalproducto)
+                    new SqlParameter("@ID_USUARIO", idusuario)
+                    
                 ).FirstOrDefault();
-                Debug.WriteLine(resultado);
-                // Verificar el resultado obtenido
+                
                 if (resultado == 1)
                 {
-                    return Json(new { success = false, message = "Solamente puede agregar un libro" });
+                    return Json(new { success = false, message = "Solamente puede agregar una copia de este producto al carrito" });
                 }
                 else 
                 {
@@ -43,6 +46,90 @@ namespace arriendojuegos.Controllers
                
             }
         }
+
+
+        public ActionResult CargarCarrito(int id)
+        {
+            Session["carrito"] = Obtenercarrito(id); ;
+           //var carrito = 
+            
+            if (Session["carrito"] != null)
+            {
+                
+                return Json(new { success = true,carrito = Session["carrito"] },JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                return Json(new {success = false, message = "Error al cargar el carrito"},JsonRequestBehavior.AllowGet);
+            }
+            
+        }
+        [HttpPost]
+        public ActionResult EliminarLibroCarrito(int idlibro, int idusuario)
+        {
+            try
+            {
+                using (var dbcontext = new arriendojuegosEntities1())
+                {
+                    var resultado = dbcontext.Database.ExecuteSqlCommand("DELETELIBROCARRITO @IDLIBRO,@IDUSUARIO",
+                        new SqlParameter("@IDLIBRO",idlibro),
+                        new SqlParameter("@IDUSUARIO",idusuario));
+                    return Json(new {success = true});
+                }
+            }
+            catch(SqlException e)
+            {
+                Debug.WriteLine(e.Message);
+                return RedirectToAction("Error", "Shared");
+            }
+        }
+
+        public ActionResult ResumenAlquiler(int idusuario)
+        {
+            if (Session["id"]!=null )
+            {
+                var carrito = Obtenercarrito(idusuario);
+                ViewBag.Carrito = carrito;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
+        }
+
+        private List<Carrito> Obtenercarrito(int id)
+        {
+            try 
+            { 
+                using (var dbcontext = new arriendojuegosEntities1())
+                {
+                    var resultado = dbcontext.Database.SqlQuery<Carrito>("OBTENERCARRITO @IDUSUARIO",
+                        new SqlParameter("@IDUSUARIO",id)).ToList();
+                    foreach(var libro in resultado)
+                    {
+                        if (!string.IsNullOrEmpty(libro.IMAGENLIBRO))
+                        {
+                            libro.imagen = Convert.FromBase64String(libro.IMAGENLIBRO);
+                        }
+                    }
+                    
+                    return resultado;
+                }
+            
+            
+            }
+            catch(SqlException e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
+
+        }
+
+        
 
     }
 }

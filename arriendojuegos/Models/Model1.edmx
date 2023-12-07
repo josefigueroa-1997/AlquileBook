@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="arriendojuegosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="arriendojuegosModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="ADMINISTRADOR">
           <Key>
             <PropertyRef Name="ID" />
@@ -88,7 +88,6 @@
           </Key>
           <Property Name="ID_LIBRO" Type="int" Nullable="false" />
           <Property Name="ID_USUARIO" Type="int" Nullable="false" />
-          <Property Name="TOTAL" Type="decimal" Precision="10" Scale="2" Nullable="false" />
         </EntityType>
         <EntityType Name="sexo">
           <Key>
@@ -248,6 +247,10 @@
           <Parameter Name="CATEGORIAS_ID_LIST" Type="varchar(max)" Mode="In" />
           <Parameter Name="IMAGEN" Type="nvarchar(max)" Mode="In" />
         </Function>
+        <Function Name="AGREGAR_CARRITO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_LIBRO" Type="int" Mode="In" />
+          <Parameter Name="ID_USUARIO" Type="int" Mode="In" />
+        </Function>
         <Function Name="CREARADMIN" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
           <Parameter Name="CORREO" Type="varchar" Mode="In" />
@@ -268,6 +271,10 @@
         <Function Name="DELETEBOOK" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
         </Function>
+        <Function Name="DELETELIBROCARRITO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDLIBRO" Type="int" Mode="In" />
+          <Parameter Name="IDUSUARIO" Type="int" Mode="In" />
+        </Function>
         <Function Name="DELETEUSUARIO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
         </Function>
@@ -280,6 +287,9 @@
         <Function Name="INICIOSESION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CORREO" Type="nvarchar" Mode="In" />
         </Function>
+        <Function Name="OBTENERCARRITO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="IDUSUARIO" Type="int" Mode="In" />
+        </Function>
         <Function Name="OBTENERCATEGORIAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="OBTENEREDITORIAL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="OBTENERLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
@@ -287,6 +297,7 @@
           <Parameter Name="TIPO_LIBRO" Type="varchar" Mode="In" />
           <Parameter Name="CATEGORIA_ID" Type="int" Mode="In" />
           <Parameter Name="ANIO" Type="int" Mode="In" />
+          <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
         </Function>
         <Function Name="OBTENERLIBROSINDEX" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="ID" Type="int" Mode="In" />
@@ -415,8 +426,7 @@
             <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
           </AssociationSet>
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="arriendojuegosModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -720,18 +730,18 @@
             <Parameter Name="SALT" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="DELETEBOOK">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DELETEUSUARIO">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="DESPLEGARCOMUNAS" ReturnType="Collection(arriendojuegosModel.DESPLEGARCOMUNAS_Result)" />
           <FunctionImport Name="DESPLEGARSEXO" ReturnType="Collection(arriendojuegosModel.DESPLEGARSEXO_Result)" />
           <FunctionImport Name="GETID" ReturnType="Collection(Int32)">
-            <Parameter Name="CORREO" Mode="In" Type="String" />
+          <Parameter Name="CORREO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="INICIOSESION" ReturnType="Collection(arriendojuegosModel.INICIOSESION_Result)">
-            <Parameter Name="CORREO" Mode="In" Type="String" />
+          <Parameter Name="CORREO" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="OBTENERCATEGORIAS" ReturnType="Collection(arriendojuegosModel.OBTENERCATEGORIAS_Result)" />
           <FunctionImport Name="OBTENEREDITORIAL" ReturnType="Collection(arriendojuegosModel.OBTENEREDITORIAL_Result)" />
@@ -740,6 +750,7 @@
             <Parameter Name="TIPO_LIBRO" Mode="In" Type="String" />
             <Parameter Name="CATEGORIA_ID" Mode="In" Type="Int32" />
             <Parameter Name="ANIO" Mode="In" Type="Int32" />
+            <Parameter Name="NOMBRE" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="OBTENERLIBROSINDEX" ReturnType="Collection(arriendojuegosModel.OBTENERLIBROSINDEX_Result)">
             <Parameter Name="ID" Mode="In" Type="Int32" />
@@ -748,10 +759,10 @@
             <Parameter Name="ANIO" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="OBTENERROL" ReturnType="Collection(Int32)">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="OBTENERUSUARIOID" ReturnType="Collection(arriendojuegosModel.OBTENERUSUARIOID_Result)">
-            <Parameter Name="ID" Mode="In" Type="Int32" />
+          <Parameter Name="ID" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="OBTENERUSUARIOS" ReturnType="Collection(arriendojuegosModel.OBTENERUSUARIOS_Result)" />
           <FunctionImport Name="REGISTRARLIBRO">
@@ -806,6 +817,17 @@
             <Parameter Name="TELEFONO" Mode="In" Type="Int32" />
             <Parameter Name="DIRECCION" Mode="In" Type="String" />
             <Parameter Name="COMUNA" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="AGREGAR_CARRITO" ReturnType="Collection(Int32)">
+            <Parameter Name="ID_LIBRO" Mode="In" Type="Int32" />
+            <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="DELETELIBROCARRITO">
+            <Parameter Name="IDLIBRO" Mode="In" Type="Int32" />
+            <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <FunctionImport Name="OBTENERCARRITO" ReturnType="Collection(arriendojuegosModel.OBTENERCARRITO_Result)">
+            <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="DESPLEGARCOMUNAS_Result">
@@ -890,6 +912,13 @@
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="OBTENERCARRITO_Result">
+          <Property Type="Int32" Name="ID_USUARIO" Nullable="false" />
+          <Property Type="Int32" Name="ID_LIBRO" Nullable="false" />
+          <Property Type="String" Name="NOMBRELIBRO" Nullable="false" MaxLength="100" />
+          <Property Type="String" Name="IMAGENLIBRO" Nullable="true" />
+          <Property Type="Decimal" Name="PRECIOLIBRO" Nullable="false" Precision="10" Scale="2" />
         </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
@@ -977,7 +1006,6 @@
               <MappingFragment StoreEntitySet="LIBRO_CARRITO_USUARIO">
                 <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
                 <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
-                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1173,6 +1201,19 @@
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="arriendojuegosModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="arriendojuegosModel.Store.sp_upgraddiagrams" />
           <FunctionImportMapping FunctionImportName="UPDATEUSUARIO" FunctionName="arriendojuegosModel.Store.UPDATEUSUARIO" />
+          <FunctionImportMapping FunctionImportName="AGREGAR_CARRITO" FunctionName="arriendojuegosModel.Store.AGREGAR_CARRITO" />
+          <FunctionImportMapping FunctionImportName="DELETELIBROCARRITO" FunctionName="arriendojuegosModel.Store.DELETELIBROCARRITO" />
+          <FunctionImportMapping FunctionImportName="OBTENERCARRITO" FunctionName="arriendojuegosModel.Store.OBTENERCARRITO">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="arriendojuegosModel.OBTENERCARRITO_Result">
+                <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+                <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
+                <ScalarProperty Name="NOMBRELIBRO" ColumnName="NOMBRELIBRO" />
+                <ScalarProperty Name="IMAGENLIBRO" ColumnName="IMAGENLIBRO" />
+                <ScalarProperty Name="PRECIOLIBRO" ColumnName="PRECIOLIBRO" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

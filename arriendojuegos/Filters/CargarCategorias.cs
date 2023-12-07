@@ -28,7 +28,7 @@ namespace arriendojuegos.Filters
                 }
                 catch (Exception ex)
                 {
-                    // Log the error
+                    
                     System.Diagnostics.Debug.WriteLine(ex);
                     return null;
                 }

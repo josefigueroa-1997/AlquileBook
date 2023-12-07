@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewBag.Title = "ResumenAlquiler";
+}
+@Styles.Render("~/Content/Detallelibro.css");
+<h2>ResumenAlquiler</h2>
+
+
+@{
+
+    var carrito = ViewBag.Carrito as List<arriendojuegos.Models.ListModelCarritoCompra.Carrito>;
+    <form method="post" action="">
+        <div class="product-container">
+            @foreach (var c in carrito)
+            {
+                <div class="product-image">
+                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(c.imagen)" alt="Nombre del producto">
+                </div>
+                <div class="product-details">
+                    <div class="product-title">
+                        <p>@c.NOMBRELIBRO</p>
+                    </div>
+                    <div class="product-manufacturer">
+                        <p>Autor: @c.AUTOR</p>
+                    </div>
+                    <div class="product-price">
+
+                        <p>$@c.PRECIOLIBRO</p>
+                    </div>
+                </div>
+
+            }
+
+        </div>    
+
+</form>
+    
+
+
+
+
+
+
+
+
+}
+

@@ -209,6 +209,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Model1.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\OBTENERCARRITO_Result.cs">
+      <DependentUpon>Model1.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\OBTENERCATEGORIAS_Result.cs">
       <DependentUpon>Model1.tt</DependentUpon>
     </Compile>
@@ -254,6 +257,7 @@
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\combined-styles.css" />
+    <Content Include="Content\Detallelibro.css" />
     <Content Include="Content\login-styles.css" />
     <Content Include="Content\modal.css" />
     <Content Include="Content\register.css" />
@@ -325,11 +329,11 @@
     <Content Include="Views\Libro\Registrar.cshtml" />
     <Content Include="Views\Libro\FilterBook.cshtml" />
     <Content Include="Views\Libro\DetalleLibro.cshtml" />
+    <Content Include="Views\CarritoCompra\ResumenAlquiler.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Base\" />
-    <Folder Include="Views\CarritoCompra\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
