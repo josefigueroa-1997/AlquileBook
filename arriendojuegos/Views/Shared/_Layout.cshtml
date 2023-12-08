@@ -174,7 +174,7 @@ function cargarCarrito() {
                             <img src="data:image/jpeg;base64,${imagenBase64}" alt="Producto en el carrito">
                             <h2 style="font-size: 16px;margin-bottom: 10px;">${producto.NOMBRELIBRO}</h4>
                             <p class="price">$${producto.PRECIOLIBRO}</p>
-                            <button style="backgound:red;" class="remove-item" data-index="${index}">
+                            <button style="background:red;" class="remove-item" data-index="${index}">
                             <i class="material-icons">clear</i>
                                 </button>
                         </div>
@@ -227,9 +227,9 @@ function cargarCarrito() {
 
     });
 }
-if (id) {
-    cargarCarrito();
-        }
+        $(document).ready(function () {
+            cargarCarrito();
+        });
     </script>
 
 </body>

@@ -262,6 +262,7 @@
     <Content Include="Content\modal.css" />
     <Content Include="Content\register.css" />
     <Content Include="Content\registerbookform.css" />
+    <Content Include="Content\resumenalquiler.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />

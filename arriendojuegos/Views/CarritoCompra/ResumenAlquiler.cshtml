@@ -1,47 +1,86 @@
-﻿
-@{
+﻿@{
     ViewBag.Title = "ResumenAlquiler";
 }
-@Styles.Render("~/Content/Detallelibro.css");
-<h2>ResumenAlquiler</h2>
-
-
+@Styles.Render("~/Content/resumenalquiler.css");
+<h2>Resumen de Alquiler</h2>
 @{
-
     var carrito = ViewBag.Carrito as List<arriendojuegos.Models.ListModelCarritoCompra.Carrito>;
-    <form method="post" action="">
-        <div class="product-container">
-            @foreach (var c in carrito)
-            {
-                <div class="product-image">
-                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(c.imagen)" alt="Nombre del producto">
-                </div>
-                <div class="product-details">
-                    <div class="product-title">
-                        <p>@c.NOMBRELIBRO</p>
-                    </div>
-                    <div class="product-manufacturer">
-                        <p>Autor: @c.AUTOR</p>
-                    </div>
-                    <div class="product-price">
-
-                        <p>$@c.PRECIOLIBRO</p>
-                    </div>
-                </div>
-
-            }
-
-        </div>    
-
-</form>
-    
-
-
-
-
-
-
-
-
 }
 
+@if (carrito != null && carrito.Count > 0)
+{
+    <form class="cart-form" method="post" action="@Url.Action("EfectuarAlquiler","CarritoCompra")">
+        <div class="cart-summary-container">
+            @foreach (var c in carrito)
+            {
+                <input type="hidden" name="idlibros[@c]" value="@c.Id_Libro"/>
+                <div class="product-container">
+                    <div class="product-image">
+                        <img src="data:image/jpeg;base64,@Convert.ToBase64String(c.imagen)">
+                    </div>
+                    <div class="product-details">
+                        <div class="product-title">
+                            <p>@c.NOMBRELIBRO</p>
+                        </div>
+                        <div class="product-manufacturer">
+                            <p>Autor: @c.AUTOR</p>
+                        </div>
+                        <div class="product-manufacturer">
+                            <p>Libro: @c.TIPOLIBRO</p>
+                        </div>
+                        <div class="product-price">
+                            <p>$@c.PRECIOLIBRO</p>
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+            <div class="product-container">
+                <p>Selecciona la cantidad de semanas o mes de alquiler</p>
+                <div class="week-options">
+                    <label>
+                        <input type="radio" name="fechaalquiler" value="1" />
+                        1 semana
+                    </label>
+                    <label>
+                        <input type="radio" name="fechaalquiler" value="2" />
+                        2 semanas
+                    </label>
+                    <label>
+                        <input type="radio" name="fechaalquiler" value="3" />
+                        1 mes
+                    </label>
+                </div>
+            </div>
+            @if (carrito.Any(libro => libro.TIPOLIBRO == "Fisico"))
+            {
+                <div class="product-container">
+                    <p>Los libros físicos se enviarán a la siguiente dirección:</p>
+                    <p>@(carrito.FirstOrDefault()?.DIRECCION) - @(carrito.FirstOrDefault()?.COMUNA)</p>
+                </div>
+            }
+            @if (carrito.Any(libro => libro.TIPOLIBRO == "Digital"))
+            {
+                <div class="product-container">
+                    <p>Los libros digitales se enviarán a su correo electronico</p>
+                    
+                </div>
+            }
+
+            <div class="total-container">
+                <p class="total-label">Total a Pagar:</p>
+                @{
+                    var totalPrice = carrito.Sum(c => c.PRECIOLIBRO);
+                }
+                <p  class="total-amount">$@totalPrice</p>
+                <input type="hidden" name="total" value="@totalPrice"/>
+                <button type="submit" class="btn-agregar">Efectuar Alquiler</button>
+            </div>
+        </div>
+    </form>
+}
+else
+{
+    <p>No hay productos en el carrito.</p>
+}

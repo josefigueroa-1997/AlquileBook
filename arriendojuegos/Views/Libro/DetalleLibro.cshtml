@@ -28,6 +28,10 @@
 
                         <p>Generos: @libro.CategoriaNombres</p>
                     </div>
+                    <div class="product-manufacturer">
+
+                        <p>Tipo Libro: @libro.TipoLibro</p>
+                    </div>
                     <div class="product-stock">
 
                         <p>Disponibilidad: @libro.Stock</p>
@@ -69,6 +73,10 @@
                 <div class="modal-body">
 
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" id="btnIrAPagar">Ir a Pagar</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Seguir Comprando</button>
+                </div>
             </div>
         </div>
     </div>
@@ -97,12 +105,15 @@
                     if (response.success) {
                         $("#modalExito .modal-body").text(response.message);
                         $("#modalExito .modal-title").text("!Éxito¡");
+                        $("#btnIrAPagar, #btnSeguirComprando").show();
                     }
                     else {
                         $("#modalExito .modal-body").text(response.message);
                         $("#modalExito .modal-title").text("Error");
                         $("#modalExito .modal-header").addClass("error");
                         $("#modalExito .modal-content").addClass("error");
+                        $("#btnIrAPagar, #btnSeguirComprando").hide();
+
                     }
                     $("#modalExito").modal("show");
                 },
@@ -110,7 +121,14 @@
             });
 
         });
-
+        $("#btnIrAPagar").click(function () {
+            
+            window.location.href = "@Url.Action("ResumenAlquiler", "CarritoCompra", new { idusuario = (int)(Session["id"] ?? 0) })";
+        });
+        $("#btnSeguirComprando").click(function () {
+            
+            $("#modalExito").modal("hide");
+        });
     });
 
 </script>

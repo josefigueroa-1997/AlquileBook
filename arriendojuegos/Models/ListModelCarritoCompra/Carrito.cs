@@ -13,6 +13,9 @@ namespace arriendojuegos.Models.ListModelCarritoCompra
         public string AUTOR { get; set; }
         public string IMAGENLIBRO { get; set; }
         public decimal PRECIOLIBRO { get; set; }
+        public string TIPOLIBRO { get; set; }
+        public string DIRECCION { get; set; }
+        public string COMUNA { get; set; }
         public byte[] imagen { get; set; }
     }
 }

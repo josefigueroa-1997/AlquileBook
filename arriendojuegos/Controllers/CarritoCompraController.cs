@@ -10,6 +10,8 @@ using arriendojuegos.Models.ListModelCarritoCompra;
 using System.Web.Services.Description;
 using arriendojuegos.Models.ListModelLibro;
 using arriendojuegos.Filters;
+using Newtonsoft.Json;
+
 namespace arriendojuegos.Controllers
 {
     [CargarCategorias]
@@ -41,6 +43,9 @@ namespace arriendojuegos.Controllers
                 }
                 else 
                 {
+
+                    var carrito = Obtenercarrito(idusuario);
+                    AlmacenarCarritoEnCookies(carrito);
                     return Json(new { success = true, message = "Se agregó con éxito el producto al carrito" });
                 }
                
@@ -50,19 +55,67 @@ namespace arriendojuegos.Controllers
 
         public ActionResult CargarCarrito(int id)
         {
-            Session["carrito"] = Obtenercarrito(id); ;
-           //var carrito = 
+           var carrito = Obtenercarrito(id); ;
             
-            if (Session["carrito"] != null)
+            
+            if (carrito != null)
             {
-                
-                return Json(new { success = true,carrito = Session["carrito"] },JsonRequestBehavior.AllowGet);
+                AlmacenarCarritoEnCookies(carrito);
+                return Json(new { success = true,carrito = carrito },JsonRequestBehavior.AllowGet);
             }
             else
             {
                 return Json(new {success = false, message = "Error al cargar el carrito"},JsonRequestBehavior.AllowGet);
             }
             
+        }
+        private List<Carrito> Obtenercarrito(int id)
+        {
+            try
+            {
+                using (var dbcontext = new arriendojuegosEntities1())
+                {
+                    var resultado = dbcontext.Database.SqlQuery<Carrito>("OBTENERCARRITO @IDUSUARIO",
+                        new SqlParameter("@IDUSUARIO", id)).ToList();
+                    foreach (var libro in resultado)
+                    {
+                        if (!string.IsNullOrEmpty(libro.IMAGENLIBRO))
+                        {
+                            libro.imagen = Convert.FromBase64String(libro.IMAGENLIBRO);
+                        }
+                    }
+
+                    return resultado;
+                }
+
+
+            }
+            catch (SqlException e)
+            {
+                Debug.WriteLine(e.Message);
+                return null;
+            }
+
+
+        }
+        public void AlmacenarCarritoEnCookies(List<Carrito> carrito)
+        {
+            // Convertir el carrito a una cadena JSON y almacenarlo en una cookie
+            var carritoJson = JsonConvert.SerializeObject(carrito);
+            Response.Cookies["Carrito"].Value = carritoJson;
+        }
+
+        // Obtener el carrito desde cookies
+        public List<Carrito> ObtenerCarritoDesdeCookies()
+        {
+            var carritoJson = Request.Cookies["Carrito"]?.Value;
+
+            if (!string.IsNullOrEmpty(carritoJson))
+            {
+                return JsonConvert.DeserializeObject<List<Carrito>>(carritoJson);
+            }
+
+            return new List<Carrito>();
         }
         [HttpPost]
         public ActionResult EliminarLibroCarrito(int idlibro, int idusuario)
@@ -98,38 +151,48 @@ namespace arriendojuegos.Controllers
             }
             
         }
-
-        private List<Carrito> Obtenercarrito(int id)
+        [HttpPost]
+        public ActionResult EfectuarAlquiler()
         {
-            try 
-            { 
-                using (var dbcontext = new arriendojuegosEntities1())
+            try
+            {
+                using(var dbcontext = new arriendojuegosEntities1())
                 {
-                    var resultado = dbcontext.Database.SqlQuery<Carrito>("OBTENERCARRITO @IDUSUARIO",
-                        new SqlParameter("@IDUSUARIO",id)).ToList();
-                    foreach(var libro in resultado)
+
+                    int iduser = int.Parse(Session["id"].ToString());
+                    decimal total = decimal.Parse(Request.Form["total"]);
+                    string[] idlibros = Request.Form.AllKeys.Where(key => key.StartsWith("idlibros[")).Select(key => Request.Form[key]).ToArray();
+                    string librosid = string.Join(",",idlibros);
+                    int semanasSeleccionadas = int.Parse(Request.Form["fechaalquiler"]);
+                    DateTime fechaAlquiler = DateTime.Now;
+
+                    for (int i = 0; i < semanasSeleccionadas; i++)
                     {
-                        if (!string.IsNullOrEmpty(libro.IMAGENLIBRO))
+                        fechaAlquiler = fechaAlquiler.AddDays(5); 
+                        if (fechaAlquiler.DayOfWeek == DayOfWeek.Friday)
                         {
-                            libro.imagen = Convert.FromBase64String(libro.IMAGENLIBRO);
+                            fechaAlquiler = fechaAlquiler.AddDays(3); 
                         }
                     }
-                    
-                    return resultado;
+                    var resultado = dbcontext.Database.ExecuteSqlCommand("EFECTUARALQUILER @ID_USUARIO,@LIBROS_ID,@TOTAL,@INFORMACION,@FECHATERMINO",
+                        new SqlParameter("@ID_USUARIO",iduser),
+                        new SqlParameter("@LIBROS_ID",librosid),
+                        new SqlParameter("@TOTAL",total),
+                        new SqlParameter("@INFORMACION","Se realizó un alquiler de manera exitosa"),
+                        new SqlParameter("@FECHATERMINO",fechaAlquiler));
                 }
-            
-            
+                return RedirectToAction("Success","CarritoCompra");
             }
             catch(SqlException e)
             {
                 Debug.WriteLine(e.Message);
-                return null;
+                return RedirectToAction("Error", "Shared");
             }
-
 
         }
 
         
+
 
     }
 }

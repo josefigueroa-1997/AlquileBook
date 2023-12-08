@@ -10,6 +10,7 @@ using arriendojuegos.Models;
 using arriendojuegos.Models.ListModelUsuario;
 using BCrypt.Net;
 using arriendojuegos.Filters;
+using arriendojuegos.Models.ListModelCarritoCompra;
 
 namespace arriendojuegos.Controllers
 {
@@ -335,7 +336,7 @@ namespace arriendojuegos.Controllers
             }
             return rol;
         }
-
+        
 
     }
 }
