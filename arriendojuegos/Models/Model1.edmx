@@ -27,6 +27,17 @@
           <Property Name="FECHAALQUILER" Type="date" Nullable="false" />
           <Property Name="INFORMACION" Type="varchar" MaxLength="500" />
           <Property Name="FECHATERMINO" Type="date" Nullable="false" />
+          <Property Name="ESTADO" Type="varchar" MaxLength="200" />
+          <Property Name="ID_TRANSACCION" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="BOLETA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ID_TRANSACCION" Type="int" />
+          <Property Name="DETALLES" Type="varchar(max)" />
+          <Property Name="FECHAEMISION" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="CATEGORIA">
           <Key>
@@ -105,6 +116,14 @@
           <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="TRANSACCION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FECHATRANSACCION" Type="date" />
+          <Property Name="TOTAL" Type="decimal" Precision="10" Scale="2" />
         </EntityType>
         <EntityType Name="usuarios">
           <Key>
@@ -220,6 +239,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="TRANSACCION_FK">
+          <End Role="TRANSACCION" Type="Self.TRANSACCION" Multiplicity="1" />
+          <End Role="ALQUILER" Type="Self.ALQUILER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRANSACCION">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ALQUILER">
+              <PropertyRef Name="ID_TRANSACCION" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TRANSACCION_FK1">
+          <End Role="TRANSACCION" Type="Self.TRANSACCION" Multiplicity="0..1" />
+          <End Role="BOLETA" Type="Self.BOLETA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRANSACCION">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOLETA">
+              <PropertyRef Name="ID_TRANSACCION" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="USUARIO_FK">
           <End Role="usuarios" Type="Self.usuarios" Multiplicity="1" />
           <End Role="LIBRO_CARRITO_USUARIO" Type="Self.LIBRO_CARRITO_USUARIO" Multiplicity="*" />
@@ -280,6 +323,13 @@
         </Function>
         <Function Name="DESPLEGARCOMUNAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <Function Name="DESPLEGARSEXO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+        <Function Name="EFECTUARALQUILER" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="ID_USUARIO" Type="int" Mode="In" />
+          <Parameter Name="LIBROS_ID" Type="varchar(max)" Mode="In" />
+          <Parameter Name="TOTAL" Type="decimal" Mode="In" />
+          <Parameter Name="INFORMACION" Type="varchar" Mode="In" />
+          <Parameter Name="FECHATERMINO" Type="date" Mode="In" />
+        </Function>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="GETID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="CORREO" Type="varchar" Mode="In" />
@@ -379,6 +429,7 @@
         <EntityContainer Name="arriendojuegosModelStoreContainer">
           <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="ALQUILER" EntityType="Self.ALQUILER" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="BOLETA" EntityType="Self.BOLETA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CATEGORIA" EntityType="Self.CATEGORIA" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="CATEGORIA_LIBRO" EntityType="Self.CATEGORIA_LIBRO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="COMUNA" EntityType="Self.COMUNA" Schema="dbo" store:Type="Tables" />
@@ -388,6 +439,7 @@
           <EntitySet Name="LIBRO_CARRITO_USUARIO" EntityType="Self.LIBRO_CARRITO_USUARIO" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sexo" EntityType="Self.sexo" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TRANSACCION" EntityType="Self.TRANSACCION" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="usuarios" EntityType="Self.usuarios" Schema="dbo" store:Type="Tables" />
           <AssociationSet Name="ADMIN_FK" Association="Self.ADMIN_FK">
             <End Role="ADMINISTRADOR" EntitySet="ADMINISTRADOR" />
@@ -420,6 +472,14 @@
           <AssociationSet Name="sexo_fk" Association="Self.sexo_fk">
             <End Role="sexo" EntitySet="sexo" />
             <End Role="usuarios" EntitySet="usuarios" />
+          </AssociationSet>
+          <AssociationSet Name="TRANSACCION_FK" Association="Self.TRANSACCION_FK">
+            <End Role="TRANSACCION" EntitySet="TRANSACCION" />
+            <End Role="ALQUILER" EntitySet="ALQUILER" />
+          </AssociationSet>
+          <AssociationSet Name="TRANSACCION_FK1" Association="Self.TRANSACCION_FK1">
+            <End Role="TRANSACCION" EntitySet="TRANSACCION" />
+            <End Role="BOLETA" EntitySet="BOLETA" />
           </AssociationSet>
           <AssociationSet Name="USUARIO_FK" Association="Self.USUARIO_FK">
             <End Role="usuarios" EntitySet="usuarios" />
@@ -457,6 +517,9 @@
           <Property Name="INFORMACION" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
           <Property Name="FECHATERMINO" Type="DateTime" Nullable="false" Precision="0" />
           <NavigationProperty Name="LIBRO_CARRITO_USUARIO" Relationship="Self.LIBROALQUILER_FK" FromRole="ALQUILER" ToRole="LIBRO_CARRITO_USUARIO" />
+          <Property Name="ESTADO" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="ID_TRANSACCION" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="TRANSACCION" Relationship="arriendojuegosModel.TRANSACCION_FK" FromRole="ALQUILER" ToRole="TRANSACCION" />
         </EntityType>
         <EntityType Name="CATEGORIA">
           <Key>
@@ -827,7 +890,24 @@
             <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
           </FunctionImport>
           <FunctionImport Name="OBTENERCARRITO" ReturnType="Collection(arriendojuegosModel.OBTENERCARRITO_Result)">
-            <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
+          <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
+          </FunctionImport>
+          <EntitySet Name="BOLETA" EntityType="arriendojuegosModel.BOLETA" />
+          <EntitySet Name="TRANSACCION" EntityType="arriendojuegosModel.TRANSACCION" />
+          <AssociationSet Name="TRANSACCION_FK" Association="arriendojuegosModel.TRANSACCION_FK">
+            <End Role="TRANSACCION" EntitySet="TRANSACCION" />
+            <End Role="ALQUILER" EntitySet="ALQUILER" />
+          </AssociationSet>
+          <AssociationSet Name="TRANSACCION_FK1" Association="arriendojuegosModel.TRANSACCION_FK1">
+            <End Role="TRANSACCION" EntitySet="TRANSACCION" />
+            <End Role="BOLETA" EntitySet="BOLETA" />
+          </AssociationSet>
+          <FunctionImport Name="EFECTUARALQUILER">
+            <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
+            <Parameter Name="LIBROS_ID" Mode="In" Type="String" />
+            <Parameter Name="TOTAL" Mode="In" Type="Decimal" />
+            <Parameter Name="INFORMACION" Mode="In" Type="String" />
+            <Parameter Name="FECHATERMINO" Mode="In" Type="DateTime" />
           </FunctionImport>
         </EntityContainer>
         <ComplexType Name="DESPLEGARCOMUNAS_Result">
@@ -920,6 +1000,50 @@
           <Property Type="String" Name="IMAGENLIBRO" Nullable="true" />
           <Property Type="Decimal" Name="PRECIOLIBRO" Nullable="false" Precision="10" Scale="2" />
         </ComplexType>
+        <EntityType Name="BOLETA">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ID_TRANSACCION" Type="Int32" />
+          <Property Name="DETALLES" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="TRANSACCION" Relationship="arriendojuegosModel.TRANSACCION_FK1" FromRole="BOLETA" ToRole="TRANSACCION" />
+          <Property Name="FECHAEMISION" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
+        <EntityType Name="TRANSACCION">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FECHATRANSACCION" Type="DateTime" Precision="0" />
+          <Property Name="TOTAL" Type="Decimal" Precision="10" Scale="2" />
+          <NavigationProperty Name="ALQUILER" Relationship="arriendojuegosModel.TRANSACCION_FK" FromRole="TRANSACCION" ToRole="ALQUILER" />
+          <NavigationProperty Name="BOLETA" Relationship="arriendojuegosModel.TRANSACCION_FK1" FromRole="TRANSACCION" ToRole="BOLETA" />
+        </EntityType>
+        <Association Name="TRANSACCION_FK">
+          <End Type="arriendojuegosModel.TRANSACCION" Role="TRANSACCION" Multiplicity="1" />
+          <End Type="arriendojuegosModel.ALQUILER" Role="ALQUILER" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRANSACCION">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="ALQUILER">
+              <PropertyRef Name="ID_TRANSACCION" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TRANSACCION_FK1">
+          <End Type="arriendojuegosModel.TRANSACCION" Role="TRANSACCION" Multiplicity="0..1" />
+          <End Type="arriendojuegosModel.BOLETA" Role="BOLETA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TRANSACCION">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="BOLETA">
+              <PropertyRef Name="ID_TRANSACCION" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -941,6 +1065,8 @@
           <EntitySetMapping Name="ALQUILER">
             <EntityTypeMapping TypeName="arriendojuegosModel.ALQUILER">
               <MappingFragment StoreEntitySet="ALQUILER">
+                <ScalarProperty Name="ID_TRANSACCION" ColumnName="ID_TRANSACCION" />
+                <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
                 <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
@@ -1214,6 +1340,26 @@
               </ComplexTypeMapping>
             </ResultMapping>
           </FunctionImportMapping>
+          <EntitySetMapping Name="BOLETA">
+            <EntityTypeMapping TypeName="arriendojuegosModel.BOLETA">
+              <MappingFragment StoreEntitySet="BOLETA">
+                <ScalarProperty Name="FECHAEMISION" ColumnName="FECHAEMISION" />
+                <ScalarProperty Name="DETALLES" ColumnName="DETALLES" />
+                <ScalarProperty Name="ID_TRANSACCION" ColumnName="ID_TRANSACCION" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TRANSACCION">
+            <EntityTypeMapping TypeName="arriendojuegosModel.TRANSACCION">
+              <MappingFragment StoreEntitySet="TRANSACCION">
+                <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+                <ScalarProperty Name="FECHATRANSACCION" ColumnName="FECHATRANSACCION" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="EFECTUARALQUILER" FunctionName="arriendojuegosModel.Store.EFECTUARALQUILER" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>

@@ -27,6 +27,9 @@
     <Property Name="INFORMACION" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="FECHATERMINO" Type="DateTime" Nullable="false" Precision="0" />
     <NavigationProperty Name="LIBRO_CARRITO_USUARIO" Relationship="Self.LIBROALQUILER_FK" FromRole="ALQUILER" ToRole="LIBRO_CARRITO_USUARIO" />
+    <Property Name="ESTADO" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ID_TRANSACCION" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="TRANSACCION" Relationship="arriendojuegosModel.TRANSACCION_FK" FromRole="ALQUILER" ToRole="TRANSACCION" />
   </EntityType>
   <EntityType Name="CATEGORIA">
     <Key>
@@ -399,6 +402,23 @@
     <FunctionImport Name="OBTENERCARRITO" ReturnType="Collection(arriendojuegosModel.OBTENERCARRITO_Result)">
       <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
     </FunctionImport>
+    <EntitySet Name="BOLETA" EntityType="arriendojuegosModel.BOLETA" />
+    <EntitySet Name="TRANSACCION" EntityType="arriendojuegosModel.TRANSACCION" />
+    <AssociationSet Name="TRANSACCION_FK" Association="arriendojuegosModel.TRANSACCION_FK">
+      <End Role="TRANSACCION" EntitySet="TRANSACCION" />
+      <End Role="ALQUILER" EntitySet="ALQUILER" />
+    </AssociationSet>
+    <AssociationSet Name="TRANSACCION_FK1" Association="arriendojuegosModel.TRANSACCION_FK1">
+      <End Role="TRANSACCION" EntitySet="TRANSACCION" />
+      <End Role="BOLETA" EntitySet="BOLETA" />
+    </AssociationSet>
+    <FunctionImport Name="EFECTUARALQUILER">
+      <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
+      <Parameter Name="LIBROS_ID" Mode="In" Type="String" />
+      <Parameter Name="TOTAL" Mode="In" Type="Decimal" />
+      <Parameter Name="INFORMACION" Mode="In" Type="String" />
+      <Parameter Name="FECHATERMINO" Mode="In" Type="DateTime" />
+    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="DESPLEGARCOMUNAS_Result">
     <Property Type="Int32" Name="ID" Nullable="false" />
@@ -490,4 +510,48 @@
     <Property Type="String" Name="IMAGENLIBRO" Nullable="true" />
     <Property Type="Decimal" Name="PRECIOLIBRO" Nullable="false" Precision="10" Scale="2" />
   </ComplexType>
+  <EntityType Name="BOLETA">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ID_TRANSACCION" Type="Int32" />
+    <Property Name="DETALLES" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="TRANSACCION" Relationship="arriendojuegosModel.TRANSACCION_FK1" FromRole="BOLETA" ToRole="TRANSACCION" />
+    <Property Name="FECHAEMISION" Type="DateTime" Nullable="false" Precision="3" />
+  </EntityType>
+  <EntityType Name="TRANSACCION">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FECHATRANSACCION" Type="DateTime" Precision="0" />
+    <Property Name="TOTAL" Type="Decimal" Precision="10" Scale="2" />
+    <NavigationProperty Name="ALQUILER" Relationship="arriendojuegosModel.TRANSACCION_FK" FromRole="TRANSACCION" ToRole="ALQUILER" />
+    <NavigationProperty Name="BOLETA" Relationship="arriendojuegosModel.TRANSACCION_FK1" FromRole="TRANSACCION" ToRole="BOLETA" />
+  </EntityType>
+  <Association Name="TRANSACCION_FK">
+    <End Type="arriendojuegosModel.TRANSACCION" Role="TRANSACCION" Multiplicity="1" />
+    <End Type="arriendojuegosModel.ALQUILER" Role="ALQUILER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRANSACCION">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ALQUILER">
+        <PropertyRef Name="ID_TRANSACCION" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TRANSACCION_FK1">
+    <End Type="arriendojuegosModel.TRANSACCION" Role="TRANSACCION" Multiplicity="0..1" />
+    <End Type="arriendojuegosModel.BOLETA" Role="BOLETA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRANSACCION">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="BOLETA">
+        <PropertyRef Name="ID_TRANSACCION" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

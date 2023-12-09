@@ -21,7 +21,10 @@ namespace arriendojuegos.Models
         public System.DateTime FECHAALQUILER { get; set; }
         public string INFORMACION { get; set; }
         public System.DateTime FECHATERMINO { get; set; }
+        public string ESTADO { get; set; }
+        public int ID_TRANSACCION { get; set; }
     
         public virtual LIBRO_CARRITO_USUARIO LIBRO_CARRITO_USUARIO { get; set; }
+        public virtual TRANSACCION TRANSACCION { get; set; }
     }
 }

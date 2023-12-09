@@ -38,6 +38,8 @@ namespace arriendojuegos.Models
         public virtual DbSet<sexo> sexo { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
         public virtual DbSet<usuarios> usuarios { get; set; }
+        public virtual DbSet<BOLETA> BOLETA { get; set; }
+        public virtual DbSet<TRANSACCION> TRANSACCION { get; set; }
     
         [DbFunction("arriendojuegosEntities1", "SplitString")]
         public virtual IQueryable<SplitString_Result> SplitString(string @string, string delimiter)
@@ -515,6 +517,31 @@ namespace arriendojuegos.Models
                 new ObjectParameter("IDUSUARIO", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERCARRITO_Result>("OBTENERCARRITO", iDUSUARIOParameter);
+        }
+    
+        public virtual int EFECTUARALQUILER(Nullable<int> iD_USUARIO, string lIBROS_ID, Nullable<decimal> tOTAL, string iNFORMACION, Nullable<System.DateTime> fECHATERMINO)
+        {
+            var iD_USUARIOParameter = iD_USUARIO.HasValue ?
+                new ObjectParameter("ID_USUARIO", iD_USUARIO) :
+                new ObjectParameter("ID_USUARIO", typeof(int));
+    
+            var lIBROS_IDParameter = lIBROS_ID != null ?
+                new ObjectParameter("LIBROS_ID", lIBROS_ID) :
+                new ObjectParameter("LIBROS_ID", typeof(string));
+    
+            var tOTALParameter = tOTAL.HasValue ?
+                new ObjectParameter("TOTAL", tOTAL) :
+                new ObjectParameter("TOTAL", typeof(decimal));
+    
+            var iNFORMACIONParameter = iNFORMACION != null ?
+                new ObjectParameter("INFORMACION", iNFORMACION) :
+                new ObjectParameter("INFORMACION", typeof(string));
+    
+            var fECHATERMINOParameter = fECHATERMINO.HasValue ?
+                new ObjectParameter("FECHATERMINO", fECHATERMINO) :
+                new ObjectParameter("FECHATERMINO", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("EFECTUARALQUILER", iD_USUARIOParameter, lIBROS_IDParameter, tOTALParameter, iNFORMACIONParameter, fECHATERMINOParameter);
         }
     }
 }

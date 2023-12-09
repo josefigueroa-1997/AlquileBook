@@ -231,6 +231,7 @@ namespace arriendojuegos.Controllers
                                 Session["rol"] = rol;
                                 Session["id"] = credenciales.Id; 
                                 Session["nombre"] = credenciales.nombre;
+                                Session["email"] = correo;
                                 return RedirectToAction("Index","Home");
 
                     }

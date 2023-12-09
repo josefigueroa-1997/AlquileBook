@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using arriendojuegos.Models;
+using arriendojuegos.Models.ListModelCarritoCompra;
 using arriendojuegos.Models.ListModelLibro;
 namespace arriendojuegos.Services
 {
@@ -40,6 +42,44 @@ namespace arriendojuegos.Services
                 }
                 return resultado;
             }
+        }
+
+        public Boleta DetalleBoleta(int? id)
+        {
+            Boleta boleta = null;
+            try
+            {
+                using (var dbcontext = new arriendojuegosEntities1())
+                {
+                    object idboleta = (object)id ?? DBNull.Value;
+                    var resultado = dbcontext.Database.SqlQuery<Boleta>("DETALLEBOLETA @ID",
+                        new SqlParameter("@ID", idboleta)).FirstOrDefault();
+                    if (resultado != null)
+                    {
+                        boleta = new Boleta
+                        {
+                            IDBOLETA = resultado.IDBOLETA,
+                            IDTRANSACCION = resultado.IDTRANSACCION,
+                            TOTALTRANSACCION = resultado.TOTALTRANSACCION,
+                            IDUSUARIO = resultado.IDUSUARIO,
+                            NOMBREUSUARIO = resultado.NOMBREUSUARIO,
+                            FECHAEMISION = resultado.FECHAEMISION,
+                            NOMBRESLIBROS = resultado.NOMBRESLIBROS,
+                            IDSLIBROS = resultado.IDSLIBROS,
+
+                        };
+
+                    }
+                }
+            }
+            catch (SqlException e)
+            {
+                Debug.WriteLine(e.Message);
+            }
+            
+            
+            return boleta;
+
         }
     }
 }

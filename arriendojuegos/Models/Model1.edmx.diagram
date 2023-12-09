@@ -24,6 +24,10 @@
         <AssociationConnector Association="arriendojuegosModel.USUARIO_FK" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.sexo_fk" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.CATEGORIA_LIBRO" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="arriendojuegosModel.BOLETA" Width="1.5" PointX="7.5" PointY="1.25" />
+        <EntityTypeShape EntityType="arriendojuegosModel.TRANSACCION" Width="1.5" PointX="5.25" PointY="0.75" />
+        <AssociationConnector Association="arriendojuegosModel.TRANSACCION_FK" />
+        <AssociationConnector Association="arriendojuegosModel.TRANSACCION_FK1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
