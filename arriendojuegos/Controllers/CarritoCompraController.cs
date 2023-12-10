@@ -177,7 +177,7 @@ namespace arriendojuegos.Controllers
 
                 string email = Session["email"].ToString();
                 Boleta boleta = new Boleta();
-                boleta = libroservice.DetalleBoleta(0);
+                boleta = libroservice.DetalleBoleta();
                 if(!string.IsNullOrEmpty(email) && boleta != null)
                 {
                     EnviarCorreo(email, boleta);
@@ -235,15 +235,35 @@ namespace arriendojuegos.Controllers
             mensaje.From = new MailAddress("alquilerbooks@outlook.com");
             mensaje.To.Add(email);
             mensaje.Subject = "Su Alquiler fue exitoso";
-            mensaje.Body = "Gracias por alquilar libros con nosotros\nSus libros fisicos serán despachados a la brvedad\nel ID de su " +
-                "boleta es: '"+boleta.IDBOLETA+"'\n" +
-                "Id de Transacción: '"+boleta.IDTRANSACCION+"'\n" +
-                "Id de Usuario: '"+boleta.IDUSUARIO+"'\n" +
-                "Nombre de Usuario: '"+boleta.NOMBREUSUARIO+"'\n" +
-                "Fecha de Emisión de Boleta: '"+boleta.FECHAEMISION+"'\n" +
-                "Id de Libros Alquilados:'"+ boleta.IDSLIBROS+ "'\n" +
-                "Nombre de Libros: '"+boleta.NOMBRESLIBROS+"'\n" +
-                "Total Transacción: '"+boleta.TOTALTRANSACCION+"'";
+            mensaje.Headers.Add("Content-Type", "text/html; charset=utf-8");
+            mensaje.AlternateViews.Add(AlternateView.CreateAlternateViewFromString("Gracias por alquilar libros con nosotros\n" +
+                                                                        "Sus libros físicos serán despachados a la brevedad\n" +
+                                                                        $"ID de Boleta: '{boleta.IDBOLETA}'\n" +
+                                                                        $"ID de Transacción: '{boleta.IDTRANSACCION}'\n" +
+                                                                        $"ID de Usuario: '{boleta.IDUSUARIO}'\n" +
+                                                                        $"Nombre de Usuario: '{boleta.NOMBREUSUARIO}'\n" +
+                                                                        $"Fecha de Emisión de Boleta: '{boleta.FECHAEMISION}'\n" +
+                                                                        $"ID de Libros Alquilados: '{boleta.IDSLIBROS}'\n" +
+                                                                        $"Nombre de Libros: '{boleta.NOMBRESLIBROS}'\n" +
+                                                                        $"Total Transacción: '{boleta.TOTALTRANSACCION}'", null, "text/plain"));
+            
+            mensaje.Body = "<html><body style='font-family: Arial, sans-serif; font-size: 16px; text-align: center;'>"; 
+            mensaje.Body += "<p style='font-weight: bold;'>Gracias por alquilar libros con nosotros</p>";
+            mensaje.Body += "<p>Sus libros físicos serán despachados a la brevedad</p>";
+            mensaje.Body += "<p>ID de Boleta: '" + boleta.IDBOLETA + "'</p>";
+            mensaje.Body += "<p>ID de Transacción: '" + boleta.IDTRANSACCION + "'</p>";
+            mensaje.Body += "<p>ID de Usuario: '" + boleta.IDUSUARIO + "'</p>";
+            mensaje.Body += "<p>Nombre de Usuario: '" + boleta.NOMBREUSUARIO + "'</p>";
+            mensaje.Body += "<p>Fecha de Emisión de Boleta: '" + boleta.FECHAEMISION + "'</p>";
+            mensaje.Body += "<p>ID de Libros Alquilados: '" + boleta.IDSLIBROS + "'</p>";
+            mensaje.Body += "<p>Nombre de Libros: '" + boleta.NOMBRESLIBROS + "'</p>";
+            mensaje.Body += "<p>Total Transacción: '" + boleta.TOTALTRANSACCION + "'</p>";
+            mensaje.Body += "</body></html>";
+
+            // Añadir una imagen al correo electrónico (cambia la URL de la imagen según tu caso)
+            string imagenUrl = "https://ejemplo.com/imagen.jpg";
+            mensaje.Body += $"<p><img src='{imagenUrl}' alt='Imagen de ejemplo'></p>";
+           
             SmtpClient smtpClient = new SmtpClient("smtp-mail.outlook.com");
             smtpClient.Port = 587;
             smtpClient.UseDefaultCredentials = false;

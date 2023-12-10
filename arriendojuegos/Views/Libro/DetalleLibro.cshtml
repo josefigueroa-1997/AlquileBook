@@ -1,4 +1,5 @@
 ﻿@model List<arriendojuegos.Models.ListModelLibro.Libro>
+
 @{
     ViewBag.Title = "DetalleLibro";
 }
@@ -6,59 +7,99 @@
 @Styles.Render("~/Content/Detallelibro.css");
 @{foreach (var libro in Model)
     {
-        <form>
-            <input type="hidden" name="Idlibro" id="Idlibro_@libro.Id" value="@libro.Id" />
-            <input type="hidden" name="totalproducto" id="totalproducto_@libro.Id" value="@libro.Precio" />
-            <div class="product-container">
-                <div class="product-image">
-                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Nombre del producto">
+    <form>
+        <input type="hidden" name="Idlibro" id="Idlibro_@libro.Id" value="@libro.Id" />
+        <input type="hidden" name="totalproducto" id="totalproducto_@libro.Id" value="@libro.Precio" />
+        <div class="product-container">
+            <div class="product-image">
+                <img src="data:image/jpeg;base64,@libro.Imagen" alt="Nombre del producto">
+            </div>
+            <div class="product-details">
+                <div class="product-title">
+                    <p>@libro.Nombre</p>
                 </div>
-                <div class="product-details">
-                    <div class="product-title">
-                        <p>@libro.Nombre</p>
-                    </div>
-                    <div class="product-manufacturer">
-                        <p>Autor: @libro.Autor</p>
-                    </div>
-                    <div class="product-manufacturer">
+                <div class="product-manufacturer">
+                    <p>Autor: @libro.Autor</p>
+                </div>
+                <div class="product-manufacturer">
 
-                        <p>ISBN: @libro.ISBN</p>
-                    </div>
-                    <div class="product-manufacturer">
+                    <p>ISBN: @libro.ISBN</p>
+                </div>
+                <div class="product-manufacturer">
 
-                        <p>Generos: @libro.CategoriaNombres</p>
-                    </div>
-                    <div class="product-manufacturer">
+                    <p>Generos: @libro.CategoriaNombres</p>
+                </div>
+                <div class="product-manufacturer">
 
-                        <p>Tipo Libro: @libro.TipoLibro</p>
-                    </div>
+                    <p>Tipo Libro: @libro.TipoLibro</p>
+                </div>
+                @if (libro.Stock > 0)
+                {
                     <div class="product-stock">
 
                         <p>Disponibilidad: @libro.Stock</p>
+
                     </div>
-                    <div class="product-description">
-                        <p>@libro.Descripcion</p>
+                }
+                else
+                {
+                    <div class="product-stock">
+
+                        <p>Agotado</p>
+
                     </div>
-                    <div class="product-price">
+                }
 
-                        <p>$@libro.Precio</p>
-                    </div>
-                    @if (Session["id"] != null)
-                    {
-                        int iduser = (int)Session["id"];
-                        <input type="hidden" name="idusuario" id="idusuario_@libro.Id" value="@iduser" />
-                        <button class="btn-agregar" type="button" id="btnAgregarCarrito_@libro.Id">Agregar al carrito</button>
-                    }
-                    else
-                    {
-
-                        <a href="@Url.Action("Login", "Usuario")">Inicia sesión, para agregar un producto al carrito</a>
-
-                    }
-
+                <div class="product-description">
+                    <p>@libro.Descripcion</p>
                 </div>
+                <div class="product-price">
+
+                    <p>$@libro.Precio</p>
+                </div>
+                @if (Session["id"] != null && libro.Stock > 0)
+                {
+                    int iduser = (int)Session["id"];
+                    <input type="hidden" name="idusuario" id="idusuario_@libro.Id" value="@iduser" />
+                    <button class="btn-agregar" type="button" id="btnAgregarCarrito_@libro.Id">Agregar al carrito</button>
+                }
+                else
+                {
+
+                    <a href="@Url.Action("Login", "Usuario")">Inicia sesión, para agregar un producto al carrito</a>
+
+                }
+
+
+
+
+
             </div>
-        </form>
+        </div>
+        <div class="row mt-4">
+            @{
+                <h3>Recomendaciones</h3>
+                var recomendados = ViewBag.Recomendaciones as List<arriendojuegos.Models.ListModelLibro.Libro>;
+                foreach (var libroRecomendado in recomendados)
+                {
+                    <div class="col-md-3">
+                        <div class="card">
+                            <a href="@Url.Action("DetalleLibro","Libro",new {id = libroRecomendado.Id })" style="text-decoration:none;">
+                                <img src="data:image/jpeg;base64,@libroRecomendado.Imagen" class="card-img-top" alt="Nombre del producto" style="width: 3cm; height: 4cm; object-fit: cover; ">
+                                <div class="card-body">
+                                    <h5 class="card-title">@libroRecomendado.Nombre</h5>
+                                    <p class="card-text">@libroRecomendado.Autor</p>
+                                    <p class="card-text">$@libroRecomendado.Precio</p>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+            }
+
+
+        </div>
+    </form>
     }
 
     <div class="modal fade" id="modalExito" tabindex="-1" role="dialog" aria-labelledby="modalExitoLabel" aria-hidden="true">
@@ -122,11 +163,11 @@
 
         });
         $("#btnIrAPagar").click(function () {
-            
+
             window.location.href = "@Url.Action("ResumenAlquiler", "CarritoCompra", new { idusuario = (int)(Session["id"] ?? 0) })";
         });
         $("#btnSeguirComprando").click(function () {
-            
+
             $("#modalExito").modal("hide");
         });
     });

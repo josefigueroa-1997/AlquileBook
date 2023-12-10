@@ -15,6 +15,8 @@ using System.Diagnostics;
 using System.Data;
 using System.Runtime.InteropServices.ComTypes;
 using arriendojuegos.Services;
+using System.Data.Entity;
+
 namespace arriendojuegos.Controllers
 {
     [CargarCategorias]
@@ -55,21 +57,13 @@ namespace arriendojuegos.Controllers
 
         public ActionResult FilterBook(int? id, string tipolibro, int? idcategoria, int? anio, string nombre)
         {
-            /*if (id == null || id < 0 || idcategoria == null || idcategoria < 0 || anio == null || anio < 0 || tipolibro == null)
-            {
-                return RedirectToAction("Libros");
-            }
-            else*/
-            /*{*/
+            
             var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio, nombre);
             TempData["BusquedaFallida"] = "No existe un libro con ese nombre :(";
             return View(libros);
-                
-            /*}*/
-
-
-            
+                 
         }
+
         public ActionResult Registrar()
         {
             if (Session["nombre"] != null)
@@ -241,8 +235,41 @@ namespace arriendojuegos.Controllers
                 return RedirectToAction("Index","Home");
             }
             var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio, nombre);
-            
+            Libro libroActual = new Libro { Id = id.Value };
+            var lobrosrecomendados = Obtenerlibrosrecomendados(libroActual);
+            Debug.WriteLine("Longitud de Recomendaciones: " + lobrosrecomendados.Count);
+            if (lobrosrecomendados != null && lobrosrecomendados.Any())
+            {
+                ViewBag.Recomendaciones = lobrosrecomendados;
+            }
+            else
+            {
+                // Si no hay recomendaciones, inicializa ViewBag.Recomendaciones como una lista vacía
+                ViewBag.Recomendaciones = new List<Libro>();
+            }
             return View(libro);
+        }
+
+        private List<Libro> Obtenerlibrosrecomendados(Libro libroactual)
+        {
+            List<Libro> recomendados = null;
+            try
+            {
+                using (var dbcontext = new arriendojuegosEntities1())
+                {
+                    recomendados = dbcontext.Database.SqlQuery<Libro>("RECOMENDACIONESLIBROSCATEGORIA @LIBROId",
+                        new SqlParameter("@LIBROId",libroactual.Id)).ToList();
+                    return recomendados;
+                }
+
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.Message);
+               
+            }
+            return recomendados;
+            
         }
 
         private string obtenerimagen(HttpPostedFileBase file)

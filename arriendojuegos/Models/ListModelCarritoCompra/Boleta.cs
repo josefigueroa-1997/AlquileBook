@@ -9,7 +9,7 @@ namespace arriendojuegos.Models.ListModelCarritoCompra
     {
         public int IDBOLETA { get; set; }
         public int IDTRANSACCION { get; set; }
-        public Decimal TOTALTRANSACCION { get; set; }
+        public decimal TOTALTRANSACCION { get; set; }
         public int  IDUSUARIO { get; set; }
         public string NOMBREUSUARIO { get; set; }
         public DateTime FECHAEMISION { get; set; }

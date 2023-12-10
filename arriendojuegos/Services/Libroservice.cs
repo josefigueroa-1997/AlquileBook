@@ -44,16 +44,15 @@ namespace arriendojuegos.Services
             }
         }
 
-        public Boleta DetalleBoleta(int? id)
+        public Boleta DetalleBoleta()
         {
             Boleta boleta = null;
             try
             {
                 using (var dbcontext = new arriendojuegosEntities1())
                 {
-                    object idboleta = (object)id ?? DBNull.Value;
-                    var resultado = dbcontext.Database.SqlQuery<Boleta>("DETALLEBOLETA @ID",
-                        new SqlParameter("@ID", idboleta)).FirstOrDefault();
+                    
+                    var resultado = dbcontext.Database.SqlQuery<Boleta>("DETALLEBOLETA").FirstOrDefault();
                     if (resultado != null)
                     {
                         boleta = new Boleta
