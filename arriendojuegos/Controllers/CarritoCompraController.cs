@@ -14,10 +14,13 @@ using Newtonsoft.Json;
 using System.Net;
 using System.Net.Mail;
 using arriendojuegos.Services;
+using OfficeOpenXml;
+using System.IO;
 
 namespace arriendojuegos.Controllers
 {
     [CargarCategorias]
+    [ActualizarEstadoAlquiler]
     public class CarritoCompraController : Controller
     {
         private readonly Libroservice libroservice = new Libroservice();
@@ -200,6 +203,98 @@ namespace arriendojuegos.Controllers
         {
             return View();
         }
+
+        public ActionResult ConsultaAlquiler(int? id)
+        {
+            if (Session["id"]!=null)
+            {
+                var alquiler = ObtenerAlquiler(id);
+                ViewBag.Alquiler = alquiler;
+                return View();
+            }
+            else
+            {
+                return RedirectToAction("Login","Usuario");
+            }
+            
+        }
+
+        public ActionResult ExportarExcel (int? id)
+        {
+            var alquileres = ObtenerAlquiler(id);
+            ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
+            using (var package = new ExcelPackage())
+            {
+                var worksheet = package.Workbook.Worksheets.Add("Alquileres");
+                worksheet.Cells[1, 1].Value = "ID Transacción";
+                worksheet.Cells[1, 2].Value = "Fecha Alquiler";
+                worksheet.Cells[1, 3].Value = "ID Usuario";
+                worksheet.Cells[1, 4].Value = "Nombre de Usuario";
+                worksheet.Cells[1, 5].Value = "Nombres Libros";
+                worksheet.Cells[1, 6].Value = "Fecha Termino";
+                worksheet.Cells[1, 7].Value = "Total Pago";
+                worksheet.Cells[1, 8].Value = "Estado";
+                decimal totalpago = 0;
+                int indice = 0;
+                for(int i = 0; i < alquileres.Count(); i++)
+                {
+                    var alquiler = alquileres[i];
+                    indice = i + 2;
+                    worksheet.Cells[i + 2, 1].Value = alquiler.ID_TRANSACCION;
+                    worksheet.Cells[i + 2, 2].Style.Numberformat.Format = "dd/MM/yyyy";
+                    worksheet.Cells[i + 2, 2].Value = alquiler.FECHAALQUILER.Date;
+                    worksheet.Cells[i + 2, 3].Value = alquiler.ID_USUARIO;
+                    worksheet.Cells[i + 2, 4].Value = alquiler.NOMBREUSUARIO;
+                    worksheet.Cells[i + 2, 5].Value = alquiler.NOMBRESLIBROS;
+                    worksheet.Cells[i + 2, 6].Style.Numberformat.Format = "dd/MM/yyyy";
+                    worksheet.Cells[i + 2, 6].Value = alquiler.FECHATERMINO.Date;
+                    worksheet.Cells[i + 2, 7].Value = alquiler.TOTALPAGO;
+                    worksheet.Cells[i + 2, 8].Value = alquiler.ESTADO;
+                    if (alquiler.ESTADO.Equals("ACTIVO"))
+                    {
+                        worksheet.Cells[i + 2, 8].Style.Font.Color.SetColor(System.Drawing.Color.Green);
+                    }
+                    else
+                    {
+                        worksheet.Cells[i + 2, 8].Style.Font.Color.SetColor(System.Drawing.Color.Red);
+                    }
+                    totalpago += alquiler.TOTALPAGO;
+
+                }
+                var style = worksheet.Cells[indice + 1, 6].Style;
+                style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Yellow);
+                worksheet.Cells[indice + 1, 6].Value = "Total";
+                style = worksheet.Cells[indice + 1, 7].Style;
+                style.Fill.PatternType = OfficeOpenXml.Style.ExcelFillStyle.Solid;
+                style.Fill.BackgroundColor.SetColor(System.Drawing.Color.Orange);
+                worksheet.Cells[indice + 1, 7].Value = totalpago;
+                var stream = new MemoryStream(package.GetAsByteArray());
+                return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "alquileres.xlsx");
+            }
+        }
+
+        private List<Alquiler> ObtenerAlquiler(int? id)
+        {
+            List<Alquiler> resultado = null;
+            try
+            {
+                using (var dbcontext = new arriendojuegosEntities1())
+                {
+                    object idparameter = (object)id ?? DBNull.Value;
+                    resultado = dbcontext.Database.SqlQuery<Alquiler>("OBTENERALQUILERES @IDUSUARIO",
+                        new SqlParameter("@IDUSUARIO", idparameter)).ToList();
+                    return resultado;
+                }
+            }
+            catch(SqlException e)
+            {
+                Debug.WriteLine(e.Message);
+                return resultado;
+            }
+           
+        }
+
         private DateTime calcularfechatermino(string parametrofecha)
         {
             int semanasseleccionadas = int.Parse(parametrofecha);

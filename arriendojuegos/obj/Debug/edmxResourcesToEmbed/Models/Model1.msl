@@ -16,8 +16,6 @@
     <EntitySetMapping Name="ALQUILER">
       <EntityTypeMapping TypeName="arriendojuegosModel.ALQUILER">
         <MappingFragment StoreEntitySet="ALQUILER">
-          <ScalarProperty Name="ID_TRANSACCION" ColumnName="ID_TRANSACCION" />
-          <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
           <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
@@ -25,6 +23,18 @@
           <ScalarProperty Name="FECHAALQUILER" ColumnName="FECHAALQUILER" />
           <ScalarProperty Name="INFORMACION" ColumnName="INFORMACION" />
           <ScalarProperty Name="FECHATERMINO" ColumnName="FECHATERMINO" />
+          <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+          <ScalarProperty Name="ID_TRANSACCION" ColumnName="ID_TRANSACCION" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="BOLETA">
+      <EntityTypeMapping TypeName="arriendojuegosModel.BOLETA">
+        <MappingFragment StoreEntitySet="BOLETA">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="ID_TRANSACCION" ColumnName="ID_TRANSACCION" />
+          <ScalarProperty Name="DETALLES" ColumnName="DETALLES" />
+          <ScalarProperty Name="FECHAEMISION" ColumnName="FECHAEMISION" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -105,6 +115,15 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="TRANSACCION">
+      <EntityTypeMapping TypeName="arriendojuegosModel.TRANSACCION">
+        <MappingFragment StoreEntitySet="TRANSACCION">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="FECHATRANSACCION" ColumnName="FECHATRANSACCION" />
+          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="usuarios">
       <EntityTypeMapping TypeName="arriendojuegosModel.usuarios">
         <MappingFragment StoreEntitySet="usuarios">
@@ -137,10 +156,13 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="ACTUALIZARESTADOALQUILER" FunctionName="arriendojuegosModel.Store.ACTUALIZARESTADOALQUILER" />
     <FunctionImportMapping FunctionImportName="ACTUALIZARLIBRO" FunctionName="arriendojuegosModel.Store.ACTUALIZARLIBRO" />
+    <FunctionImportMapping FunctionImportName="AGREGAR_CARRITO" FunctionName="arriendojuegosModel.Store.AGREGAR_CARRITO" />
     <FunctionImportMapping FunctionImportName="CREARADMIN" FunctionName="arriendojuegosModel.Store.CREARADMIN" />
     <FunctionImportMapping FunctionImportName="CREARUSUARIO" FunctionName="arriendojuegosModel.Store.CREARUSUARIO" />
     <FunctionImportMapping FunctionImportName="DELETEBOOK" FunctionName="arriendojuegosModel.Store.DELETEBOOK" />
+    <FunctionImportMapping FunctionImportName="DELETELIBROCARRITO" FunctionName="arriendojuegosModel.Store.DELETELIBROCARRITO" />
     <FunctionImportMapping FunctionImportName="DELETEUSUARIO" FunctionName="arriendojuegosModel.Store.DELETEUSUARIO" />
     <FunctionImportMapping FunctionImportName="DESPLEGARCOMUNAS" FunctionName="arriendojuegosModel.Store.DESPLEGARCOMUNAS">
       <ResultMapping>
@@ -158,6 +180,21 @@
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="DETALLEBOLETA" FunctionName="arriendojuegosModel.Store.DETALLEBOLETA">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="arriendojuegosModel.DETALLEBOLETA_Result">
+          <ScalarProperty Name="IDBOLETA" ColumnName="IDBOLETA" />
+          <ScalarProperty Name="IDTRANSACCION" ColumnName="IDTRANSACCION" />
+          <ScalarProperty Name="TOTALTRANSACCION" ColumnName="TOTALTRANSACCION" />
+          <ScalarProperty Name="IDUSUARIO" ColumnName="IDUSUARIO" />
+          <ScalarProperty Name="NOMBREUSUARIO" ColumnName="NOMBREUSUARIO" />
+          <ScalarProperty Name="FECHAEMISION" ColumnName="FECHAEMISION" />
+          <ScalarProperty Name="NOMBRESLIBROS" ColumnName="NOMBRESLIBROS" />
+          <ScalarProperty Name="IDSLIBROS" ColumnName="IDSLIBROS" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="EFECTUARALQUILER" FunctionName="arriendojuegosModel.Store.EFECTUARALQUILER" />
     <FunctionImportMapping FunctionImportName="GETID" FunctionName="arriendojuegosModel.Store.GETID" />
     <FunctionImportMapping FunctionImportName="INICIOSESION" FunctionName="arriendojuegosModel.Store.INICIOSESION">
       <ResultMapping>
@@ -165,6 +202,35 @@
           <ScalarProperty Name="ID" ColumnName="ID" />
           <ScalarProperty Name="CONTRASEÑA" ColumnName="CONTRASEÑA" />
           <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="OBTENERALQUILERES" FunctionName="arriendojuegosModel.Store.OBTENERALQUILERES">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="arriendojuegosModel.OBTENERALQUILERES_Result">
+          <ScalarProperty Name="ID_TRANSACCION" ColumnName="ID_TRANSACCION" />
+          <ScalarProperty Name="FECHAALQUILER" ColumnName="FECHAALQUILER" />
+          <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+          <ScalarProperty Name="NOMBREUSUARIO" ColumnName="NOMBREUSUARIO" />
+          <ScalarProperty Name="NOMBRESLIBROS" ColumnName="NOMBRESLIBROS" />
+          <ScalarProperty Name="FECHATERMINO" ColumnName="FECHATERMINO" />
+          <ScalarProperty Name="TOTALPAGO" ColumnName="TOTALPAGO" />
+          <ScalarProperty Name="ESTADO" ColumnName="ESTADO" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="OBTENERCARRITO" FunctionName="arriendojuegosModel.Store.OBTENERCARRITO">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="arriendojuegosModel.OBTENERCARRITO_Result">
+          <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
+          <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
+          <ScalarProperty Name="NOMBRELIBRO" ColumnName="NOMBRELIBRO" />
+          <ScalarProperty Name="AUTOR" ColumnName="AUTOR" />
+          <ScalarProperty Name="IMAGENLIBRO" ColumnName="IMAGENLIBRO" />
+          <ScalarProperty Name="PRECIOLIBRO" ColumnName="PRECIOLIBRO" />
+          <ScalarProperty Name="TIPOLIBRO" ColumnName="TIPOLIBRO" />
+          <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
+          <ScalarProperty Name="COMUNA" ColumnName="COMUNA" />
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
@@ -227,6 +293,7 @@
       </ResultMapping>
     </FunctionImportMapping>
     <FunctionImportMapping FunctionImportName="OBTENERROL" FunctionName="arriendojuegosModel.Store.OBTENERROL" />
+    <FunctionImportMapping FunctionImportName="OBTENERULTIMABOLETA" FunctionName="arriendojuegosModel.Store.OBTENERULTIMABOLETA" />
     <FunctionImportMapping FunctionImportName="OBTENERUSUARIOID" FunctionName="arriendojuegosModel.Store.OBTENERUSUARIOID">
       <ResultMapping>
         <ComplexTypeMapping TypeName="arriendojuegosModel.OBTENERUSUARIOID_Result">
@@ -249,6 +316,17 @@
           <ScalarProperty Name="CONTRASEÑA" ColumnName="CONTRASEÑA" />
           <ScalarProperty Name="DIRECCION" ColumnName="DIRECCION" />
           <ScalarProperty Name="comunanombre" ColumnName="comunanombre" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="RECOMENDACIONESLIBROSCATEGORIA" FunctionName="arriendojuegosModel.Store.RECOMENDACIONESLIBROSCATEGORIA">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="arriendojuegosModel.RECOMENDACIONESLIBROSCATEGORIA_Result">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="NOMBRE" ColumnName="NOMBRE" />
+          <ScalarProperty Name="AUTOR" ColumnName="AUTOR" />
+          <ScalarProperty Name="IMAGEN" ColumnName="IMAGEN" />
+          <ScalarProperty Name="PRECIO" ColumnName="PRECIO" />
         </ComplexTypeMapping>
       </ResultMapping>
     </FunctionImportMapping>
@@ -278,38 +356,5 @@
     <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="arriendojuegosModel.Store.sp_renamediagram" />
     <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="arriendojuegosModel.Store.sp_upgraddiagrams" />
     <FunctionImportMapping FunctionImportName="UPDATEUSUARIO" FunctionName="arriendojuegosModel.Store.UPDATEUSUARIO" />
-    <FunctionImportMapping FunctionImportName="AGREGAR_CARRITO" FunctionName="arriendojuegosModel.Store.AGREGAR_CARRITO" />
-    <FunctionImportMapping FunctionImportName="DELETELIBROCARRITO" FunctionName="arriendojuegosModel.Store.DELETELIBROCARRITO" />
-    <FunctionImportMapping FunctionImportName="OBTENERCARRITO" FunctionName="arriendojuegosModel.Store.OBTENERCARRITO">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="arriendojuegosModel.OBTENERCARRITO_Result">
-          <ScalarProperty Name="ID_USUARIO" ColumnName="ID_USUARIO" />
-          <ScalarProperty Name="ID_LIBRO" ColumnName="ID_LIBRO" />
-          <ScalarProperty Name="NOMBRELIBRO" ColumnName="NOMBRELIBRO" />
-          <ScalarProperty Name="IMAGENLIBRO" ColumnName="IMAGENLIBRO" />
-          <ScalarProperty Name="PRECIOLIBRO" ColumnName="PRECIOLIBRO" />
-        </ComplexTypeMapping>
-      </ResultMapping>
-    </FunctionImportMapping>
-    <EntitySetMapping Name="BOLETA">
-      <EntityTypeMapping TypeName="arriendojuegosModel.BOLETA">
-        <MappingFragment StoreEntitySet="BOLETA">
-          <ScalarProperty Name="FECHAEMISION" ColumnName="FECHAEMISION" />
-          <ScalarProperty Name="DETALLES" ColumnName="DETALLES" />
-          <ScalarProperty Name="ID_TRANSACCION" ColumnName="ID_TRANSACCION" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="TRANSACCION">
-      <EntityTypeMapping TypeName="arriendojuegosModel.TRANSACCION">
-        <MappingFragment StoreEntitySet="TRANSACCION">
-          <ScalarProperty Name="TOTAL" ColumnName="TOTAL" />
-          <ScalarProperty Name="FECHATRANSACCION" ColumnName="FECHATRANSACCION" />
-          <ScalarProperty Name="ID" ColumnName="ID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <FunctionImportMapping FunctionImportName="EFECTUARALQUILER" FunctionName="arriendojuegosModel.Store.EFECTUARALQUILER" />
   </EntityContainerMapping>
 </Mapping>

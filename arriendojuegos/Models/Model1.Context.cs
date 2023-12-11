@@ -29,6 +29,7 @@ namespace arriendojuegos.Models
     
         public virtual DbSet<ADMINISTRADOR> ADMINISTRADOR { get; set; }
         public virtual DbSet<ALQUILER> ALQUILER { get; set; }
+        public virtual DbSet<BOLETA> BOLETA { get; set; }
         public virtual DbSet<CATEGORIA> CATEGORIA { get; set; }
         public virtual DbSet<COMUNA> COMUNA { get; set; }
         public virtual DbSet<EDITORIAL> EDITORIAL { get; set; }
@@ -37,9 +38,8 @@ namespace arriendojuegos.Models
         public virtual DbSet<LIBRO_CARRITO_USUARIO> LIBRO_CARRITO_USUARIO { get; set; }
         public virtual DbSet<sexo> sexo { get; set; }
         public virtual DbSet<sysdiagrams> sysdiagrams { get; set; }
-        public virtual DbSet<usuarios> usuarios { get; set; }
-        public virtual DbSet<BOLETA> BOLETA { get; set; }
         public virtual DbSet<TRANSACCION> TRANSACCION { get; set; }
+        public virtual DbSet<usuarios> usuarios { get; set; }
     
         [DbFunction("arriendojuegosEntities1", "SplitString")]
         public virtual IQueryable<SplitString_Result> SplitString(string @string, string delimiter)
@@ -53,6 +53,11 @@ namespace arriendojuegos.Models
                 new ObjectParameter("Delimiter", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.CreateQuery<SplitString_Result>("[arriendojuegosEntities1].[SplitString](@String, @Delimiter)", stringParameter, delimiterParameter);
+        }
+    
+        public virtual int ACTUALIZARESTADOALQUILER()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ACTUALIZARESTADOALQUILER");
         }
     
         public virtual int ACTUALIZARLIBRO(string iSBN, string nOMBRE, string aUTOR, string tIPOLIBRO, Nullable<decimal> pRECIO, Nullable<int> sTOCK, Nullable<int> aNIO, Nullable<int> eDITORIAL, Nullable<int> iD_ADMINISTRADOR, string dESCRIPCION, Nullable<int> iDLIBRO, string cATEGORIAS_ID_LIST, string iMAGEN)
@@ -110,6 +115,19 @@ namespace arriendojuegos.Models
                 new ObjectParameter("IMAGEN", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("ACTUALIZARLIBRO", iSBNParameter, nOMBREParameter, aUTORParameter, tIPOLIBROParameter, pRECIOParameter, sTOCKParameter, aNIOParameter, eDITORIALParameter, iD_ADMINISTRADORParameter, dESCRIPCIONParameter, iDLIBROParameter, cATEGORIAS_ID_LISTParameter, iMAGENParameter);
+        }
+    
+        public virtual ObjectResult<Nullable<int>> AGREGAR_CARRITO(Nullable<int> iD_LIBRO, Nullable<int> iD_USUARIO)
+        {
+            var iD_LIBROParameter = iD_LIBRO.HasValue ?
+                new ObjectParameter("ID_LIBRO", iD_LIBRO) :
+                new ObjectParameter("ID_LIBRO", typeof(int));
+    
+            var iD_USUARIOParameter = iD_USUARIO.HasValue ?
+                new ObjectParameter("ID_USUARIO", iD_USUARIO) :
+                new ObjectParameter("ID_USUARIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AGREGAR_CARRITO", iD_LIBROParameter, iD_USUARIOParameter);
         }
     
         public virtual int CREARADMIN(string nOMBRE, string cORREO, string cONTRASEÑA, string sALT)
@@ -183,6 +201,19 @@ namespace arriendojuegos.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DELETEBOOK", iDParameter);
         }
     
+        public virtual int DELETELIBROCARRITO(Nullable<int> iDLIBRO, Nullable<int> iDUSUARIO)
+        {
+            var iDLIBROParameter = iDLIBRO.HasValue ?
+                new ObjectParameter("IDLIBRO", iDLIBRO) :
+                new ObjectParameter("IDLIBRO", typeof(int));
+    
+            var iDUSUARIOParameter = iDUSUARIO.HasValue ?
+                new ObjectParameter("IDUSUARIO", iDUSUARIO) :
+                new ObjectParameter("IDUSUARIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DELETELIBROCARRITO", iDLIBROParameter, iDUSUARIOParameter);
+        }
+    
         public virtual int DELETEUSUARIO(Nullable<int> iD)
         {
             var iDParameter = iD.HasValue ?
@@ -202,6 +233,36 @@ namespace arriendojuegos.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DESPLEGARSEXO_Result>("DESPLEGARSEXO");
         }
     
+        public virtual ObjectResult<DETALLEBOLETA_Result> DETALLEBOLETA()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<DETALLEBOLETA_Result>("DETALLEBOLETA");
+        }
+    
+        public virtual int EFECTUARALQUILER(Nullable<int> iD_USUARIO, string lIBROS_ID, Nullable<decimal> tOTAL, string iNFORMACION, Nullable<System.DateTime> fECHATERMINO)
+        {
+            var iD_USUARIOParameter = iD_USUARIO.HasValue ?
+                new ObjectParameter("ID_USUARIO", iD_USUARIO) :
+                new ObjectParameter("ID_USUARIO", typeof(int));
+    
+            var lIBROS_IDParameter = lIBROS_ID != null ?
+                new ObjectParameter("LIBROS_ID", lIBROS_ID) :
+                new ObjectParameter("LIBROS_ID", typeof(string));
+    
+            var tOTALParameter = tOTAL.HasValue ?
+                new ObjectParameter("TOTAL", tOTAL) :
+                new ObjectParameter("TOTAL", typeof(decimal));
+    
+            var iNFORMACIONParameter = iNFORMACION != null ?
+                new ObjectParameter("INFORMACION", iNFORMACION) :
+                new ObjectParameter("INFORMACION", typeof(string));
+    
+            var fECHATERMINOParameter = fECHATERMINO.HasValue ?
+                new ObjectParameter("FECHATERMINO", fECHATERMINO) :
+                new ObjectParameter("FECHATERMINO", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("EFECTUARALQUILER", iD_USUARIOParameter, lIBROS_IDParameter, tOTALParameter, iNFORMACIONParameter, fECHATERMINOParameter);
+        }
+    
         public virtual ObjectResult<Nullable<int>> GETID(string cORREO)
         {
             var cORREOParameter = cORREO != null ?
@@ -218,6 +279,24 @@ namespace arriendojuegos.Models
                 new ObjectParameter("CORREO", typeof(string));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<INICIOSESION_Result>("INICIOSESION", cORREOParameter);
+        }
+    
+        public virtual ObjectResult<OBTENERALQUILERES_Result> OBTENERALQUILERES(Nullable<int> iDUSUARIO)
+        {
+            var iDUSUARIOParameter = iDUSUARIO.HasValue ?
+                new ObjectParameter("IDUSUARIO", iDUSUARIO) :
+                new ObjectParameter("IDUSUARIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERALQUILERES_Result>("OBTENERALQUILERES", iDUSUARIOParameter);
+        }
+    
+        public virtual ObjectResult<OBTENERCARRITO_Result> OBTENERCARRITO(Nullable<int> iDUSUARIO)
+        {
+            var iDUSUARIOParameter = iDUSUARIO.HasValue ?
+                new ObjectParameter("IDUSUARIO", iDUSUARIO) :
+                new ObjectParameter("IDUSUARIO", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERCARRITO_Result>("OBTENERCARRITO", iDUSUARIOParameter);
         }
     
         public virtual ObjectResult<OBTENERCATEGORIAS_Result> OBTENERCATEGORIAS()
@@ -285,6 +364,11 @@ namespace arriendojuegos.Models
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("OBTENERROL", iDParameter);
         }
     
+        public virtual ObjectResult<Nullable<int>> OBTENERULTIMABOLETA()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("OBTENERULTIMABOLETA");
+        }
+    
         public virtual ObjectResult<OBTENERUSUARIOID_Result> OBTENERUSUARIOID(Nullable<int> iD)
         {
             var iDParameter = iD.HasValue ?
@@ -297,6 +381,15 @@ namespace arriendojuegos.Models
         public virtual ObjectResult<OBTENERUSUARIOS_Result> OBTENERUSUARIOS()
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERUSUARIOS_Result>("OBTENERUSUARIOS");
+        }
+    
+        public virtual ObjectResult<RECOMENDACIONESLIBROSCATEGORIA_Result> RECOMENDACIONESLIBROSCATEGORIA(Nullable<int> lIBROId)
+        {
+            var lIBROIdParameter = lIBROId.HasValue ?
+                new ObjectParameter("LIBROId", lIBROId) :
+                new ObjectParameter("LIBROId", typeof(int));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<RECOMENDACIONESLIBROSCATEGORIA_Result>("RECOMENDACIONESLIBROSCATEGORIA", lIBROIdParameter);
         }
     
         public virtual int REGISTRARLIBRO(string iSBN, string nOMBRE, string aUTOR, string tIPOLIBRO, Nullable<decimal> pRECIO, Nullable<int> sTOCK, Nullable<int> aNIO, Nullable<int> eDITORIAL, Nullable<int> iD_ADMINISTRADOR, string dESCRIPCION, ObjectParameter iDLIBRO, string cATEGORIAS_ID_LIST, string iMAGEN)
@@ -482,66 +575,6 @@ namespace arriendojuegos.Models
                 new ObjectParameter("COMUNA", typeof(int));
     
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("UPDATEUSUARIO", iDParameter, nOMBREParameter, cORREOParameter, tELEFONOParameter, dIRECCIONParameter, cOMUNAParameter);
-        }
-    
-        public virtual ObjectResult<Nullable<int>> AGREGAR_CARRITO(Nullable<int> iD_LIBRO, Nullable<int> iD_USUARIO)
-        {
-            var iD_LIBROParameter = iD_LIBRO.HasValue ?
-                new ObjectParameter("ID_LIBRO", iD_LIBRO) :
-                new ObjectParameter("ID_LIBRO", typeof(int));
-    
-            var iD_USUARIOParameter = iD_USUARIO.HasValue ?
-                new ObjectParameter("ID_USUARIO", iD_USUARIO) :
-                new ObjectParameter("ID_USUARIO", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<Nullable<int>>("AGREGAR_CARRITO", iD_LIBROParameter, iD_USUARIOParameter);
-        }
-    
-        public virtual int DELETELIBROCARRITO(Nullable<int> iDLIBRO, Nullable<int> iDUSUARIO)
-        {
-            var iDLIBROParameter = iDLIBRO.HasValue ?
-                new ObjectParameter("IDLIBRO", iDLIBRO) :
-                new ObjectParameter("IDLIBRO", typeof(int));
-    
-            var iDUSUARIOParameter = iDUSUARIO.HasValue ?
-                new ObjectParameter("IDUSUARIO", iDUSUARIO) :
-                new ObjectParameter("IDUSUARIO", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("DELETELIBROCARRITO", iDLIBROParameter, iDUSUARIOParameter);
-        }
-    
-        public virtual ObjectResult<OBTENERCARRITO_Result> OBTENERCARRITO(Nullable<int> iDUSUARIO)
-        {
-            var iDUSUARIOParameter = iDUSUARIO.HasValue ?
-                new ObjectParameter("IDUSUARIO", iDUSUARIO) :
-                new ObjectParameter("IDUSUARIO", typeof(int));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<OBTENERCARRITO_Result>("OBTENERCARRITO", iDUSUARIOParameter);
-        }
-    
-        public virtual int EFECTUARALQUILER(Nullable<int> iD_USUARIO, string lIBROS_ID, Nullable<decimal> tOTAL, string iNFORMACION, Nullable<System.DateTime> fECHATERMINO)
-        {
-            var iD_USUARIOParameter = iD_USUARIO.HasValue ?
-                new ObjectParameter("ID_USUARIO", iD_USUARIO) :
-                new ObjectParameter("ID_USUARIO", typeof(int));
-    
-            var lIBROS_IDParameter = lIBROS_ID != null ?
-                new ObjectParameter("LIBROS_ID", lIBROS_ID) :
-                new ObjectParameter("LIBROS_ID", typeof(string));
-    
-            var tOTALParameter = tOTAL.HasValue ?
-                new ObjectParameter("TOTAL", tOTAL) :
-                new ObjectParameter("TOTAL", typeof(decimal));
-    
-            var iNFORMACIONParameter = iNFORMACION != null ?
-                new ObjectParameter("INFORMACION", iNFORMACION) :
-                new ObjectParameter("INFORMACION", typeof(string));
-    
-            var fECHATERMINOParameter = fECHATERMINO.HasValue ?
-                new ObjectParameter("FECHATERMINO", fECHATERMINO) :
-                new ObjectParameter("FECHATERMINO", typeof(System.DateTime));
-    
-            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("EFECTUARALQUILER", iD_USUARIOParameter, lIBROS_IDParameter, tOTALParameter, iNFORMACIONParameter, fECHATERMINOParameter);
         }
     }
 }

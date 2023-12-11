@@ -214,3 +214,10 @@ G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\Google.Apis.Core.xm
 G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\Google.Apis.Gmail.v1.pdb
 G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\Google.Apis.Gmail.v1.xml
 G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\System.CodeDom.xml
+G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\EPPlus.dll
+G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\EPPlus.Interfaces.dll
+G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\EPPlus.System.Drawing.dll
+G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\Microsoft.IO.RecyclableMemoryStream.dll
+G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\System.ComponentModel.Annotations.dll
+G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\EPPlus.xml
+G:\arriendonet\arriendojuegos\AlquileBook\arriendojuegos\bin\Microsoft.IO.RecyclableMemoryStream.xml

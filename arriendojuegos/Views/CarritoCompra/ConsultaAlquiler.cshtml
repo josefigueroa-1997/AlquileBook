@@ -1,0 +1,254 @@
+﻿@{
+    ViewBag.Title = "ConsultaAlquiler";
+}
+
+<style>
+    .custom-table {
+        margin: 20px;
+    }
+
+    .pagination {
+        display: inline-block;
+    }
+
+        .pagination li {
+            color: black;
+            float: left;
+            padding: 8px 16px;
+            text-decoration: none;
+        }
+
+            .pagination li.active {
+                background-color: red;
+                color: white;
+            }
+
+            .pagination li:hover:not(.active) {
+                background-color: #ddd;
+            }
+
+    .custom-table thead {
+        background-color: red;
+        color: white;
+    }
+
+    /* Estilos para los encabezados */
+    .h2 {
+        font-size: 1.5em;
+        color: #333;
+    }
+
+    .h4 {
+        font-size: 1.2em;
+        color: #666;
+    }
+
+    /* Estilos para el contenedor de cada alquiler */
+    .alquiler {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 15px;
+    }
+
+    /* Estilos para la lista de libros */
+    .libros {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+    }
+
+        .libros li {
+            font-size: 1em;
+            color: #444;
+            margin-bottom: 10px;
+        }
+
+            /* Estilos para las imágenes de las portadas de los libros */
+            .libros li img {
+                max-width: 50px; /* Ajusta el tamaño máximo según tu diseño */
+                margin-right: 10px; /* Espacio entre la imagen y el nombre del libro */
+                vertical-align: middle; /* Alinea verticalmente la imagen con el texto */
+            }
+</style>
+@{var alquileres = ViewBag.Alquiler as List<arriendojuegos.Models.ListModelCarritoCompra.Alquiler>; }
+<h1>Alquileres</h1>
+@if ((int)Session["rol"] == 2)
+{
+    <div style="text-align: center;">
+        <input type="text" id="searchInput" placeholder="Buscar por ID DE USUARIO O TRANSACCIÓN" style="text-align: center;">
+    </div>
+    <a class="btn btn-success" href="@Url.Action("ExportarExcel","CarritoCompra")" style="text-decoration:none; ">Generar Excel</a>
+    <div class="table-responsive custom-table">
+        <table id="myTable" class="table table-bordered table-striped table-hover">
+            <thead style="background: red; color: white;">
+                <tr>
+                    <th>ID Transacción</th>
+                    <th>Fecha Alquiler</th>
+                    <th>ID Usuario</th>
+                    <th>Nombre de Usuario</th>
+                    <th>Libros</th>
+                    <th>Fecha Término</th>
+                    <th>Total Transacción</th>
+                    <th>Estado</th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+
+                    foreach (var alquiler in alquileres)
+                    {
+                        <tr>
+                            <td>@alquiler.ID_TRANSACCION</td>
+                            <td>@alquiler.FECHAALQUILER.ToString("yyyy-MM-dd")</td>
+                            <td>@alquiler.ID_USUARIO</td>
+                            <td>@alquiler.NOMBREUSUARIO</td>
+                            <td>@alquiler.NOMBRESLIBROS</td>
+                            <td>@alquiler.FECHATERMINO.ToString("yyyy-MM-dd")</td>
+                            <td>@alquiler.TOTALPAGO</td>
+                            @if (alquiler.ESTADO.Equals("ACTIVO"))
+                            {
+                                <td style="color:green;">@alquiler.ESTADO</td>
+                            }
+                            else
+                            {
+                                <td style="color:red;">@alquiler.ESTADO</td>
+                            }
+
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+        <ul class="pagination" id="pagination"></ul>
+    </div>
+}
+else
+{
+
+
+    foreach (var alquiler in alquileres)
+    {
+        <div class="alquiler">
+            <h2 class="h2">@alquiler.ID_TRANSACCION</h2>
+            <h4 class="h4">@alquiler.FECHAALQUILER.ToString("yyyy-MM-dd")</h4>
+
+            <ul  class="libros">
+                @for (var i = 0; i < alquiler.NOMBRESLIBROS.Split(',').Length; i++)
+                {
+                    var nombresLibros = alquiler.NOMBRESLIBROS.Split(',');
+                    var imagenesLibro = alquiler.IMAGENLIBRO.Split(',');
+
+                    
+                    if (i < nombresLibros.Length && i < imagenesLibro.Length)
+                    {
+                        var nombreLibro = nombresLibros[i].Trim();
+                        var imagenLibro = imagenesLibro[i].Trim();
+
+                        <li>
+                            <img src="data:image/jpeg;base64,@imagenLibro" alt="@nombreLibro" />
+                            @nombreLibro
+                        </li>
+                    }
+                }
+            </ul>
+        </div>
+    }
+
+}
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+
+<script>
+    // Función para realizar la búsqueda
+    function searchTable() {
+        // Obtén el valor de la caja de búsqueda
+        var input = document.getElementById("searchInput");
+        var filter = input.value.toUpperCase();
+
+        // Obtén las filas de la tabla, excluyendo la primera que contiene el encabezado
+        var rows = document.querySelectorAll(".table tbody tr");
+
+        // Índices de las columnas que deseas buscar
+        var columnsToSearch = [0, 2]; // Cambia estos índices según tus necesidades
+
+        // Itera sobre las filas y muestra u oculta las filas según la búsqueda
+        for (var i = 0; i < rows.length; i++) {
+            var cells = rows[i].getElementsByTagName("td");
+            var rowVisible = false;
+
+            // Itera sobre las celdas de las columnas específicas
+            for (var j = 0; j < columnsToSearch.length; j++) {
+                var columnIndex = columnsToSearch[j];
+                var cellText = cells[columnIndex].textContent || cells[columnIndex].innerText;
+
+                if (cellText.toUpperCase().indexOf(filter) > -1) {
+                    rowVisible = true;
+                    break; // Importante: salir del bucle si se encuentra una coincidencia
+                }
+            }
+
+            // Muestra u oculta la fila según la búsqueda
+            rows[i].style.display = rowVisible ? "" : "none";
+        }
+    }
+
+    // Asocia la función de búsqueda al evento de entrada en la caja de búsqueda
+    document.getElementById("searchInput").addEventListener("input", searchTable);
+</script>
+<script>
+    // Número de filas por página
+    var rowsPerPage = 5;
+
+    // Obtén la tabla y las filas
+    var table = document.getElementById("myTable");
+    var tbody = table.getElementsByTagName("tbody")[0];
+    var rows = tbody.getElementsByTagName("tr");
+
+    // Calcula el número total de páginas
+    var totalPages = Math.ceil(rows.length / rowsPerPage);
+
+    // Crea los enlaces de paginación
+    var pagination = document.getElementById("pagination");
+    for (var i = 1; i <= totalPages; i++) {
+        var li = document.createElement("li");
+        li.textContent = i;
+        li.onclick = function () {
+            showPage(this.textContent);
+            updatePaginationStyles(this);
+        };
+        pagination.appendChild(li);
+    }
+
+    // Muestra la primera página al cargar
+    showPage(1);
+    updatePaginationStyles(pagination.children[0]);
+
+    // Función para mostrar una página específica
+    function showPage(pageNumber) {
+        // Oculta todas las filas
+        for (var i = 0; i < rows.length; i++) {
+            rows[i].style.display = "none";
+        }
+
+        // Calcula el rango de filas a mostrar
+        var startIndex = (pageNumber - 1) * rowsPerPage;
+        var endIndex = startIndex + rowsPerPage;
+
+        // Muestra las filas correspondientes a la página actual
+        for (var j = startIndex; j < endIndex && j < rows.length; j++) {
+            rows[j].style.display = "";
+        }
+    }
+
+    // Función para actualizar estilos de la paginación
+    function updatePaginationStyles(selectedElement) {
+        // Remueve la clase 'active' de todos los elementos
+        for (var k = 0; k < pagination.children.length; k++) {
+            pagination.children[k].classList.remove('active');
+        }
+
+        // Agrega la clase 'active' al elemento seleccionado
+        selectedElement.classList.add('active');
+    }
+</script>

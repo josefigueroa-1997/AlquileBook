@@ -15,6 +15,7 @@ using arriendojuegos.Models.ListModelCarritoCompra;
 namespace arriendojuegos.Controllers
 {
     [CargarCategorias]
+    [ActualizarEstadoAlquiler]
     public class UsuarioController : Controller
     {
         // GET: Usuario
@@ -263,7 +264,7 @@ namespace arriendojuegos.Controllers
             return RedirectToAction("Login", "Usuario");
         }
 
-
+        
 
 
         private bool verificarcontraseñas(string passuser, string passbd)

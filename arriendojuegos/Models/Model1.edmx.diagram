@@ -4,30 +4,30 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="8596036968ab4475851feb63ae4ca062" Name="Diagram1">
-        <EntityTypeShape EntityType="arriendojuegosModel.ADMINISTRADOR" Width="1.5" PointX="0.75" PointY="3.25" IsExpanded="true" />
+      <Diagram DiagramId="9d9f216e94a9428daee49f0c7527c532" Name="Diagram1">
+        <EntityTypeShape EntityType="arriendojuegosModel.ADMINISTRADOR" Width="1.5" PointX="0.75" PointY="3.5" IsExpanded="true" />
         <EntityTypeShape EntityType="arriendojuegosModel.ALQUILER" Width="1.5" PointX="7.5" PointY="3.125" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.CATEGORIA" Width="1.5" PointX="0.75" PointY="6.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.COMUNA" Width="1.5" PointX="0.75" PointY="9.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.EDITORIAL" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.FECHAALQUILER" Width="1.5" PointX="5.75" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.LIBRO" Width="1.5" PointX="3" PointY="2.375" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.LIBRO_CARRITO_USUARIO" Width="1.5" PointX="5.25" PointY="3.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.sexo" Width="1.5" PointX="0.75" PointY="11.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="7" IsExpanded="true" />
-        <EntityTypeShape EntityType="arriendojuegosModel.usuarios" Width="1.5" PointX="3" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.BOLETA" Width="1.5" PointX="7.5" PointY="7.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.CATEGORIA" Width="1.5" PointX="0.75" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.COMUNA" Width="1.5" PointX="0.75" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.EDITORIAL" Width="1.5" PointX="0.75" PointY="1.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.FECHAALQUILER" Width="1.5" PointX="5.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.LIBRO" Width="1.5" PointX="3" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.LIBRO_CARRITO_USUARIO" Width="1.5" PointX="5.25" PointY="3.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.sexo" Width="1.5" PointX="0.75" PointY="12.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.sysdiagrams" Width="1.5" PointX="7.75" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.TRANSACCION" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="arriendojuegosModel.usuarios" Width="1.5" PointX="3" PointY="9.875" IsExpanded="true" />
         <AssociationConnector Association="arriendojuegosModel.ADMIN_FK" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.LIBROALQUILER_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="arriendojuegosModel.TRANSACCION_FK" ManuallyRouted="false" />
+        <AssociationConnector Association="arriendojuegosModel.TRANSACCION_FK1" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.COMUNA_FK" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.EDITORIAL_L_FK" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.LIBROCARRITO_FK" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.USUARIO_FK" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.sexo_fk" ManuallyRouted="false" />
         <AssociationConnector Association="arriendojuegosModel.CATEGORIA_LIBRO" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="arriendojuegosModel.BOLETA" Width="1.5" PointX="7.5" PointY="1.25" />
-        <EntityTypeShape EntityType="arriendojuegosModel.TRANSACCION" Width="1.5" PointX="5.25" PointY="0.75" />
-        <AssociationConnector Association="arriendojuegosModel.TRANSACCION_FK" />
-        <AssociationConnector Association="arriendojuegosModel.TRANSACCION_FK1" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

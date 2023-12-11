@@ -20,18 +20,26 @@ using System.Data.Entity;
 namespace arriendojuegos.Controllers
 {
     [CargarCategorias]
-
+    [ActualizarEstadoAlquiler]
     public class LibroController : Controller
     {
         private readonly Libroservice libroservice = new Libroservice();
         // GET: Libro
         public ActionResult Libros(int? id, string tipolibro, int? idcategoria, int? anio,string nombre)
         {
-            if (Session["nombre"] != null)
+            if (Session["id"] != null)
             {
-               var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio,nombre);
-                ViewBag.Libros = libros;
-                return View();
+                if ((int)Session["rol"] == 2)
+                {
+                    var libros = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio, nombre);
+                    ViewBag.Libros = libros;
+                    return View();
+                }
+                else
+                {
+                    return  RedirectToAction("Index","Home");
+                }
+               
             }
             else
             {
@@ -43,16 +51,40 @@ namespace arriendojuegos.Controllers
 
         public ActionResult Detalle(int? id, string tipolibro, int? idcategoria, int? anio, string nombre)
         {
-            if (id == null || id<0)
+            if (id == null || id<0 )
             {
+                if (Session["id"]!=null)
+                {
+                    if ((int)Session["rol"] != 2)
+                    {
+                        return RedirectToAction("Index", "Home");
+                    }
+                    
+                }
                 return RedirectToAction("Libros");
-            } 
-            var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio,nombre);
-            var editorial = obtenereditorial();
-            var cateogiras = obtenercategorias();
-            ViewBag.Editoriales = editorial;
-            ViewBag.Categorias = cateogiras;
-            return View(libro);
+                
+            }
+            if ((int)Session["rol"] > 0)
+            {
+                if ((int)Session["rol"] == 2)
+                {
+                    var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio, nombre);
+                    var editorial = obtenereditorial();
+                    var cateogiras = obtenercategorias();
+                    ViewBag.Editoriales = editorial;
+                    ViewBag.Categorias = cateogiras;
+                    return View(libro);
+                }
+                else
+                {
+                    return RedirectToAction("Index","Home");
+                }
+            }
+            else
+            {
+                return RedirectToAction("Login", "Usuario");
+            }
+            
         }
 
         public ActionResult FilterBook(int? id, string tipolibro, int? idcategoria, int? anio, string nombre)
@@ -66,13 +98,21 @@ namespace arriendojuegos.Controllers
 
         public ActionResult Registrar()
         {
-            if (Session["nombre"] != null)
+            if (Session["id"] != null)
             {
-                var editorial = obtenereditorial();
-                var cateogiras = obtenercategorias();
-                ViewBag.Editoriales = editorial;
-                ViewBag.Categorias = cateogiras;
-                return View();
+                if ((int)Session["rol"] == 2)
+                {
+                    var editorial = obtenereditorial();
+                    var cateogiras = obtenercategorias();
+                    ViewBag.Editoriales = editorial;
+                    ViewBag.Categorias = cateogiras;
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Index","Home");
+                }
+                
 
             }
             else
@@ -237,14 +277,12 @@ namespace arriendojuegos.Controllers
             var libro = libroservice.ObtenerLibros(id, tipolibro, idcategoria, anio, nombre);
             Libro libroActual = new Libro { Id = id.Value };
             var lobrosrecomendados = Obtenerlibrosrecomendados(libroActual);
-            Debug.WriteLine("Longitud de Recomendaciones: " + lobrosrecomendados.Count);
             if (lobrosrecomendados != null && lobrosrecomendados.Any())
             {
                 ViewBag.Recomendaciones = lobrosrecomendados;
             }
             else
             {
-                // Si no hay recomendaciones, inicializa ViewBag.Recomendaciones como una lista vacía
                 ViewBag.Recomendaciones = new List<Libro>();
             }
             return View(libro);

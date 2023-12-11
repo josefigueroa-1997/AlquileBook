@@ -270,6 +270,7 @@
       </Dependent>
     </ReferentialConstraint>
   </Association>
+  <Function Name="ACTUALIZARESTADOALQUILER" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="ACTUALIZARLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ISBN" Type="varchar" Mode="In" />
     <Parameter Name="NOMBRE" Type="varchar" Mode="In" />
@@ -318,6 +319,7 @@
   </Function>
   <Function Name="DESPLEGARCOMUNAS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="DESPLEGARSEXO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="DETALLEBOLETA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="EFECTUARALQUILER" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID_USUARIO" Type="int" Mode="In" />
     <Parameter Name="LIBROS_ID" Type="varchar(max)" Mode="In" />
@@ -331,6 +333,9 @@
   </Function>
   <Function Name="INICIOSESION" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="CORREO" Type="nvarchar" Mode="In" />
+  </Function>
+  <Function Name="OBTENERALQUILERES" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="IDUSUARIO" Type="int" Mode="In" />
   </Function>
   <Function Name="OBTENERCARRITO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="IDUSUARIO" Type="int" Mode="In" />
@@ -353,10 +358,14 @@
   <Function Name="OBTENERROL" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="int" Mode="In" />
   </Function>
+  <Function Name="OBTENERULTIMABOLETA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
   <Function Name="OBTENERUSUARIOID" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ID" Type="int" Mode="In" />
   </Function>
   <Function Name="OBTENERUSUARIOS" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="RECOMENDACIONESLIBROSCATEGORIA" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="LIBROId" Type="int" Mode="In" />
+  </Function>
   <Function Name="REGISTRARLIBRO" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
     <Parameter Name="ISBN" Type="varchar" Mode="In" />
     <Parameter Name="NOMBRE" Type="varchar" Mode="In" />

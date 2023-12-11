@@ -9,6 +9,7 @@ namespace arriendojuegos
         {
             filters.Add(new HandleErrorAttribute());
             filters.Add(new CargarCategorias());
+            filters.Add(new ActualizarEstadoAlquiler());
         }
     }
 }

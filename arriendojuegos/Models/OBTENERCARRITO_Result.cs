@@ -16,7 +16,11 @@ namespace arriendojuegos.Models
         public int ID_USUARIO { get; set; }
         public int ID_LIBRO { get; set; }
         public string NOMBRELIBRO { get; set; }
+        public string AUTOR { get; set; }
         public string IMAGENLIBRO { get; set; }
         public decimal PRECIOLIBRO { get; set; }
+        public string TIPOLIBRO { get; set; }
+        public string DIRECCION { get; set; }
+        public string COMUNA { get; set; }
     }
 }

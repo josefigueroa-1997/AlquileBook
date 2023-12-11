@@ -22,7 +22,6 @@ namespace arriendojuegos.Models
     
         public int ID_LIBRO { get; set; }
         public int ID_USUARIO { get; set; }
-        public decimal TOTAL { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<ALQUILER> ALQUILER { get; set; }

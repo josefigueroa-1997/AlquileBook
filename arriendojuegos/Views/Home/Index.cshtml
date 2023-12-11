@@ -100,7 +100,7 @@
                             <!-- Sección: Novedades -->
                             <div class="product-item">
                                 <a href="#" style="text-decoration:none;">
-                                    <img src="data:image/jpeg;base64,@libro.Imagen)" alt="Producto 5">
+                                    <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 5">
                                     <h3>@libro.Nombre</h3>
                                     <p>@libro.Autor</p>
                                     <p class="price">$@libro.Precio</p>
@@ -133,7 +133,7 @@
                             <!-- Sección: Novedades -->
                             <div class="product-item">
                                 <a href="#" style="text-decoration:none;">
-                                    <img src="data:image/jpeg;base64,@libro.Imagen)" alt="Producto 5">
+                                    <img src="data:image/jpeg;base64,@libro.Imagen" alt="Producto 5">
                                     <h3>@libro.Nombre</h3>
                                     <p>@libro.Autor</p>
                                     <p class="price">$@libro.Precio</p>

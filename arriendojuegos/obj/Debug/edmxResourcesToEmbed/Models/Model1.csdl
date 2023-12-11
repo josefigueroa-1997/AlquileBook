@@ -26,10 +26,20 @@
     <Property Name="FECHAALQUILER" Type="DateTime" Nullable="false" Precision="0" />
     <Property Name="INFORMACION" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
     <Property Name="FECHATERMINO" Type="DateTime" Nullable="false" Precision="0" />
-    <NavigationProperty Name="LIBRO_CARRITO_USUARIO" Relationship="Self.LIBROALQUILER_FK" FromRole="ALQUILER" ToRole="LIBRO_CARRITO_USUARIO" />
     <Property Name="ESTADO" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
     <Property Name="ID_TRANSACCION" Type="Int32" Nullable="false" />
-    <NavigationProperty Name="TRANSACCION" Relationship="arriendojuegosModel.TRANSACCION_FK" FromRole="ALQUILER" ToRole="TRANSACCION" />
+    <NavigationProperty Name="LIBRO_CARRITO_USUARIO" Relationship="Self.LIBROALQUILER_FK" FromRole="ALQUILER" ToRole="LIBRO_CARRITO_USUARIO" />
+    <NavigationProperty Name="TRANSACCION" Relationship="Self.TRANSACCION_FK" FromRole="ALQUILER" ToRole="TRANSACCION" />
+  </EntityType>
+  <EntityType Name="BOLETA">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ID_TRANSACCION" Type="Int32" />
+    <Property Name="DETALLES" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+    <Property Name="FECHAEMISION" Type="DateTime" Nullable="false" Precision="3" />
+    <NavigationProperty Name="TRANSACCION" Relationship="Self.TRANSACCION_FK1" FromRole="BOLETA" ToRole="TRANSACCION" />
   </EntityType>
   <EntityType Name="CATEGORIA">
     <Key>
@@ -90,7 +100,6 @@
     </Key>
     <Property Name="ID_LIBRO" Type="Int32" Nullable="false" />
     <Property Name="ID_USUARIO" Type="Int32" Nullable="false" />
-    <Property Name="TOTAL" Type="Decimal" Precision="10" Scale="2" Nullable="false" />
     <NavigationProperty Name="ALQUILER" Relationship="Self.LIBROALQUILER_FK" FromRole="LIBRO_CARRITO_USUARIO" ToRole="ALQUILER" />
     <NavigationProperty Name="LIBRO" Relationship="Self.LIBROCARRITO_FK" FromRole="LIBRO_CARRITO_USUARIO" ToRole="LIBRO" />
     <NavigationProperty Name="usuarios" Relationship="Self.USUARIO_FK" FromRole="LIBRO_CARRITO_USUARIO" ToRole="usuarios" />
@@ -112,6 +121,16 @@
     <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Name="version" Type="Int32" />
     <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <EntityType Name="TRANSACCION">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="FECHATRANSACCION" Type="DateTime" Precision="0" />
+    <Property Name="TOTAL" Type="Decimal" Precision="10" Scale="2" />
+    <NavigationProperty Name="ALQUILER" Relationship="Self.TRANSACCION_FK" FromRole="TRANSACCION" ToRole="ALQUILER" />
+    <NavigationProperty Name="BOLETA" Relationship="Self.TRANSACCION_FK1" FromRole="TRANSACCION" ToRole="BOLETA" />
   </EntityType>
   <EntityType Name="usuarios">
     <Key>
@@ -155,6 +174,30 @@
       <Dependent Role="ALQUILER">
         <PropertyRef Name="ID_LIBRO" />
         <PropertyRef Name="ID_USUARIO" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TRANSACCION_FK">
+    <End Role="TRANSACCION" Type="Self.TRANSACCION" Multiplicity="1" />
+    <End Role="ALQUILER" Type="Self.ALQUILER" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRANSACCION">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="ALQUILER">
+        <PropertyRef Name="ID_TRANSACCION" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="TRANSACCION_FK1">
+    <End Role="TRANSACCION" Type="Self.TRANSACCION" Multiplicity="0..1" />
+    <End Role="BOLETA" Type="Self.BOLETA" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="TRANSACCION">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="BOLETA">
+        <PropertyRef Name="ID_TRANSACCION" />
       </Dependent>
     </ReferentialConstraint>
   </Association>
@@ -225,6 +268,7 @@
   <EntityContainer Name="arriendojuegosEntities1" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="ADMINISTRADOR" EntityType="Self.ADMINISTRADOR" />
     <EntitySet Name="ALQUILER" EntityType="Self.ALQUILER" />
+    <EntitySet Name="BOLETA" EntityType="Self.BOLETA" />
     <EntitySet Name="CATEGORIA" EntityType="Self.CATEGORIA" />
     <EntitySet Name="COMUNA" EntityType="Self.COMUNA" />
     <EntitySet Name="EDITORIAL" EntityType="Self.EDITORIAL" />
@@ -233,6 +277,7 @@
     <EntitySet Name="LIBRO_CARRITO_USUARIO" EntityType="Self.LIBRO_CARRITO_USUARIO" />
     <EntitySet Name="sexo" EntityType="Self.sexo" />
     <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" />
+    <EntitySet Name="TRANSACCION" EntityType="Self.TRANSACCION" />
     <EntitySet Name="usuarios" EntityType="Self.usuarios" />
     <AssociationSet Name="ADMIN_FK" Association="Self.ADMIN_FK">
       <End Role="ADMINISTRADOR" EntitySet="ADMINISTRADOR" />
@@ -241,6 +286,14 @@
     <AssociationSet Name="LIBROALQUILER_FK" Association="Self.LIBROALQUILER_FK">
       <End Role="LIBRO_CARRITO_USUARIO" EntitySet="LIBRO_CARRITO_USUARIO" />
       <End Role="ALQUILER" EntitySet="ALQUILER" />
+    </AssociationSet>
+    <AssociationSet Name="TRANSACCION_FK" Association="Self.TRANSACCION_FK">
+      <End Role="TRANSACCION" EntitySet="TRANSACCION" />
+      <End Role="ALQUILER" EntitySet="ALQUILER" />
+    </AssociationSet>
+    <AssociationSet Name="TRANSACCION_FK1" Association="Self.TRANSACCION_FK1">
+      <End Role="TRANSACCION" EntitySet="TRANSACCION" />
+      <End Role="BOLETA" EntitySet="BOLETA" />
     </AssociationSet>
     <AssociationSet Name="COMUNA_FK" Association="Self.COMUNA_FK">
       <End Role="COMUNA" EntitySet="COMUNA" />
@@ -270,6 +323,7 @@
       <Parameter Name="String" Mode="In" Type="String" />
       <Parameter Name="Delimiter" Mode="In" Type="String" />
     </FunctionImport>
+    <FunctionImport Name="ACTUALIZARESTADOALQUILER" />
     <FunctionImport Name="ACTUALIZARLIBRO">
       <Parameter Name="ISBN" Mode="In" Type="String" />
       <Parameter Name="NOMBRE" Mode="In" Type="String" />
@@ -284,6 +338,10 @@
       <Parameter Name="IDLIBRO" Mode="In" Type="Int32" />
       <Parameter Name="CATEGORIAS_ID_LIST" Mode="In" Type="String" />
       <Parameter Name="IMAGEN" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="AGREGAR_CARRITO" ReturnType="Collection(Int32)">
+      <Parameter Name="ID_LIBRO" Mode="In" Type="Int32" />
+      <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="CREARADMIN">
       <Parameter Name="NOMBRE" Mode="In" Type="String" />
@@ -305,16 +363,34 @@
     <FunctionImport Name="DELETEBOOK">
       <Parameter Name="ID" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="DELETELIBROCARRITO">
+      <Parameter Name="IDLIBRO" Mode="In" Type="Int32" />
+      <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
+    </FunctionImport>
     <FunctionImport Name="DELETEUSUARIO">
       <Parameter Name="ID" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="DESPLEGARCOMUNAS" ReturnType="Collection(arriendojuegosModel.DESPLEGARCOMUNAS_Result)" />
     <FunctionImport Name="DESPLEGARSEXO" ReturnType="Collection(arriendojuegosModel.DESPLEGARSEXO_Result)" />
+    <FunctionImport Name="DETALLEBOLETA" ReturnType="Collection(arriendojuegosModel.DETALLEBOLETA_Result)" />
+    <FunctionImport Name="EFECTUARALQUILER">
+      <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
+      <Parameter Name="LIBROS_ID" Mode="In" Type="String" />
+      <Parameter Name="TOTAL" Mode="In" Type="Decimal" />
+      <Parameter Name="INFORMACION" Mode="In" Type="String" />
+      <Parameter Name="FECHATERMINO" Mode="In" Type="DateTime" />
+    </FunctionImport>
     <FunctionImport Name="GETID" ReturnType="Collection(Int32)">
       <Parameter Name="CORREO" Mode="In" Type="String" />
     </FunctionImport>
     <FunctionImport Name="INICIOSESION" ReturnType="Collection(arriendojuegosModel.INICIOSESION_Result)">
       <Parameter Name="CORREO" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="OBTENERALQUILERES" ReturnType="Collection(arriendojuegosModel.OBTENERALQUILERES_Result)">
+      <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="OBTENERCARRITO" ReturnType="Collection(arriendojuegosModel.OBTENERCARRITO_Result)">
+      <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="OBTENERCATEGORIAS" ReturnType="Collection(arriendojuegosModel.OBTENERCATEGORIAS_Result)" />
     <FunctionImport Name="OBTENEREDITORIAL" ReturnType="Collection(arriendojuegosModel.OBTENEREDITORIAL_Result)" />
@@ -334,10 +410,14 @@
     <FunctionImport Name="OBTENERROL" ReturnType="Collection(Int32)">
       <Parameter Name="ID" Mode="In" Type="Int32" />
     </FunctionImport>
+    <FunctionImport Name="OBTENERULTIMABOLETA" ReturnType="Collection(Int32)" />
     <FunctionImport Name="OBTENERUSUARIOID" ReturnType="Collection(arriendojuegosModel.OBTENERUSUARIOID_Result)">
       <Parameter Name="ID" Mode="In" Type="Int32" />
     </FunctionImport>
     <FunctionImport Name="OBTENERUSUARIOS" ReturnType="Collection(arriendojuegosModel.OBTENERUSUARIOS_Result)" />
+    <FunctionImport Name="RECOMENDACIONESLIBROSCATEGORIA" ReturnType="Collection(arriendojuegosModel.RECOMENDACIONESLIBROSCATEGORIA_Result)">
+      <Parameter Name="LIBROId" Mode="In" Type="Int32" />
+    </FunctionImport>
     <FunctionImport Name="REGISTRARLIBRO">
       <Parameter Name="ISBN" Mode="In" Type="String" />
       <Parameter Name="NOMBRE" Mode="In" Type="String" />
@@ -391,34 +471,6 @@
       <Parameter Name="DIRECCION" Mode="In" Type="String" />
       <Parameter Name="COMUNA" Mode="In" Type="Int32" />
     </FunctionImport>
-    <FunctionImport Name="AGREGAR_CARRITO" ReturnType="Collection(Int32)">
-      <Parameter Name="ID_LIBRO" Mode="In" Type="Int32" />
-      <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="DELETELIBROCARRITO">
-      <Parameter Name="IDLIBRO" Mode="In" Type="Int32" />
-      <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <FunctionImport Name="OBTENERCARRITO" ReturnType="Collection(arriendojuegosModel.OBTENERCARRITO_Result)">
-      <Parameter Name="IDUSUARIO" Mode="In" Type="Int32" />
-    </FunctionImport>
-    <EntitySet Name="BOLETA" EntityType="arriendojuegosModel.BOLETA" />
-    <EntitySet Name="TRANSACCION" EntityType="arriendojuegosModel.TRANSACCION" />
-    <AssociationSet Name="TRANSACCION_FK" Association="arriendojuegosModel.TRANSACCION_FK">
-      <End Role="TRANSACCION" EntitySet="TRANSACCION" />
-      <End Role="ALQUILER" EntitySet="ALQUILER" />
-    </AssociationSet>
-    <AssociationSet Name="TRANSACCION_FK1" Association="arriendojuegosModel.TRANSACCION_FK1">
-      <End Role="TRANSACCION" EntitySet="TRANSACCION" />
-      <End Role="BOLETA" EntitySet="BOLETA" />
-    </AssociationSet>
-    <FunctionImport Name="EFECTUARALQUILER">
-      <Parameter Name="ID_USUARIO" Mode="In" Type="Int32" />
-      <Parameter Name="LIBROS_ID" Mode="In" Type="String" />
-      <Parameter Name="TOTAL" Mode="In" Type="Decimal" />
-      <Parameter Name="INFORMACION" Mode="In" Type="String" />
-      <Parameter Name="FECHATERMINO" Mode="In" Type="DateTime" />
-    </FunctionImport>
   </EntityContainer>
   <ComplexType Name="DESPLEGARCOMUNAS_Result">
     <Property Type="Int32" Name="ID" Nullable="false" />
@@ -428,10 +480,41 @@
     <Property Type="Int32" Name="ID" Nullable="false" />
     <Property Type="String" Name="Nombre" Nullable="false" MaxLength="50" />
   </ComplexType>
+  <ComplexType Name="DETALLEBOLETA_Result">
+    <Property Type="Int32" Name="IDBOLETA" Nullable="false" />
+    <Property Type="Int32" Name="IDTRANSACCION" Nullable="false" />
+    <Property Type="Decimal" Name="TOTALTRANSACCION" Nullable="true" Precision="10" Scale="2" />
+    <Property Type="Int32" Name="IDUSUARIO" Nullable="false" />
+    <Property Type="String" Name="NOMBREUSUARIO" Nullable="true" MaxLength="100" />
+    <Property Type="DateTime" Name="FECHAEMISION" Nullable="false" Precision="23" />
+    <Property Type="String" Name="NOMBRESLIBROS" Nullable="true" />
+    <Property Type="String" Name="IDSLIBROS" Nullable="true" />
+  </ComplexType>
   <ComplexType Name="INICIOSESION_Result">
     <Property Type="Int32" Name="ID" Nullable="true" />
     <Property Type="String" Name="CONTRASEÑA" Nullable="true" MaxLength="255" />
     <Property Type="String" Name="NOMBRE" Nullable="true" MaxLength="100" />
+  </ComplexType>
+  <ComplexType Name="OBTENERALQUILERES_Result">
+    <Property Type="Int32" Name="ID_TRANSACCION" Nullable="false" />
+    <Property Type="DateTime" Name="FECHAALQUILER" Nullable="false" />
+    <Property Type="Int32" Name="ID_USUARIO" Nullable="false" />
+    <Property Type="String" Name="NOMBREUSUARIO" Nullable="true" MaxLength="100" />
+    <Property Type="String" Name="NOMBRESLIBROS" Nullable="true" />
+    <Property Type="DateTime" Name="FECHATERMINO" Nullable="false" />
+    <Property Type="Decimal" Name="TOTALPAGO" Nullable="false" Precision="10" Scale="2" />
+    <Property Type="String" Name="ESTADO" Nullable="true" MaxLength="200" />
+  </ComplexType>
+  <ComplexType Name="OBTENERCARRITO_Result">
+    <Property Type="Int32" Name="ID_USUARIO" Nullable="false" />
+    <Property Type="Int32" Name="ID_LIBRO" Nullable="false" />
+    <Property Type="String" Name="NOMBRELIBRO" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="AUTOR" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="IMAGENLIBRO" Nullable="true" />
+    <Property Type="Decimal" Name="PRECIOLIBRO" Nullable="false" Precision="10" Scale="2" />
+    <Property Type="String" Name="TIPOLIBRO" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="DIRECCION" Nullable="false" MaxLength="200" />
+    <Property Type="String" Name="COMUNA" Nullable="false" MaxLength="70" />
   </ComplexType>
   <ComplexType Name="OBTENERCATEGORIAS_Result">
     <Property Type="Int32" Name="ID" Nullable="false" />
@@ -492,6 +575,13 @@
     <Property Type="String" Name="DIRECCION" Nullable="false" MaxLength="200" />
     <Property Type="String" Name="comunanombre" Nullable="false" MaxLength="70" />
   </ComplexType>
+  <ComplexType Name="RECOMENDACIONESLIBROSCATEGORIA_Result">
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="NOMBRE" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="AUTOR" Nullable="false" MaxLength="100" />
+    <Property Type="String" Name="IMAGEN" Nullable="true" />
+    <Property Type="Decimal" Name="PRECIO" Nullable="false" Precision="10" Scale="2" />
+  </ComplexType>
   <ComplexType Name="sp_helpdiagramdefinition_Result">
     <Property Type="Int32" Name="version" Nullable="true" />
     <Property Type="Binary" Name="definition" Nullable="true" />
@@ -503,55 +593,4 @@
     <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
     <Property Type="Int32" Name="OwnerID" Nullable="false" />
   </ComplexType>
-  <ComplexType Name="OBTENERCARRITO_Result">
-    <Property Type="Int32" Name="ID_USUARIO" Nullable="false" />
-    <Property Type="Int32" Name="ID_LIBRO" Nullable="false" />
-    <Property Type="String" Name="NOMBRELIBRO" Nullable="false" MaxLength="100" />
-    <Property Type="String" Name="IMAGENLIBRO" Nullable="true" />
-    <Property Type="Decimal" Name="PRECIOLIBRO" Nullable="false" Precision="10" Scale="2" />
-  </ComplexType>
-  <EntityType Name="BOLETA">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="ID_TRANSACCION" Type="Int32" />
-    <Property Name="DETALLES" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
-    <NavigationProperty Name="TRANSACCION" Relationship="arriendojuegosModel.TRANSACCION_FK1" FromRole="BOLETA" ToRole="TRANSACCION" />
-    <Property Name="FECHAEMISION" Type="DateTime" Nullable="false" Precision="3" />
-  </EntityType>
-  <EntityType Name="TRANSACCION">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="FECHATRANSACCION" Type="DateTime" Precision="0" />
-    <Property Name="TOTAL" Type="Decimal" Precision="10" Scale="2" />
-    <NavigationProperty Name="ALQUILER" Relationship="arriendojuegosModel.TRANSACCION_FK" FromRole="TRANSACCION" ToRole="ALQUILER" />
-    <NavigationProperty Name="BOLETA" Relationship="arriendojuegosModel.TRANSACCION_FK1" FromRole="TRANSACCION" ToRole="BOLETA" />
-  </EntityType>
-  <Association Name="TRANSACCION_FK">
-    <End Type="arriendojuegosModel.TRANSACCION" Role="TRANSACCION" Multiplicity="1" />
-    <End Type="arriendojuegosModel.ALQUILER" Role="ALQUILER" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TRANSACCION">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="ALQUILER">
-        <PropertyRef Name="ID_TRANSACCION" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
-  <Association Name="TRANSACCION_FK1">
-    <End Type="arriendojuegosModel.TRANSACCION" Role="TRANSACCION" Multiplicity="0..1" />
-    <End Type="arriendojuegosModel.BOLETA" Role="BOLETA" Multiplicity="*" />
-    <ReferentialConstraint>
-      <Principal Role="TRANSACCION">
-        <PropertyRef Name="ID" />
-      </Principal>
-      <Dependent Role="BOLETA">
-        <PropertyRef Name="ID_TRANSACCION" />
-      </Dependent>
-    </ReferentialConstraint>
-  </Association>
 </Schema>
