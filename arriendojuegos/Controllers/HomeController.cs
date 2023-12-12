@@ -10,6 +10,7 @@ using arriendojuegos.Filters;
 using arriendojuegos.Services;
 using System.Web.UI.WebControls;
 using System.Data.SqlClient;
+using System.Diagnostics;
 
 namespace arriendojuegos.Controllers
 {
@@ -21,11 +22,20 @@ namespace arriendojuegos.Controllers
         public ActionResult Index(int? id, string tipolibro, int? idcategoria, int? anio,string nombre)
         {
             var libro = libroservice.ObtenerLibros(id,tipolibro,idcategoria,anio,nombre);
-            var recomendaciones = RecomendacionesLibroUsuario(id);
+            if (Session["id"] != null)
+            {
+                var recomendaciones = RecomendacionesLibroUsuario((int)Session["id"]);
+                if (recomendaciones != null)
+                {
+                    ViewBag.Recomendaciones = recomendaciones;
+                }
+            }
+            var populares = LibrosMasAlquilados();
+            ViewBag.Populares = populares;
             return View(libro);
         }
 
-        private List<Libro> RecomendacionesLibroUsuario(int? id)
+        private List<Libro> RecomendacionesLibroUsuario(int id)
         {
             List<Libro> recomendaciones = null;
             using(var dbcontext = new arriendojuegosEntities1())
@@ -34,6 +44,17 @@ namespace arriendojuegos.Controllers
                     new SqlParameter("@IDUSUARIO",id)).ToList();
             }
             return recomendaciones;
+        }
+
+        private List<Libro> LibrosMasAlquilados()
+        {
+            List<Libro> librospopulares = null;
+            
+            using (var dbcontext = new arriendojuegosEntities1())
+            {
+                librospopulares = dbcontext.Database.SqlQuery<Libro>("LIBROSMASALQUILADOS").ToList();
+            }
+            return librospopulares;
         }
      
         public ActionResult About()

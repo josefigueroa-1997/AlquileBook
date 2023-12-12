@@ -103,6 +103,17 @@ namespace arriendojuegos.Controllers
             
         }
 
+        public ActionResult Mensajetexto()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult VerificarNumero(int numero)
+        {
+            return RedirectToAction("Index","Home");
+        }
+
         private Boolean tieneMayusculas(string contraseña)
         {
             return contraseña.Any(char.IsUpper);

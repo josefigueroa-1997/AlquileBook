@@ -3,53 +3,85 @@
     ViewBag.Title = "Home Page";
 
 }
-
-
-
 <div class="content">
     <div class="banner-container">
         <div class="banner" id="banner">
-            <!-- Puedes agregar tus imágenes aquí -->
+
             <img src="~/imagenes/banner-3544296_1280.jpg" alt="Imagen 1" style="width: 100%;">
 
-            <!-- Agrega más imágenes según sea necesario -->
+
         </div>
 
     </div>
-    @if (Session["nombre"] != null)
+    @if (Session["id"] != null)
     {
-        <!-- Sección: Para ti -->
-        <div class="section">
-            <h2 style="font-size:30px;">Para ti</h2>
-            <div class="product">
-                <div class="product-item">
-                    <img src="~/imagenes/libro_1354376096.jpg" alt="Producto 1">
-                    <h3>Producto 1</h3>
-                    <p>Descripción del producto 1</p>
-                    <p class="price">$XX.XX</p>
+        if ((int)Session["rol"] == 1)
+        {
+            <!-- Sección: Para ti -->
+            var recomendaciones = ViewBag.Recomendaciones as List<arriendojuegos.Models.ListModelLibro.Libro>;
+
+            if (recomendaciones != null)
+            {
+                <div class="section">
+
+                    <h2 style="font-size:30px;">Te Podrian Gustar</h2>
+                    <div class="product-container">
+                        <div class="product">
+
+                            @foreach (var recomendacion in recomendaciones)
+                            {
+                                <div class="product-item">
+                                    <a href="@Url.Action("DetalleLibro", "Libro", new {id= recomendacion.Id})" style="text-decoration:none;">
+                                        <img src="data:image/jpeg;base64,@recomendacion.Imagen" alt="Producto 1">
+                                        <h3>@recomendacion.Nombre</h3>
+                                        <p>@recomendacion.Autor</p>
+                                        <p class="price">$@recomendacion.Precio</p>
+                                    </a>
+                                </div>
+
+                            }
+                        </div>
+                    </div>
+
+
                 </div>
-                <div class="product-item">
-                    <img src="~/imagenes/descarga.jpg" alt="Producto 2">
-                    <h3>Producto 2</h3>
-                    <p>Descripción del producto 2</p>
-                    <p class="price">$XX.XX</p>
-                </div>
-                <div class="product-item">
-                    <img src="~/imagenes/images.jpg" alt="Producto 3">
-                    <h3>Maldita Roma</h3>
-                    <p>Descripción del producto 3</p>
-                    <p class="price">$27.000</p>
-                </div>
-                <div class="product-item">
-                    <img src="" alt="Producto 4">
-                    <h3>Producto 4</h3>
-                    <p>Descripción del producto 4</p>
-                    <p class="price">$27.000</p>
-                </div>
-            </div>
-        </div>
+
+
+            }
+
+
+        }
+
 
     }
+
+    <div class="section">
+        <h2 style="font-size:30px;">Más Alquilados</h2>
+        <div class="product-container">
+            <div class="product">
+
+                @{
+                            var populares = ViewBag.Populares as List<arriendojuegos.Models.ListModelLibro.Libro>;
+
+                            foreach (var libro in populares)
+                            {
+                                
+                            <!-- Sección: POpulares -->
+                            <div class="product-item">
+                                <a href="@Url.Action("DetalleLibro","Libro", new {id = libro.Id })" style="text-decoration:none;">
+                                    <img src="data:image/jpeg;base64,@libro.Imagen" alt="Producto 5">
+                                    <h3>@libro.Nombre</h3>
+                                    <p>@libro.Autor</p>
+                                    <p class="price">$@libro.Precio</p>
+                                </a>
+
+                            </div>
+                        
+                            }
+                }
+            </div>
+        </div>
+    </div>
 
 
     <div class="section">
@@ -99,7 +131,7 @@
                         {
                             <!-- Sección: Novedades -->
                             <div class="product-item">
-                                <a href="#" style="text-decoration:none;">
+                                <a href="@Url.Action("DetalleLibro", "Libro", new {id=libro.Id})" style="text-decoration:none;">
                                     <img src="data:image/jpeg;base64,@Convert.ToBase64String(libro.Byteimagen)" alt="Producto 5">
                                     <h3>@libro.Nombre</h3>
                                     <p>@libro.Autor</p>
@@ -132,7 +164,7 @@
                         {
                             <!-- Sección: Novedades -->
                             <div class="product-item">
-                                <a href="#" style="text-decoration:none;">
+                                <a href="@Url.Action("DetalleLibro", "Libro", new {id=libro.Id})" style="text-decoration:none;">
                                     <img src="data:image/jpeg;base64,@libro.Imagen" alt="Producto 5">
                                     <h3>@libro.Nombre</h3>
                                     <p>@libro.Autor</p>

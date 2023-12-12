@@ -45,7 +45,7 @@ namespace arriendojuegos.Controllers
                 
                 if (resultado == 1)
                 {
-                    return Json(new { success = false, message = "Solamente puede agregar una copia de este producto al carrito" });
+                    return Json(new { success = false, message = "Solamente puede agregar una copia de este producto al carrito o Ud. ya tiene alquilado este producto" });
                 }
                 else 
                 {
